@@ -1,0 +1,1 @@
+python main.py  -i ./images/kshema/Kshema1_cropped_properly.jpeg -o ./output/kshema1.jpeg -s 640x512 -b 8x4
