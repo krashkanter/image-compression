@@ -13,8 +13,6 @@ def main():
     parser = argparse.ArgumentParser(description="Quadtree-based image compression utility.")
     parser.add_argument("input_image", help="Path to the input image file.")
     parser.add_argument("output_image", nargs='?', help="Path to save the reconstructed image file.")
-    parser.add_argument("--split", choices=['h', 'v'], required=True,
-                        help="Split mode for 8x8 blocks: 'h' for 8x4 (horizontal) or 'v' for 4x8 (vertical).")
     parser.add_argument("--dump-bin", action="store_true", help="Save the compressed binary bitstream to a .bin file.")
     parser.add_argument("--dump-stats", action="store_true", help="Save compression statistics to a .txt file.")
 
@@ -23,12 +21,12 @@ def main():
     base_name = os.path.splitext(os.path.basename(args.input_image))[0]
     output_path = args.output_image if args.output_image else f'{base_name}_reconstructed.png'
     compressed_bitstream_path = f'{base_name}_compressed.bin'
-    stats_output_path = f'{base_name}_stats_{args.split}.txt'
+    stats_output_path = f'{base_name}_stats.txt'
 
     # --- Compression Timing ---
-    print(f"Compressing '{args.input_image}' with --split={args.split}...")
+    print(f"Compressing '{args.input_image}'...")
     compression_start_time = time.time()
-    compressed_result = compress_image_to_bitstream(args.input_image, args.split)
+    compressed_result = compress_image_to_bitstream(args.input_image)
     compression_end_time = time.time()
     compression_time_taken = compression_end_time - compression_start_time
     print(f"Compression finished in {compression_time_taken:.4f} seconds.")
@@ -67,7 +65,7 @@ def main():
     # --- Decompression Timing ---
     print("\nDecompressing from in-memory bitstream...")
     decompression_start_time = time.time()
-    reconstructed_arr = decompress_image_from_bitstream(bitstream, padded_width, padded_height, args.split)
+    reconstructed_arr = decompress_image_from_bitstream(bitstream, padded_width, padded_height)
     decompression_end_time = time.time()
     decompression_time_taken = decompression_end_time - decompression_start_time
 

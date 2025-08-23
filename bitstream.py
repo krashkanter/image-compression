@@ -20,30 +20,13 @@ class QuadTree:
         self.subtype = None
         self.children = []
 
-    def subdivide(self, block_data, split_mode):
+    def subdivide(self, block_data):
         blk = block_data
         if np.all(blk == blk.flat[0]):
             self.color = int(blk.flat[0])
             return
 
-        if self.w == 8 and self.h == 8:
-            if split_mode == 'h':
-                child1 = QuadTree(self.x, self.y, 8, 4)
-                child1.subdivide(blk[0:4, :], split_mode)
-                self.children.append(child1)
-                child2 = QuadTree(self.x, self.y + 4, 8, 4)
-                child2.subdivide(blk[4:8, :], split_mode)
-                self.children.append(child2)
-            elif split_mode == 'v':
-                child1 = QuadTree(self.x, self.y, 4, 8)
-                child1.subdivide(blk[:, 0:4], split_mode)
-                self.children.append(child1)
-                child2 = QuadTree(self.x + 4, self.y, 4, 8)
-                child2.subdivide(blk[:, 4:8], split_mode)
-                self.children.append(child2)
-            return
-
-        if self.w <= 8 and self.h <= 8:
+        if self.w <= 4 and self.h <= 4:
             raw_cost = self.w * self.h
             min_data = minimize_block(blk)
             cubes = min_data.get('cubes', [])
@@ -54,7 +37,7 @@ class QuadTree:
                 encoding_map, _ = decode_char_code_mapping(map_value)
                 for inp, _ in cubes:
                     for char in inp: input_pattern_cost += len(encoding_map.get(char, '10'))
-            espresso_cost = 2 + 1 + 3 + 3 + 7 + input_pattern_cost + num_cubes * 1
+            espresso_cost = 1 + 3 + 7 + input_pattern_cost + num_cubes * 1
             if raw_cost <= espresso_cost:
                 self.subtype = 'raw'; self.raw_block_data = blk
             else:
@@ -68,7 +51,7 @@ class QuadTree:
         for (dx, dy, ww, hh), child_slice in child_info:
             if ww > 0 and hh > 0:
                 child = QuadTree(self.x + dx, self.y + dy, ww, hh)
-                child.subdivide(child_slice, split_mode)
+                child.subdivide(child_slice)
                 self.children.append(child)
 
     def to_dict(self):
@@ -87,7 +70,7 @@ class QuadTree:
                 'children': [c.to_dict() for c in self.children]}
 
 
-def compress_image_to_bitstream(image_path, split_mode):
+def compress_image_to_bitstream(image_path):
     arr = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if arr is None: raise FileNotFoundError(f"Could not read image at {image_path}")
     h_original, w_original = arr.shape
@@ -109,7 +92,7 @@ def compress_image_to_bitstream(image_path, split_mode):
             for x0 in range(0, w, 64):
                 tile = plane_arr[y0:y0 + 64, x0:x0 + 64]
                 root = QuadTree(0, 0, 64, 64)
-                root.subdivide(tile, split_mode)
+                root.subdivide(tile)
                 node_dict = root.to_dict()
 
                 temp_stream = io.BytesIO()
@@ -135,7 +118,7 @@ def compress_image_to_bitstream(image_path, split_mode):
             'original_height': h_original, 'stats': stats}
 
 
-def decompress_image_from_bitstream(bitstream, padded_width, padded_height, split_mode):
+def decompress_image_from_bitstream(bitstream, padded_width, padded_height):
     byte_stream = io.BytesIO(bitstream)
     reader = BitStreamReader(byte_stream)
     final_arr = np.zeros((padded_height, padded_width), dtype=np.uint8)
@@ -152,7 +135,7 @@ def decompress_image_from_bitstream(bitstream, padded_width, padded_height, spli
                             if (y0 + r_offset < padded_height) and (x0 + c_offset < padded_width): plane_arr[
                                 y0 + r_offset, x0 + c_offset] = pixel
                 else:
-                    root_node_dict = decode_quadtree_node_bitstream(reader, 0, 0, 64, 64, split_mode)
+                    root_node_dict = decode_quadtree_node_bitstream(reader, 0, 0, 64, 64)
                     if root_node_dict is None: return None
                     tile_plane = np.zeros((64, 64), dtype=np.uint8)
                     reconstruct_from_quadtree_node(root_node_dict, tile_plane)
@@ -185,12 +168,12 @@ def encode_quadtree_node_bitstream(node, writer):
 def encode_minimized_block_bitstream(minimized_data, writer):
     code = minimized_data.get('code', '00')
     cubes = minimized_data.get('cubes', [])
-    n_bits = minimized_data.get('n_bits', 1)
+    # n_bits = minimized_data.get('n_bits', 1)
     encoding_map = minimized_data.get('encoding_map', {})
     map_value = minimized_data.get('map_value', 0)
     writer.write_bit(0 if code == '00' else 1)
     writer.write_bits(map_value, 3)
-    writer.write_bits(n_bits, 3)
+    # writer.write_bits(n_bits, 3)
     writer.write_bits(len(cubes), 7)
     for inp, out in cubes:
         for char in inp:
@@ -204,7 +187,7 @@ def encode_minimized_block_bitstream(minimized_data, writer):
         writer.write_bit(int(out))
 
 
-def decode_quadtree_node_bitstream(reader, x, y, w, h, split_mode):
+def decode_quadtree_node_bitstream(reader, x, y, w, h):
     node_encoding = reader.read_bits(2)
     if node_encoding is None: return None
     node = {'x': x, 'y': y, 'w': w, 'h': h}
@@ -214,14 +197,13 @@ def decode_quadtree_node_bitstream(reader, x, y, w, h, split_mode):
         node.update({'type': 'leaf', 'code': '11'})
     elif node_encoding == ENCODING_INTERNAL:
         node.update({'type': 'node', 'children': []})
-        child_positions = (w == 8 and h == 8) and (
-                    split_mode == 'h' and [(0, 0, 8, 4), (0, 4, 8, 4)] or [(0, 0, 4, 8), (4, 0, 4, 8)]) or [
+        child_positions = [
                               (0, 0, (w + 1) // 2, (h + 1) // 2), ((w + 1) // 2, 0, w - (w + 1) // 2, (h + 1) // 2),
                               (0, (h + 1) // 2, (w + 1) // 2, h - (h + 1) // 2),
                               ((w + 1) // 2, (h + 1) // 2, w - (w + 1) // 2, h - (h + 1) // 2)]
         for dx, dy, ww, hh in child_positions:
             if ww > 0 and hh > 0:
-                child_node = decode_quadtree_node_bitstream(reader, x + dx, y + dy, ww, hh, split_mode)
+                child_node = decode_quadtree_node_bitstream(reader, x + dx, y + dy, ww, hh)
                 if child_node: node['children'].append(child_node)
     elif node_encoding == ENCODING_HETEROGENEOUS:
         node['type'] = 'leaf'
@@ -237,7 +219,8 @@ def decode_minimized_block_bitstream(reader):
     code = '00' if reader.read_bit() == 0 else '01'
     map_value = reader.read_bits(3)
     _, decoding_code_map = decode_char_code_mapping(map_value)
-    n_bits = reader.read_bits(3)
+    # n_bits = reader.read_bits(3)
+    n_bits = 4
     num_cubes = reader.read_bits(7)
     cubes = []
     for _ in range(num_cubes):
