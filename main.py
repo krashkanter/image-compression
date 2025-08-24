@@ -21,9 +21,9 @@ def main():
     args = parser.parse_args()
 
     base_name = os.path.splitext(os.path.basename(args.input_image))[0]
-    output_path = args.output_image if args.output_image else f'{base_name}_reconstructed.png'
-    compressed_bitstream_path = f'{base_name}_compressed.bin'
-    stats_output_path = f'{base_name}_stats_{args.split}.txt'
+    output_path = args.output_image if args.output_image else f'./output/{base_name}_reconstructed.png'
+    compressed_bitstream_path = f'./output/{base_name}_compressed.bin'
+    stats_output_path = f'./output/{base_name}_stats_{args.split}.txt'
 
     # --- Compression Timing ---
     print(f"Compressing '{args.input_image}' with --split={args.split}...")

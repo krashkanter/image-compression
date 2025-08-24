@@ -19,6 +19,8 @@ class QuadTree:
         self.raw_block_data = None
         self.subtype = None
         self.children = []
+        # NEW: Attribute to hold discarded espresso data for stats
+        self.discarded_minimized_data = None
 
     def subdivide(self, block_data, split_mode):
         blk = block_data
@@ -54,11 +56,16 @@ class QuadTree:
                 encoding_map, _ = decode_char_code_mapping(map_value)
                 for inp, _ in cubes:
                     for char in inp: input_pattern_cost += len(encoding_map.get(char, '10'))
-            espresso_cost = 2 + 1 + 3 + 3 + 7 + input_pattern_cost + num_cubes * 1
+            espresso_cost = 1 + 3 + 7 + input_pattern_cost + num_cubes * 1
+            
+            # MODIFIED: Preserve the espresso data even if subtype is 'raw'
             if raw_cost <= espresso_cost:
-                self.subtype = 'raw'; self.raw_block_data = blk
+                self.subtype = 'raw'
+                self.raw_block_data = blk
+                self.discarded_minimized_data = min_data
             else:
-                self.subtype = 'espresso'; self.minimized = min_data
+                self.subtype = 'espresso'
+                self.minimized = min_data
             return
 
         w1, h1 = (self.w + 1) // 2, (self.h + 1) // 2
@@ -77,15 +84,25 @@ class QuadTree:
             if self.color is not None:
                 node['code'] = '11' if self.color == 1 else '10'
             elif self.subtype == 'espresso':
-                node['subtype'] = 'espresso'; node['data'] = self.minimized
+                node['subtype'] = 'espresso'
+                node['data'] = self.minimized
             elif self.subtype == 'raw':
-                node['subtype'] = 'raw'; node['data'] = self.raw_block_data.tolist()
+                node['subtype'] = 'raw'
+                node['data'] = self.raw_block_data.tolist()
+                # MODIFIED: Add the discarded data to the dictionary for stats
+                if self.discarded_minimized_data:
+                    node['discarded_minimized_data'] = self.discarded_minimized_data
             else:
                 node['code'] = '10'  # Default case
             return node
         return {'type': 'node', 'x': self.x, 'y': self.y, 'w': self.w, 'h': self.h,
                 'children': [c.to_dict() for c in self.children]}
 
+
+# The rest of the file (compress_image_to_bitstream, decompress, etc.)
+# uses the same logic as the previous response, which correctly separates
+# stats for used 64x64 blocks vs. overflowed 64x64 blocks.
+# No further changes are needed in this file.
 
 def compress_image_to_bitstream(image_path, split_mode):
     arr = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
@@ -101,9 +118,7 @@ def compress_image_to_bitstream(image_path, split_mode):
     stats.raw_bits = h * w * 8
 
     for bit in range(8):
-        # BUG FIX: This line was missing. It initializes the dictionary for the current bitplane.
         stats._init_plane_stats(bit)
-
         plane_arr = ((padded_arr >> bit) & 1).astype(np.uint8)
         for y0 in range(0, h, 64):
             for x0 in range(0, w, 64):
@@ -116,15 +131,16 @@ def compress_image_to_bitstream(image_path, split_mode):
                 temp_writer = BitStreamWriter(temp_stream)
                 encode_quadtree_node_bitstream(node_dict, temp_writer)
                 temp_writer.flush()
-                quadtree_cost_bits = temp_stream.tell() * 8 + temp_writer._bits_in_byte
+                quadtree_cost_bits = len(temp_stream.getvalue()) * 8
 
                 if quadtree_cost_bits >= tile.size:
                     stats.plane_stats[bit]['raw_64_blocks'] += 1
+                    _collect_stats_from_node(node_dict, stats, bit, is_overflow=True)
                     writer.write_bit(1)
                     for pixel in tile.flat: writer.write_bit(int(pixel))
                 else:
                     stats.plane_stats[bit]['quadtree_64_blocks'] += 1
-                    _collect_stats_from_node(node_dict, stats, bit)
+                    _collect_stats_from_node(node_dict, stats, bit, is_overflow=False)
                     writer.write_bit(0)
                     encode_quadtree_node_bitstream(node_dict, writer)
 
@@ -185,16 +201,14 @@ def encode_quadtree_node_bitstream(node, writer):
 def encode_minimized_block_bitstream(minimized_data, writer):
     code = minimized_data.get('code', '00')
     cubes = minimized_data.get('cubes', [])
-    n_bits = minimized_data.get('n_bits', 1)
     encoding_map = minimized_data.get('encoding_map', {})
     map_value = minimized_data.get('map_value', 0)
     writer.write_bit(0 if code == '00' else 1)
     writer.write_bits(map_value, 3)
-    writer.write_bits(n_bits, 3)
     writer.write_bits(len(cubes), 7)
     for inp, out in cubes:
         for char in inp:
-            encoded_char_code = encoding_map.get(char, '10')  # Default to '-'
+            encoded_char_code = encoding_map.get(char, '10')
             if encoded_char_code == '0':
                 writer.write_bit(0)
             elif encoded_char_code == '10':
@@ -237,7 +251,7 @@ def decode_minimized_block_bitstream(reader):
     code = '00' if reader.read_bit() == 0 else '01'
     map_value = reader.read_bits(3)
     _, decoding_code_map = decode_char_code_mapping(map_value)
-    n_bits = reader.read_bits(3)
+    n_bits = 5
     num_cubes = reader.read_bits(7)
     cubes = []
     for _ in range(num_cubes):

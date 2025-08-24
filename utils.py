@@ -3,7 +3,6 @@ import subprocess
 import tempfile
 from collections import Counter
 from math import ceil, log2
-from pyeda.inter import truthtable, exprvars, espresso_tts
 
 import numpy as np
 
@@ -24,65 +23,65 @@ def bin_to_gray(bin_str):
     return ''.join(map(str, g))
 
 
-# def run_espresso(terms, n_bits):
-#     try:
-#         with tempfile.NamedTemporaryFile(mode='w+', suffix='.pla', delete=False) as f:
-#             pla_filepath = f.name
-#             f.write(f'.i {n_bits}\n.o 1\n')
-#             for inp, out in terms:
-#                 f.write(f'{inp} {out}\n')
-#             f.write('.e\n')
-#             f.flush()
-
-#         res = subprocess.run(['espresso', pla_filepath], capture_output=True, text=True, check=True)
-
-#         os.remove(pla_filepath)
-
-#         cubes = []
-#         for line in res.stdout.splitlines():
-#             parts = line.split()
-#             if len(parts) == 2 and all(c in '01-' for c in parts[0]):
-#                 cubes.append((parts[0], parts[1]))
-
-#         return cubes
-
-#     except FileNotFoundError:
-#         print("Error: 'espresso' command not found.")
-#         print("Please ensure Espresso is installed and accessible in your system's PATH.")
-#         return []
-#     except subprocess.CalledProcessError as e:
-#         print(f"Error running Espresso (exit code {e.returncode}): {e}")
-#         print(f"Stderr: {e.stderr}")
-#         return []
-#     except Exception as e:
-#         print(f"An unexpected error occurred during Espresso execution: {e}")
-#         return []
-
 def run_espresso(terms, n_bits):
     try:
-        vars_ = exprvars('x', n_bits)
+        with tempfile.NamedTemporaryFile(mode='w+', suffix='.pla', delete=False) as f:
+            pla_filepath = f.name
+            f.write(f'.i {n_bits}\n.o 1\n')
+            for inp, out in terms:
+                f.write(f'{inp} {out}\n')
+            f.write('.e\n')
+            f.flush()
 
-        table = ['0'] * (2 ** n_bits)
-        for inp, out in terms:
-            if out == '1':
-                for idx in range(2 ** n_bits):
-                    bits = f"{idx:0{n_bits}b}"
-                    if all(p == '-' or p == b for p, b in zip(inp, bits)):
-                        table[idx] = '1'
+        res = subprocess.run(['espresso', pla_filepath], capture_output=True, text=True, check=True)
 
-        tt = truthtable(vars_, ''.join(table))
-        minimized_tt, = espresso_tts(tt)
+        os.remove(pla_filepath)
 
         cubes = []
-        for point, val in minimized_tt.iter_relation():
-            in_pattern = ''.join(str(b) if b in (0, 1) else '-' for b in point)
-            cubes.append((in_pattern, str(val)))
+        for line in res.stdout.splitlines():
+            parts = line.split()
+            if len(parts) == 2 and all(c in '01-' for c in parts[0]):
+                cubes.append((parts[0], parts[1]))
 
         return cubes
 
-    except Exception as e:
-        print(f"Error during PyEDA Espresso execution: {e}")
+    except FileNotFoundError:
+        print("Error: 'espresso' command not found.")
+        print("Please ensure Espresso is installed and accessible in your system's PATH.")
         return []
+    except subprocess.CalledProcessError as e:
+        print(f"Error running Espresso (exit code {e.returncode}): {e}")
+        print(f"Stderr: {e.stderr}")
+        return []
+    except Exception as e:
+        print(f"An unexpected error occurred during Espresso execution: {e}")
+        return []
+
+# def run_espresso(terms, n_bits):
+#     try:
+#         vars_ = exprvars('x', n_bits)
+
+#         table = ['0'] * (2 ** n_bits)
+#         for inp, out in terms:
+#             if out == '1':
+#                 for idx in range(2 ** n_bits):
+#                     bits = f"{idx:0{n_bits}b}"
+#                     if all(p == '-' or p == b for p, b in zip(inp, bits)):
+#                         table[idx] = '1'
+
+#         tt = truthtable(vars_, ''.join(table))
+#         minimized_tt, = espresso_tts(tt)
+
+#         cubes = []
+#         for point, val in minimized_tt.iter_relation():
+#             in_pattern = ''.join(str(b) if b in (0, 1) else '-' for b in point)
+#             cubes.append((in_pattern, str(val)))
+
+#         return cubes
+
+#     except Exception as e:
+#         print(f"Error during PyEDA Espresso execution: {e}")
+#         return []
 
 
 def get_char_frequencies(cubes):
