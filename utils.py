@@ -1,10 +1,35 @@
-import os
+# utils.py
 import subprocess
-import tempfile
 from collections import Counter
 from math import ceil, log2
 
 import numpy as np
+
+
+def get_espresso_cost(min_data, use_3_bit_cube_count=False):
+    """Calculates the bit cost of an espresso-minimized block."""
+    cubes = min_data.get('cubes', [])
+    num_cubes = len(cubes)
+    map_value = min_data.get('map_value', 0)
+
+    input_pattern_cost = 0
+    if cubes:
+        encoding_map, _ = decode_char_code_mapping(map_value)
+        for inp, _ in cubes:
+            for char in inp:
+                # Use a default cost for characters not in map, though this shouldn't happen
+                input_pattern_cost += len(encoding_map.get(char, '10'))
+    
+    # Header: 1 bit (on/off) + 3 bits (map)
+    header_cost = 1 + 3
+    
+    # Cube count cost: 3 bits if specified, otherwise 7
+    cube_count_cost = 3 if use_3_bit_cube_count else 7
+    
+    # Data cost: variable input patterns + 1 bit per cube for output
+    data_cost = input_pattern_cost + num_cubes * 1
+    
+    return header_cost + cube_count_cost + data_cost
 
 
 def zigzag_indices(width, height):
@@ -25,17 +50,19 @@ def bin_to_gray(bin_str):
 
 def run_espresso(terms, n_bits):
     try:
-        with tempfile.NamedTemporaryFile(mode='w+', suffix='.pla', delete=False) as f:
-            pla_filepath = f.name
-            f.write(f'.i {n_bits}\n.o 1\n')
-            for inp, out in terms:
-                f.write(f'{inp} {out}\n')
-            f.write('.e\n')
-            f.flush()
+        pla_content = [f'.i {n_bits}', '.o 1']
+        for inp, out in terms:
+            pla_content.append(f'{inp} {out}')
+        pla_content.append('.e')
+        pla_input_str = '\n'.join(pla_content)
 
-        res = subprocess.run(['espresso', pla_filepath], capture_output=True, text=True, check=True)
-
-        os.remove(pla_filepath)
+        res = subprocess.run(
+            ['espresso'],
+            input=pla_input_str,
+            capture_output=True,
+            text=True,
+            check=True
+        )
 
         cubes = []
         for line in res.stdout.splitlines():
@@ -57,40 +84,12 @@ def run_espresso(terms, n_bits):
         print(f"An unexpected error occurred during Espresso execution: {e}")
         return []
 
-# def run_espresso(terms, n_bits):
-#     try:
-#         vars_ = exprvars('x', n_bits)
-
-#         table = ['0'] * (2 ** n_bits)
-#         for inp, out in terms:
-#             if out == '1':
-#                 for idx in range(2 ** n_bits):
-#                     bits = f"{idx:0{n_bits}b}"
-#                     if all(p == '-' or p == b for p, b in zip(inp, bits)):
-#                         table[idx] = '1'
-
-#         tt = truthtable(vars_, ''.join(table))
-#         minimized_tt, = espresso_tts(tt)
-
-#         cubes = []
-#         for point, val in minimized_tt.iter_relation():
-#             in_pattern = ''.join(str(b) if b in (0, 1) else '-' for b in point)
-#             cubes.append((in_pattern, str(val)))
-
-#         return cubes
-
-#     except Exception as e:
-#         print(f"Error during PyEDA Espresso execution: {e}")
-#         return []
-
-
 def get_char_frequencies(cubes):
 
     char_counts = Counter()
     for inp, _ in cubes:
         char_counts.update(inp)
     return char_counts
-
 
 def get_char_code_mapping(char_counts):
 
@@ -328,7 +327,6 @@ class BitStreamWriter:
 
 
 class BitStreamReader:
-
     def __init__(self, byte_stream):
         self._byte_stream = byte_stream
         self._current_byte = 0

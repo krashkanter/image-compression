@@ -1,8 +1,9 @@
+# bitstream.py
 from math import ceil
 import cv2
 import numpy as np
 import io
-from utils import reconstruct_block, decode_char_code_mapping, minimize_block, BitStreamWriter, BitStreamReader
+from utils import reconstruct_block, decode_char_code_mapping, minimize_block, BitStreamWriter, BitStreamReader, get_espresso_cost
 from stats import CompressionStats, _collect_stats_from_node
 
 ENCODING_HOMOGENEOUS_0 = 0b00
@@ -19,7 +20,6 @@ class QuadTree:
         self.raw_block_data = None
         self.subtype = None
         self.children = []
-        # NEW: Attribute to hold discarded espresso data for stats
         self.discarded_minimized_data = None
 
     def subdivide(self, block_data, split_mode):
@@ -48,18 +48,13 @@ class QuadTree:
         if self.w <= 8 and self.h <= 8:
             raw_cost = self.w * self.h
             min_data = minimize_block(blk)
-            cubes = min_data.get('cubes', [])
-            num_cubes = len(cubes)
-            map_value = min_data.get('map_value', 0)
-            input_pattern_cost = 0
-            if cubes:
-                encoding_map, _ = decode_char_code_mapping(map_value)
-                for inp, _ in cubes:
-                    for char in inp: input_pattern_cost += len(encoding_map.get(char, '10'))
-            espresso_cost = 1 + 3 + 7 + input_pattern_cost + num_cubes * 1
+            num_cubes = len(min_data.get('cubes', []))
             
-            # MODIFIED: Preserve the espresso data even if subtype is 'raw'
-            if raw_cost <= espresso_cost:
+            # MODIFIED: Pass min_data to get_espresso_cost
+            espresso_cost = get_espresso_cost(min_data, use_3_bit_cube_count=True)
+
+            # MODIFIED: Force raw storage if cube count > 7 or if it's not cost-effective
+            if num_cubes > 7 or raw_cost <= espresso_cost:
                 self.subtype = 'raw'
                 self.raw_block_data = blk
                 self.discarded_minimized_data = min_data
@@ -89,20 +84,14 @@ class QuadTree:
             elif self.subtype == 'raw':
                 node['subtype'] = 'raw'
                 node['data'] = self.raw_block_data.tolist()
-                # MODIFIED: Add the discarded data to the dictionary for stats
                 if self.discarded_minimized_data:
                     node['discarded_minimized_data'] = self.discarded_minimized_data
             else:
-                node['code'] = '10'  # Default case
+                node['code'] = '10'
             return node
         return {'type': 'node', 'x': self.x, 'y': self.y, 'w': self.w, 'h': self.h,
                 'children': [c.to_dict() for c in self.children]}
 
-
-# The rest of the file (compress_image_to_bitstream, decompress, etc.)
-# uses the same logic as the previous response, which correctly separates
-# stats for used 64x64 blocks vs. overflowed 64x64 blocks.
-# No further changes are needed in this file.
 
 def compress_image_to_bitstream(image_path, split_mode):
     arr = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
@@ -205,7 +194,8 @@ def encode_minimized_block_bitstream(minimized_data, writer):
     map_value = minimized_data.get('map_value', 0)
     writer.write_bit(0 if code == '00' else 1)
     writer.write_bits(map_value, 3)
-    writer.write_bits(len(cubes), 7)
+    # MODIFIED: Write the number of cubes using 3 bits instead of 7
+    writer.write_bits(len(cubes), 3)
     for inp, out in cubes:
         for char in inp:
             encoded_char_code = encoding_map.get(char, '10')
@@ -251,8 +241,9 @@ def decode_minimized_block_bitstream(reader):
     code = '00' if reader.read_bit() == 0 else '01'
     map_value = reader.read_bits(3)
     _, decoding_code_map = decode_char_code_mapping(map_value)
-    n_bits = 5
-    num_cubes = reader.read_bits(7)
+    n_bits = 5 
+    # MODIFIED: Read the number of cubes using 3 bits instead of 7
+    num_cubes = reader.read_bits(3)
     cubes = []
     for _ in range(num_cubes):
         inp = ''.join(reader.read_variable_code(decoding_code_map) for _ in range(n_bits))
