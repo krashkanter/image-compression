@@ -1,0 +1,1 @@
+PURE_QUADTREE_MODE = False
