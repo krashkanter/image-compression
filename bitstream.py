@@ -37,7 +37,7 @@ class QuadTree:
             return
 
         if flags.PURE_QUADTREE_MODE:
-            if self.w == 1 and self.h == 1:
+            if self.w == 4 and self.h == 4:
                 self.subtype = "raw"
                 self.raw_block_data = blk
                 self.discarded_minimized_data = {}
