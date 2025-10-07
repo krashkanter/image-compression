@@ -43,7 +43,11 @@ class QuadTree:
                 self.discarded_minimized_data = {}
                 return
         else:
-            if self.w <= 8 and self.h <= 8:
+            if self.w == 4 and self.h == 4:
+                self.subtype = "raw"
+                self.raw_block_data = blk
+                self.discarded_minimized_data = {}
+            if self.w == 8 and self.h == 8:
                 raw_cost = self.w * self.h
                 min_data = minimize_block(blk)
                 espresso_cost = get_espresso_cost(min_data, use_3_bit_cube_count=True)
@@ -54,6 +58,24 @@ class QuadTree:
                     self.discarded_minimized_data = min_data
                 else:
                     self.subtype = "espresso"
+
+                    # HOOK TO SUBDIVIDE TO 4X4
+                    w1, h1 = (self.w + 1) // 2, (self.h + 1) // 2
+                    w2, h2 = self.w - w1, self.h - h1
+
+                    child_info = [
+                        ((0, 0, w1, h1), blk[0:h1, 0:w1]),
+                        ((w1, 0, w2, h1), blk[0:h1, w1:w1 + w2]),
+                        ((0, h1, w1, h2), blk[h1:h1 + h2, 0:w1]),
+                        ((w1, h1, w2, h2), blk[h1:h1 + h2, w1:w1 + w2]),
+                    ]
+
+                    for (dx, dy, ww, hh), child_slice in child_info:
+                        if ww > 0 and hh > 0:
+                            child = QuadTree(self.x + dx, self.y + dy, ww, hh)
+                            child.subdivide(child_slice)
+                            self.children.append(child)
+
                     self.minimized = min_data
                 return
 

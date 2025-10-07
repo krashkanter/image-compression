@@ -55,7 +55,8 @@ class CompressionStats:
                     '64x64': {'00': 0, '01': 0, '10': 0, '11': 0},
                     '32x32': {'00': 0, '01': 0, '10': 0, '11': 0},
                     '16x16': {'00': 0, '01': 0, '10': 0, '11': 0},
-                    '8x8': {'00': 0, '01': 0, '10': 0, '11': 0}
+                    '8x8': {'00': 0, '01': 0, '10': 0, '11': 0},
+                    '4x4' : { '00': 0, '01': 0, '10': 0, '11': 0},
                 },
             }
 
@@ -89,10 +90,10 @@ class CompressionStats:
                     f.write(f"Total 64x64 blocks processed: {total_64_blocks}\n")
                     if total_64_blocks > 0:
                         f.write(
-                            f"  - Compressed with Quadtree: {to_percent(stats['quadtree_64_blocks'], total_64_blocks):.2f}%\n"
+                            f"  - Compressed with Quadtree: {to_percent(stats['quadtree_64_blocks'], total_64_blocks):.2f}% ({stats['quadtree_64_blocks']} blocks)\n"
                         )
                         f.write(
-                            f"  - Stored as Raw (64x64 Overflow): {to_percent(stats['raw_64_blocks'], total_64_blocks):.2f}%\n\n"
+                            f"  - Stored as Raw (64x64 Overflow): {to_percent(stats['raw_64_blocks'], total_64_blocks):.2f}% ({stats['raw_64_blocks']} blocks)\n\n"
                         )
 
                     f.write(
@@ -111,14 +112,14 @@ class CompressionStats:
                                 "11": "Hetero-Leaf",
                             }
                             for code, desc in code_map.items():
-                                if code == "11" and level not in ["8x8"]:
+                                if code == "11" and level not in ["8x8", "4x4"]:
                                     continue
                                 perc = to_percent(
                                     counts.get(code, 0), total_level_nodes
                                 )
                                 f.write(
                                     f"    - {code} ({desc}):".ljust(22)
-                                    + f"{perc:.2f}%\n"
+                                    + f"{perc:.2f}% ({counts.get(code, 0)} blocks)\n"
                                 )
                         else:
                             f.write("    - No nodes at this level.\n")
