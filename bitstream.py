@@ -28,10 +28,11 @@ class QuadTree:
         self.subtype = None
         self.children = []
         self.discarded_minimized_data = None
+        self.alternative_subdivision = None  # Store 4x4 subdivision for comparison
 
     def subdivide(self, block_data):
         blk = block_data
-        
+
         if np.all(blk == blk.flat[0]):
             self.color = int(blk.flat[0])
             return
@@ -47,46 +48,35 @@ class QuadTree:
                 self.subtype = "raw"
                 self.raw_block_data = blk
                 self.discarded_minimized_data = {}
+                return
+
             if self.w == 8 and self.h == 8:
                 raw_cost = self.w * self.h
                 min_data = minimize_block(blk)
                 espresso_cost = get_espresso_cost(min_data, use_3_bit_cube_count=True)
-                
+
                 if raw_cost <= espresso_cost:
                     self.subtype = "raw"
                     self.raw_block_data = blk
                     self.discarded_minimized_data = min_data
                 else:
                     self.subtype = "espresso"
-
-                    # HOOK TO SUBDIVIDE TO 4X4
-                    w1, h1 = (self.w + 1) // 2, (self.h + 1) // 2
-                    w2, h2 = self.w - w1, self.h - h1
-
-                    child_info = [
-                        ((0, 0, w1, h1), blk[0:h1, 0:w1]),
-                        ((w1, 0, w2, h1), blk[0:h1, w1:w1 + w2]),
-                        ((0, h1, w1, h2), blk[h1:h1 + h2, 0:w1]),
-                        ((w1, h1, w2, h2), blk[h1:h1 + h2, w1:w1 + w2]),
-                    ]
-
-                    for (dx, dy, ww, hh), child_slice in child_info:
-                        if ww > 0 and hh > 0:
-                            child = QuadTree(self.x + dx, self.y + dy, ww, hh)
-                            child.subdivide(child_slice)
-                            self.children.append(child)
-
                     self.minimized = min_data
+
+                    # Store 4x4 subdivision for comparison
+                    self.alternative_subdivision = self._create_4x4_subdivision(blk)
+
                 return
 
+        # Default subdivision for blocks larger than 8x8
         w1, h1 = (self.w + 1) // 2, (self.h + 1) // 2
         w2, h2 = self.w - w1, self.h - h1
 
         child_info = [
             ((0, 0, w1, h1), blk[0:h1, 0:w1]),
-            ((w1, 0, w2, h1), blk[0:h1, w1:w1 + w2]),
-            ((0, h1, w1, h2), blk[h1:h1 + h2, 0:w1]),
-            ((w1, h1, w2, h2), blk[h1:h1 + h2, w1:w1 + w2]),
+            ((w1, 0, w2, h1), blk[0:h1, w1 : w1 + w2]),
+            ((0, h1, w1, h2), blk[h1 : h1 + h2, 0:w1]),
+            ((w1, h1, w2, h2), blk[h1 : h1 + h2, w1 : w1 + w2]),
         ]
 
         for (dx, dy, ww, hh), child_slice in child_info:
@@ -95,6 +85,42 @@ class QuadTree:
                 child.subdivide(child_slice)
                 self.children.append(child)
 
+    def _create_4x4_subdivision(self, blk):
+        """Create 4x4 subdivision structure for comparison (not actual QuadTree nodes)"""
+        w1, h1 = (self.w + 1) // 2, (self.h + 1) // 2
+        w2, h2 = self.w - w1, self.h - h1
+
+        child_info = [
+            ((0, 0, w1, h1), blk[0:h1, 0:w1]),
+            ((w1, 0, w2, h1), blk[0:h1, w1 : w1 + w2]),
+            ((0, h1, w1, h2), blk[h1 : h1 + h2, 0:w1]),
+            ((w1, h1, w2, h2), blk[h1 : h1 + h2, w1 : w1 + w2]),
+        ]
+
+        subdivision_data = []
+        for (dx, dy, ww, hh), child_slice in child_info:
+            if ww > 0 and hh > 0:
+                child_data = {
+                    "x": self.x + dx,
+                    "y": self.y + dy,
+                    "w": ww,
+                    "h": hh,
+                }
+
+                # Check if uniform
+                if np.all(child_slice == child_slice.flat[0]):
+                    child_data["color"] = int(child_slice.flat[0])
+                    child_data["cost"] = 1
+                else:
+                    child_data["data"] = child_slice.tolist()
+                    child_data["cost"] = ww * hh
+
+                subdivision_data.append(child_data)
+
+        return {
+            "children": subdivision_data,
+            "total_cost": sum(c["cost"] for c in subdivision_data),
+        }
 
     def to_dict(self):
         if not self.children:
@@ -104,6 +130,8 @@ class QuadTree:
             elif self.subtype == "espresso":
                 node["subtype"] = "espresso"
                 node["data"] = self.minimized
+                if self.alternative_subdivision:
+                    node["alternative_subdivision"] = self.alternative_subdivision
             elif self.subtype == "raw":
                 node["subtype"] = "raw"
                 node["data"] = self.raw_block_data.tolist()
