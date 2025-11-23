@@ -14,215 +14,23 @@ class CompressionStats:
                     "compressible_homo_1": 0,
                     "compressible_espresso": 0,
                     "incompressible_raw": 0,
+                    "template_match": 0,  # NEW
                 },
-                "espresso_cube_counts": {
-                    1: 0,
-                    2: 0,
-                    3: 0,
-                    4: 0,
-                    5: 0,
-                    6: 0,
-                    7: 0,
-                    8: 0,
-                    9: 0,
-                    10: 0,
-                    11: 0,
-                    12: 0,
-                    13: 0,
-                    14: 0,
-                    15: 0,
-                    16: 0,
-                    17: 0,
-                    18: 0,
-                    19: 0,
-                    20: 0,
-                    21: 0,
-                    22: 0,
-                    23: 0,
-                    24: 0,
-                    25: 0,
-                    26: 0,
-                    27: 0,
-                    28: 0,
-                    29: 0,
-                    30: 0,
-                    31: 0,
-                    32: 0,
-                },
-                "on_set_cube_counts": {
-                    1: 0,
-                    2: 0,
-                    3: 0,
-                    4: 0,
-                    5: 0,
-                    6: 0,
-                    7: 0,
-                    8: 0,
-                    9: 0,
-                    10: 0,
-                    11: 0,
-                    12: 0,
-                    13: 0,
-                    14: 0,
-                    15: 0,
-                    16: 0,
-                    17: 0,
-                    18: 0,
-                    19: 0,
-                    20: 0,
-                    21: 0,
-                    22: 0,
-                    23: 0,
-                    24: 0,
-                    25: 0,
-                    26: 0,
-                    27: 0,
-                    28: 0,
-                    29: 0,
-                    30: 0,
-                    31: 0,
-                    32: 0,
-                },
-                "off_set_cube_counts": {
-                    1: 0,
-                    2: 0,
-                    3: 0,
-                    4: 0,
-                    5: 0,
-                    6: 0,
-                    7: 0,
-                    8: 0,
-                    9: 0,
-                    10: 0,
-                    11: 0,
-                    12: 0,
-                    13: 0,
-                    14: 0,
-                    15: 0,
-                    16: 0,
-                    17: 0,
-                    18: 0,
-                    19: 0,
-                    20: 0,
-                    21: 0,
-                    22: 0,
-                    23: 0,
-                    24: 0,
-                    25: 0,
-                    26: 0,
-                    27: 0,
-                    28: 0,
-                    29: 0,
-                    30: 0,
-                    31: 0,
-                    32: 0,
-                },
+                "espresso_cube_counts": {i: 0 for i in range(1, 33)},
+                "on_set_cube_counts": {i: 0 for i in range(1, 33)},
+                "off_set_cube_counts": {i: 0 for i in range(1, 33)},
                 "in_tree_raw_stats": {
                     "total_blocks": 0,
-                    "espresso_cube_counts": {
-                        1: 0,
-                        2: 0,
-                        3: 0,
-                        4: 0,
-                        5: 0,
-                        6: 0,
-                        7: 0,
-                        8: 0,
-                        9: 0,
-                        10: 0,
-                        11: 0,
-                        12: 0,
-                        13: 0,
-                        14: 0,
-                        15: 0,
-                        16: 0,
-                        17: 0,
-                        18: 0,
-                        19: 0,
-                        20: 0,
-                        21: 0,
-                        22: 0,
-                        23: 0,
-                        24: 0,
-                        25: 0,
-                        26: 0,
-                        27: 0,
-                        28: 0,
-                        29: 0,
-                        30: 0,
-                        31: 0,
-                        32: 0,
-                    },
-                    "on_set_cube_counts": {
-                        1: 0,
-                        2: 0,
-                        3: 0,
-                        4: 0,
-                        5: 0,
-                        6: 0,
-                        7: 0,
-                        8: 0,
-                        9: 0,
-                        10: 0,
-                        11: 0,
-                        12: 0,
-                        13: 0,
-                        14: 0,
-                        15: 0,
-                        16: 0,
-                        17: 0,
-                        18: 0,
-                        19: 0,
-                        20: 0,
-                        21: 0,
-                        22: 0,
-                        23: 0,
-                        24: 0,
-                        25: 0,
-                        26: 0,
-                        27: 0,
-                        28: 0,
-                        29: 0,
-                        30: 0,
-                        31: 0,
-                        32: 0,
-                    },
-                    "off_set_cube_counts": {
-                        1: 0,
-                        2: 0,
-                        3: 0,
-                        4: 0,
-                        5: 0,
-                        6: 0,
-                        7: 0,
-                        8: 0,
-                        9: 0,
-                        10: 0,
-                        11: 0,
-                        12: 0,
-                        13: 0,
-                        14: 0,
-                        15: 0,
-                        16: 0,
-                        17: 0,
-                        18: 0,
-                        19: 0,
-                        20: 0,
-                        21: 0,
-                        22: 0,
-                        23: 0,
-                        24: 0,
-                        25: 0,
-                        26: 0,
-                        27: 0,
-                        28: 0,
-                        29: 0,
-                        30: 0,
-                        31: 0,
-                        32: 0,
-                    },
+                    "espresso_cube_counts": {i: 0 for i in range(1, 33)},
+                    "on_set_cube_counts": {i: 0 for i in range(1, 33)},
+                    "off_set_cube_counts": {i: 0 for i in range(1, 33)},
                 },
-                # NEW: Alternative subdivision comparison stats
+                # NEW: Template Stats
+                "template_stats": {
+                    "blocks_resolved": 0,
+                    "bits_saved": 0,
+                    "template_usage": {i: 0 for i in range(1, 8)},  # IDs 1-7
+                },
                 "alternative_subdivision_stats": {
                     "total_espresso_blocks": 0,
                     "espresso_better": 0,
@@ -237,41 +45,9 @@ class CompressionStats:
                         "compressible_homo_1": 0,
                         "compressible_espresso": 0,
                         "incompressible_raw": 0,
+                        "template_match": 0,  # FIXED: Added missing key here
                     },
-                    "espresso_cube_counts": {
-                        1: 0,
-                        2: 0,
-                        3: 0,
-                        4: 0,
-                        5: 0,
-                        6: 0,
-                        7: 0,
-                        8: 0,
-                        9: 0,
-                        10: 0,
-                        11: 0,
-                        12: 0,
-                        13: 0,
-                        14: 0,
-                        15: 0,
-                        16: 0,
-                        17: 0,
-                        18: 0,
-                        19: 0,
-                        20: 0,
-                        21: 0,
-                        22: 0,
-                        23: 0,
-                        24: 0,
-                        25: 0,
-                        26: 0,
-                        27: 0,
-                        28: 0,
-                        29: 0,
-                        30: 0,
-                        31: 0,
-                        32: 0,
-                    },
+                    "espresso_cube_counts": {i: 0 for i in range(1, 33)},
                 },
                 "code_counts": {
                     "64x64": {"00": 0, "01": 0, "10": 0, "11": 0},
@@ -299,6 +75,9 @@ class CompressionStats:
                 def to_percent(numerator, denominator):
                     return (numerator / denominator) * 100 if denominator > 0 else 0.0
 
+                total_template_resolved_all_planes = 0
+                total_bits_saved_all_planes = 0
+
                 for bit, stats in sorted(self.plane_stats.items()):
                     f.write("-" * 40 + "\n")
                     f.write(f"  Bitplane {bit}\n")
@@ -317,39 +96,16 @@ class CompressionStats:
                             f"  - Stored as Raw (64x64 Overflow): {to_percent(stats['raw_64_blocks'], total_64_blocks):.2f}%\n\n"
                         )
 
-                    f.write(
-                        "Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):\n"
-                    )
+                    f.write("Code Appearances per Level:\n")
                     for level, counts in stats["code_counts"].items():
                         total_level_nodes = sum(counts.values())
-                        f.write(
-                            f"  Level {level} (Total Nodes: {total_level_nodes}):\n"
-                        )
                         if total_level_nodes > 0:
-                            code_map = {
-                                "00": "Homo-0",
-                                "01": "Homo-1",
-                                "10": "Internal",
-                                "11": "Hetero-Leaf",
-                            }
-                            for code, desc in code_map.items():
-                                if code == "11" and level not in ["8x8", "4x4"]:
-                                    continue
-                                perc = to_percent(
-                                    counts.get(code, 0), total_level_nodes
-                                )
-                                f.write(
-                                    f"    - {code} ({desc}):".ljust(22)
-                                    + f"{perc:.2f}%\n"
-                                )
-                        else:
-                            f.write("    - No nodes at this level.\n")
-                    f.write("\n")
+                            f.write(f"  Level {level} (Total: {total_level_nodes})\n")
 
-                    f.write("Leaf Node Type Distribution:\n")
+                    f.write("\nLeaf Node Type Distribution:\n")
                     leaf_counts = stats["leaf_node_counts"]
                     total_leaf_nodes = sum(leaf_counts.values())
-                    f.write(f"  Total Leaf Nodes: {total_leaf_nodes}\n")
+
                     if total_leaf_nodes > 0:
                         total_compressible = (
                             leaf_counts["compressible_homo_0"]
@@ -357,14 +113,42 @@ class CompressionStats:
                             + leaf_counts["compressible_espresso"]
                         )
                         f.write(
-                            f"  - Compressible:".ljust(25)
-                            + f"{to_percent(total_compressible, total_leaf_nodes):.2f}% ({total_compressible} nodes)\n"
+                            f"  - Standard Compressible:".ljust(30)
+                            + f"{to_percent(total_compressible, total_leaf_nodes):.2f}% ({total_compressible})\n"
                         )
                         f.write(
-                            f"  - Incompressible (In-Tree Raw):".ljust(25)
-                            + f"{to_percent(leaf_counts['incompressible_raw'], total_leaf_nodes):.2f}% ({leaf_counts['incompressible_raw']} nodes)\n\n"
+                            f"  - Template Matches (New):".ljust(30)
+                            + f"{to_percent(leaf_counts['template_match'], total_leaf_nodes):.2f}% ({leaf_counts['template_match']})\n"
+                        )
+                        f.write(
+                            f"  - Incompressible (Raw):".ljust(30)
+                            + f"{to_percent(leaf_counts['incompressible_raw'], total_leaf_nodes):.2f}% ({leaf_counts['incompressible_raw']})\n\n"
                         )
 
+                    # NEW: Template Stats Section
+                    t_stats = stats["template_stats"]
+                    f.write(
+                        "--- Template Matching Statistics (Incompressible Fallback) ---\n"
+                    )
+                    if t_stats["blocks_resolved"] > 0:
+                        total_template_resolved_all_planes += t_stats["blocks_resolved"]
+                        total_bits_saved_all_planes += t_stats["bits_saved"]
+
+                        f.write(
+                            f"  Total Incompressible Blocks Resolved: {t_stats['blocks_resolved']}\n"
+                        )
+                        f.write(f"  Bits Saved vs Raw: {t_stats['bits_saved']} bits\n")
+                        f.write("  Template Usage:\n")
+                        for t_id, count in t_stats["template_usage"].items():
+                            if count > 0:
+                                f.write(
+                                    f"    - Template #{t_id}: {count} times ({to_percent(count, t_stats['blocks_resolved']):.1f}%)\n"
+                                )
+                    else:
+                        f.write("  No blocks used template matching in this plane.\n")
+                    f.write("\n")
+
+                    # Existing Espresso Stats
                     f.write("Espresso-Compressed Leaf Cube Distribution:\n")
                     cube_counts = stats["espresso_cube_counts"]
                     total_espresso_nodes = stats["leaf_node_counts"][
@@ -375,99 +159,28 @@ class CompressionStats:
                             f"  (For the {total_espresso_nodes} leaves compressed with Espresso)\n"
                         )
                         for num_cubes, count in sorted(cube_counts.items()):
-                            label = f"{num_cubes} Cubes"
-                            f.write(
-                                f"    - {label}:".ljust(15)
-                                + f"{to_percent(count, total_espresso_nodes):.2f}% ({count} blocks)\n"
-                            )
+                            if count > 0:
+                                label = f"{num_cubes} Cubes"
+                                f.write(
+                                    f"    - {label}:".ljust(15)
+                                    + f"{to_percent(count, total_espresso_nodes):.2f}% ({count} blocks)\n"
+                                )
                         f.write("\n")
-                    else:
-                        f.write("  - No leaf nodes were compressed with Espresso.\n\n")
 
-                    # NEW: Alternative Subdivision Comparison
                     f.write("--- Espresso vs 4x4 Subdivision Comparison ---\n")
                     alt_stats = stats["alternative_subdivision_stats"]
                     if alt_stats["total_espresso_blocks"] > 0:
                         total = alt_stats["total_espresso_blocks"]
                         f.write(f"  Total 8x8 blocks using Espresso: {total}\n")
                         f.write(
-                            f"  - Espresso was better: {to_percent(alt_stats['espresso_better'], total):.2f}% ({alt_stats['espresso_better']} blocks)\n"
+                            f"  - Espresso was better: {to_percent(alt_stats['espresso_better'], total):.2f}%\n"
                         )
                         f.write(
-                            f"  - 4x4 Subdivision was better: {to_percent(alt_stats['subdivision_better'], total):.2f}% ({alt_stats['subdivision_better']} blocks)\n"
+                            f"  - 4x4 Subdivision was better: {to_percent(alt_stats['subdivision_better'], total):.2f}%\n"
                         )
                         f.write(
-                            f"  - Tied: {to_percent(alt_stats['tied'], total):.2f}% ({alt_stats['tied']} blocks)\n"
+                            f"  - Tied: {to_percent(alt_stats['tied'], total):.2f}%\n\n"
                         )
-                        avg_espresso = alt_stats["total_espresso_cost"] / total
-                        avg_subdivision = alt_stats["total_subdivision_cost"] / total
-                        f.write(f"  Average Espresso cost: {avg_espresso:.2f} bits\n")
-                        f.write(
-                            f"  Average 4x4 Subdivision cost: {avg_subdivision:.2f} bits\n\n"
-                        )
-                    else:
-                        f.write("  - No 8x8 blocks were compressed with Espresso.\n\n")
-
-                    f.write(
-                        "Analysis of Discarded Espresso Results (In-Tree Raw Leaves):\n"
-                    )
-                    in_tree_stats = stats["in_tree_raw_stats"]
-                    total_raw_leaves = in_tree_stats["total_blocks"]
-                    if total_raw_leaves > 0:
-                        f.write(
-                            f"  (For the {total_raw_leaves} leaves where Espresso was costlier than raw pixels or had >7 cubes)\n"
-                        )
-                        cube_counts_raw = in_tree_stats["espresso_cube_counts"]
-                        for num_cubes, count in sorted(cube_counts_raw.items()):
-                            label = (
-                                f"{num_cubes} Cubes"
-                                if isinstance(num_cubes, int)
-                                else "8+ Cubes"
-                            )
-                            f.write(
-                                f"    - {label}:".ljust(15)
-                                + f"{to_percent(count, total_raw_leaves):.2f}% ({count} blocks)\n"
-                            )
-                        f.write("\n")
-                    else:
-                        f.write(
-                            "  - No leaf nodes were stored as raw due to high Espresso cost or too many cubes.\n\n"
-                        )
-
-                    f.write("On-Set Cube Distribution (Before Selection):\n")
-                    on_set_counts = stats["on_set_cube_counts"]
-                    total_blocks_analyzed = sum(on_set_counts.values())
-                    if total_blocks_analyzed > 0:
-                        f.write(
-                            f" (For the {total_blocks_analyzed} blocks that underwent Espresso analysis)\n"
-                        )
-                        for num_cubes, count in sorted(on_set_counts.items()):
-                            if count > 0:
-                                label = f"{num_cubes} Cubes"
-                                f.write(
-                                    f" - {label}:".ljust(15)
-                                    + f"{to_percent(count, total_blocks_analyzed):.2f}% ({count} blocks)\n"
-                                )
-                        f.write("\n")
-                    else:
-                        f.write(" - No blocks underwent Espresso analysis.\n\n")
-
-                    f.write("Off-Set Cube Distribution (Before Selection):\n")
-                    off_set_counts = stats["off_set_cube_counts"]
-                    if total_blocks_analyzed > 0:
-                        f.write(
-                            f" (For the {total_blocks_analyzed} blocks that underwent Espresso analysis)\n"
-                        )
-                        for num_cubes, count in sorted(off_set_counts.items()):
-                            if count > 0:
-                                label = f"{num_cubes} Cubes"
-                                f.write(
-                                    f" - {label}:".ljust(15)
-                                    + f"{to_percent(count, total_blocks_analyzed):.2f}% ({count} blocks)\n"
-                                )
-                        f.write("\n")
-                    else:
-                        f.write(" - No blocks underwent Espresso analysis.\n\n")
 
                     f.write(
                         "\n--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---\n"
@@ -480,27 +193,15 @@ class CompressionStats:
                         leaf_counts_ovf = overflow_stats["leaf_node_counts"]
                         total_leaf_nodes_ovf = sum(leaf_counts_ovf.values())
                         f.write("  Leaf Node Type Distribution (Overflow Trees):\n")
-                        f.write(f"    Total Leaf Nodes: {total_leaf_nodes_ovf}\n")
                         if total_leaf_nodes_ovf > 0:
-                            total_comp_ovf = (
-                                leaf_counts_ovf["compressible_homo_0"]
-                                + leaf_counts_ovf["compressible_homo_1"]
-                                + leaf_counts_ovf["compressible_espresso"]
-                            )
                             f.write(
-                                f"    - Compressible:".ljust(25)
-                                + f"{to_percent(total_comp_ovf, total_leaf_nodes_ovf):.2f}%\n"
+                                f"    - Template Matches: {to_percent(leaf_counts_ovf['template_match'], total_leaf_nodes_ovf):.2f}%\n"
                             )
-                            f.write(
-                                f"    - Incompressible (In-Tree Raw):".ljust(25)
-                                + f"{to_percent(leaf_counts_ovf['incompressible_raw'], total_leaf_nodes_ovf):.2f}%\n\n"
-                            )
-                    else:
-                        f.write("  No 64x64 blocks overflowed.\n\n")
 
                 f.write("=" * 50 + "\n")
                 f.write("      Overall Summary\n")
                 f.write("=" * 50 + "\n")
+
                 compression_ratio = (
                     initial_size_bits / self.compressed_bits
                     if self.compressed_bits > 0
@@ -511,6 +212,14 @@ class CompressionStats:
                     if padded_size_bits > 0
                     else 0
                 )
+
+                f.write(
+                    f"Total Blocks Resolved by Templates: {total_template_resolved_all_planes}\n"
+                )
+                f.write(
+                    f"Total Bits Saved by Templates:      {total_bits_saved_all_planes}\n\n"
+                )
+
                 f.write(
                     f"Initial Size (before padding): {initial_size_bits / 8:.0f} bytes ({initial_size_bits} bits)\n"
                 )
@@ -549,13 +258,6 @@ def _collect_stats_from_node(node, stats, bit, is_overflow=False):
         else stat_root["espresso_cube_counts"]
     )
 
-    target_on_set_counter = (
-        stat_root.get("on_set_cube_counts", {}) if not is_overflow else {}
-    )
-    target_off_set_counter = (
-        stat_root.get("off_set_cube_counts", {}) if not is_overflow else {}
-    )
-
     w, h = node.get("w", 0), node.get("h", 0)
     level_key = f"{w}x{h}"
     plane_stat_dict = stats.plane_stats[bit]
@@ -564,7 +266,7 @@ def _collect_stats_from_node(node, stats, bit, is_overflow=False):
     if level_key in code_counts:
         if node["type"] == "leaf":
             subtype = node.get("subtype")
-            if subtype in ["espresso", "raw"]:
+            if subtype in ["espresso", "raw", "template_match"]:
                 code_counts[level_key]["11"] += 1
             elif "code" in node:
                 if node["code"] == "10":
@@ -576,32 +278,34 @@ def _collect_stats_from_node(node, stats, bit, is_overflow=False):
 
     if node["type"] == "leaf":
         subtype = node.get("subtype")
-        if subtype == "espresso":
+
+        if subtype == "template_match":
+            target_leaf_counter["template_match"] += 1
+            if not is_overflow:
+                t_stats = stat_root["template_stats"]
+                t_stats["blocks_resolved"] += 1
+
+                # Calculate savings
+                saved = node.get("bits_saved", 0)
+                t_stats["bits_saved"] += saved
+
+                t_id = node.get("template_id", 0)
+                if t_id in t_stats["template_usage"]:
+                    t_stats["template_usage"][t_id] += 1
+
+        elif subtype == "espresso":
             target_leaf_counter["compressible_espresso"] += 1
             num_cubes = len(node["data"].get("cubes", []))
             if 1 <= num_cubes <= 32:
                 target_cube_counter[num_cubes] += 1
 
-            if "data" in node and not is_overflow:
-                on_set_cubes = node["data"].get("on_set_cubes", 0)
-                off_set_cubes = node["data"].get("off_set_cubes", 0)
-                if 1 <= on_set_cubes <= 32:
-                    target_on_set_counter[on_set_cubes] += 1
-                if 1 <= off_set_cubes <= 32:
-                    target_off_set_counter[off_set_cubes] += 1
-
-            # NEW: Track alternative subdivision comparison
             if "alternative_subdivision" in node and not is_overflow:
                 alt_stats = stat_root["alternative_subdivision_stats"]
                 alt_stats["total_espresso_blocks"] += 1
 
                 alt_data = node["alternative_subdivision"]
                 subdivision_cost = alt_data.get("total_cost", 0)
-
-                # Calculate espresso cost (assuming it's stored in the node data)
-                espresso_cost = (
-                    len(node["data"].get("cubes", [])) * 10
-                )  # Adjust based on your cost calculation
+                espresso_cost = len(node["data"].get("cubes", [])) * 10  # Approx cost
 
                 alt_stats["total_espresso_cost"] += espresso_cost
                 alt_stats["total_subdivision_cost"] += subdivision_cost
@@ -624,11 +328,8 @@ def _collect_stats_from_node(node, stats, bit, is_overflow=False):
                     in_tree_stats["espresso_cube_counts"][num_cubes] += 1
 
                 on_set_cubes = discarded_data.get("on_set_cubes", 0)
-                off_set_cubes = discarded_data.get("off_set_cubes", 0)
                 if 1 <= on_set_cubes <= 32:
                     in_tree_stats["on_set_cube_counts"][on_set_cubes] += 1
-                if 1 <= off_set_cubes <= 32:
-                    in_tree_stats["off_set_cube_counts"][off_set_cubes] += 1
 
         elif "code" in node:
             if node["code"] == "10":

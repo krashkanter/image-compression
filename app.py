@@ -5,8 +5,8 @@ import numpy
 import os
 
 # Assuming these exist in your environment
-from sharp import process_blocks
-from utils import minimize_block, reconstruct_block
+# from sharp import process_blocks
+from utils import minimize_block, reconstruct_block, load_templates, get_espresso_cost
 
 GRID_SIZE = 8
 CELL_SIZE = 30
@@ -200,7 +200,7 @@ class GridApp:
         self.output_window = OutputWindow(self.root)
 
         # Toggle state for decoding
-        self.decoding_enabled = tk.BooleanVar(value=False)
+        self.decoding_enabled = tk.BooleanVar(value=True)
 
         self.create_menu_bar()
 
@@ -252,7 +252,7 @@ class GridApp:
         # Execute Button
         self.execute_button = tk.Button(
             self.creator_tab,
-            text="Execute All Templates",
+            text="Execute (Resolve Incompressible)",
             command=self.execute_sharp,
             bg="#dddddd",
             height=2,
@@ -302,7 +302,7 @@ class GridApp:
         os.makedirs("config", exist_ok=True)
         templates_path = os.path.join("config", "templates.txt")
 
-        def load_templates():
+        def load_templates_gui():
             templates_list.delete(0, tk.END)
             try:
                 with open(templates_path, "r") as f:
@@ -316,7 +316,7 @@ class GridApp:
             template_str = "".join(map(str, grid_state.flatten().astype(int)))
             with open(templates_path, "a") as f:
                 f.write(template_str + "\n")
-            load_templates()
+            load_templates_gui()
 
         def delete_template():
             sel = templates_list.curselection()
@@ -331,7 +331,7 @@ class GridApp:
                     with open(templates_path, "w") as f:
                         for line in lines:
                             f.write(line + "\n")
-                load_templates()
+                load_templates_gui()
             except FileNotFoundError:
                 return
 
@@ -360,20 +360,48 @@ class GridApp:
         tk.Button(right_frame, text="Delete Selected", command=delete_template).pack(
             pady=5, fill="x"
         )
-        load_templates()
+        load_templates_gui()
+
+    def resolve_incompressible_block(self, block):
+        """
+        Attempts to resolve an incompressible block by XORing with templates.
+        Returns the best result (template_id, minimized_data, cost).
+        """
+        # Load templates via utility
+        templates = load_templates()
+        if not templates:
+            return None
+
+        best_result = None
+        min_cost = 64  # Raw cost is 64 bits
+
+        # Try first 7 templates
+        for i, tmpl in enumerate(templates[:7]):
+            if tmpl.shape != block.shape:
+                continue
+
+            xor_diff = block ^ tmpl
+            min_data = minimize_block(xor_diff)
+            # Cost = Header (3 bits) + Espresso Cost
+            cost = get_espresso_cost(min_data, use_3_bit_cube_count=True) + 3
+
+            if cost < min_cost:
+                min_cost = cost
+                # template_id is 1-based index (001-111)
+                best_result = (i + 1, min_data, tmpl)
+
+        return best_result
 
     def execute_sharp(self):
         """
-        1. Minimizes A directly to get baseline 'cube_before'.
-           (Note: Since 0 is Black/Ink, we invert A before sending to minimizer)
-        2. For each template B:
-           - Computes X = A ^ B
-           - Minimizes X directly (since 1s represent differences/changes)
-        3. Displays comparison: {cube_before} >> {cube_after}
+        Modified execution flow:
+        1. Checks if the block is compressible via standard Espresso.
+        2. If NOT (cost >= 64), it invokes resolve_incompressible_block.
+        3. Displays the decision path.
         """
         execute_window = tk.Toplevel(self.root)
         execute_window.title("Execution Results")
-        execute_window.geometry("1200x750")
+        execute_window.geometry("1000x800")
 
         # --- Top Summary Frame ---
         summary_frame = tk.Frame(execute_window, bg="#e6f3ff", pady=10)
@@ -384,196 +412,105 @@ class GridApp:
         )
         lbl_status.pack()
 
-        # --- Scrollable Area Setup ---
-        canvas = tk.Canvas(execute_window)
-        scrollbar = tk.Scrollbar(
-            execute_window, orient="vertical", command=canvas.yview
-        )
-        scrollable_frame = tk.Frame(canvas)
+        # --- Content Area ---
+        content_frame = tk.Frame(execute_window)
+        content_frame.pack(fill="both", expand=True, padx=20, pady=20)
 
-        scrollable_frame.bind(
-            "<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
-        )
-        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-        canvas.configure(yscrollcommand=scrollbar.set)
-        canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
+        # Helper to draw grid
+        def draw_grid(parent, title, matrix, color_bg="#ffffff"):
+            f = tk.Frame(parent, bg=color_bg, bd=2, relief="groove")
+            f.pack(side="left", padx=10, pady=10)
+            tk.Label(f, text=title, font=("Arial", 9, "bold"), bg=color_bg).pack(pady=5)
+            g = InteractiveGrid(
+                f, execute_window, self.pixel_image, show_reset_button=False
+            )
+            for r in range(GRID_SIZE):
+                for c in range(GRID_SIZE):
+                    g._update_cell(r, c, int(matrix[r, c]))
+            return g
 
-        # ==========================================
-        # 1. Get User Input A & Calculate Baseline
-        # ==========================================
-        # 0 = Black (Ink), 1 = White (Empty)
+        # 1. Get User Input A
         grid_a_state = self.creator_grid_A.get_grid_state().astype(int)
 
-        cube_before = 0
-        # To count blocks, we need to count the Black pixels (0).
-        # The minimizer expects 1 as "Active". So we invert A for this calculation.
-        # (1 - 0 = 1, 1 - 1 = 0)
-        inverted_a_for_counting = 1 - grid_a_state
+        # 2. Evaluate Standard Compression
+        # 0 = Ink, 1 = Empty. Invert for minimization logic.
+        # However, minimize_block handles inputs naturally, usually expecting 1 as 'On'.
+        # Since interactive grid is: 1=White/Empty, 0=Black/Ink
+        # We usually minimize the Black pixels. So we send (1 - grid_a_state)
+        # But if the bitstream logic uses the raw value, we should be consistent.
+        # Let's assume we minimize '1's. If Ink is 0, we flip.
+        # Based on previous app.py logic: inverted_a_for_counting = 1 - grid_a_state
+        block_to_process = 1 - grid_a_state
 
-        if numpy.any(inverted_a_for_counting):
-            baseline_block = minimize_block(inverted_a_for_counting)
-            if baseline_block and "cubes" in baseline_block:
-                cube_before = len(baseline_block["cubes"])
-            else:
-                cube_before = 999
+        min_std = minimize_block(block_to_process)
+        cost_std = get_espresso_cost(min_std, use_3_bit_cube_count=True)
+        cost_raw = 64
 
-        print(f"Baseline (A) Cubes: {cube_before}")
+        # Decision Phase
+        if cost_std < cost_raw:
+            # Case A: Standard Compression Works
+            lbl_status.config(
+                text=f"Block is Compressible (Standard). Cost: {cost_std} bits vs Raw: {cost_raw} bits.",
+                fg="green",
+            )
 
-        # ==========================================
-        # 2. Read Templates
-        # ==========================================
-        templates = []
-        try:
-            with open("config/templates.txt", "r") as f:
-                for line in f:
-                    line = line.strip()
-                    if len(line) == GRID_SIZE * GRID_SIZE:
-                        templates.append(line)
-        except FileNotFoundError:
-            lbl_status.config(text="Error: config/templates.txt not found")
-            return
+            row1 = tk.Frame(content_frame)
+            row1.pack(fill="x")
+            draw_grid(row1, "Original Input", grid_a_state)
+            draw_grid(
+                row1, "Standard Compressed", reconstruct_block(min_std, 8, 8) ^ 1
+            )  # Invert back for display
 
-        if not templates:
-            lbl_status.config(text="Error: No templates available")
-            return
-
-        # --- Tracking Best Result ---
-        best_after_size = float("inf")
-        best_template_idx = -1
-
-        # ==========================================
-        # 3. Loop through templates
-        # ==========================================
-        for idx, tmpl_str in enumerate(templates):
-            try:
-                grid_b_state = numpy.array(list(tmpl_str), dtype=int).reshape(
-                    (GRID_SIZE, GRID_SIZE)
-                )
-            except Exception:
-                continue
-
-            # ---------------------------------------------------------
-            # CORE LOGIC: XOR (A ^ B)
-            # ---------------------------------------------------------
-            # 0^0=0 (Match), 1^1=0 (Match)
-            # 0^1=1 (Diff),  1^0=1 (Diff)
-            # The result X contains 1s wherever A and B disagree.
-            diff_pixels_X = grid_a_state ^ grid_b_state
-
-            # Minimize X
-            # Since 1 represents a "Difference" (a necessary change),
-            # the minimizer naturally counts these 1s. No inversion needed here.
-            minimized_block = None
-            cube_after = 0
-
-            if numpy.any(diff_pixels_X):
-                minimized_block = minimize_block(diff_pixels_X)
-                if minimized_block and "cubes" in minimized_block:
-                    cube_after = len(minimized_block["cubes"])
-                else:
-                    cube_after = 999
-
-            # Track Best
-            if cube_after < best_after_size:
-                best_after_size = cube_after
-                best_template_idx = idx
-
-            # --- UI Generation for Row ---
-            row_frame = tk.Frame(scrollable_frame, relief="groove", borderwidth=2)
-            row_frame.pack(pady=10, padx=10, fill="x")
-
-            # Determine Color
-            size_color = "#000000"
-            if cube_after < cube_before:
-                size_color = "#008800"  # Green (Good)
-            elif cube_after > cube_before:
-                size_color = "#cc0000"  # Red (Bad)
-
-            # Row Header
-            header_color = "#d1e7dd" if cube_after == 0 else "#f0f0f0"
-            header_frame = tk.Frame(row_frame, bg=header_color)
-            header_frame.pack(fill="x")
-
-            tk.Label(
-                header_frame,
-                text=f"Template #{idx + 1}",
-                font=("Arial", 10, "bold"),
-                bg=header_color,
-            ).pack(side="left", padx=10, pady=5)
-
-            comparison_text = f"Cubes: {cube_before} >> {cube_after}"
-            tk.Label(
-                header_frame,
-                text=comparison_text,
-                font=("Arial", 11, "bold"),
-                fg=size_color,
-                bg=header_color,
-            ).pack(side="right", padx=10)
-
-            grids_frame = tk.Frame(row_frame)
-            grids_frame.pack(pady=5)
-
-            # Helper to draw grid
-            def draw_grid(parent, title, matrix):
-                f = tk.Frame(parent)
-                f.pack(side="left", padx=10)
-                tk.Label(f, text=title, font=("Arial", 9)).pack()
-                g = InteractiveGrid(
-                    f, execute_window, self.pixel_image, show_reset_button=False
-                )
-                for r in range(GRID_SIZE):
-                    for c in range(GRID_SIZE):
-                        g._update_cell(r, c, int(matrix[r, c]))
-                return g
-
-            # 1. User Input
-            draw_grid(grids_frame, "User (A)", grid_a_state)
-
-            # 2. Template
-            draw_grid(grids_frame, "Template (B)", grid_b_state)
-
-            # 3. XOR Difference
-            draw_grid(grids_frame, "XOR Diff (A ^ B)", diff_pixels_X)
-
-            # 4. Final Result (Visual Decoding)
-            final_display = diff_pixels_X
-            result_title = "Raw Result (X)"
-
-            if self.decoding_enabled.get():
-                if minimized_block:
-                    try:
-                        # Reconstruct X from the compressed block
-                        reconstructed_X = reconstruct_block(
-                            minimized_block, GRID_SIZE, GRID_SIZE
-                        )
-                        # Decoding: Recover A = X ^ B
-                        # This verifies if the compression is lossless
-                        final_display = reconstructed_X ^ grid_b_state
-                        result_title = "Recovered A (X ^ B)"
-                    except Exception:
-                        result_title = "Error Reconstructing"
-                else:
-                    # If X is empty (Perfect Match), A = B
-                    final_display = grid_b_state
-                    result_title = "Recovered (Perfect)"
-
-            draw_grid(grids_frame, result_title, final_display)
-            self.root.update_idletasks()
-
-        # ==========================================
-        # 4. Final Summary Update
-        # ==========================================
-        if best_template_idx != -1:
-            saving = ""
-            if cube_before > 0:
-                pct = ((cube_before - best_after_size) / cube_before) * 100
-                saving = f"(Saved {pct:.1f}%)"
-
-            summary_text = f"Best: Template #{best_template_idx + 1} | {cube_before} >> {best_after_size}"
-            lbl_status.config(text=summary_text, fg="green", font=("Arial", 14, "bold"))
         else:
-            lbl_status.config(text="No valid templates processed.")
+            # Case B: Incompressible - Invoke New Function
+            lbl_status.config(
+                text=f"Block is Incompressible (Cost {cost_std} >= 64). Attempting Templates...",
+                fg="orange",
+            )
+
+            result = self.resolve_incompressible_block(block_to_process)
+
+            if result:
+                # Resolution Successful
+                t_id, min_data, tmpl = result
+                # Cost is stored implicitly, recalculate for display
+                cost_new = get_espresso_cost(min_data, use_3_bit_cube_count=True) + 3
+                saved = cost_raw - cost_new
+
+                lbl_status.config(
+                    text=f"Incompressible Block Resolved by Template #{t_id}!\nRaw: 64 bits -> New: {cost_new} bits (Saved {saved} bits)",
+                    fg="#008800",
+                    font=("Arial", 14, "bold"),
+                )
+
+                # Visuals
+                row1 = tk.Frame(content_frame)
+                row1.pack(fill="x", pady=10)
+
+                draw_grid(row1, "User Input (Raw)", grid_a_state)
+                tk.Label(row1, text="XOR", font=("Arial", 16, "bold")).pack(
+                    side="left", padx=10
+                )
+                draw_grid(
+                    row1, f"Template #{t_id}", 1 - tmpl
+                )  # Display template (inverted to match visual style)
+                tk.Label(row1, text="=", font=("Arial", 16, "bold")).pack(
+                    side="left", padx=10
+                )
+
+                # XOR Result (Diff)
+                xor_diff = block_to_process ^ tmpl
+                draw_grid(row1, "Difference (Encoded)", 1 - xor_diff)
+
+            else:
+                # Resolution Failed
+                lbl_status.config(
+                    text=f"Resolution Failed. No template reduced cost below 64 bits.\nFallback to Raw Pixels (Header 000).",
+                    fg="red",
+                )
+                row1 = tk.Frame(content_frame)
+                row1.pack(fill="x")
+                draw_grid(row1, "Input (Stored as Raw)", grid_a_state)
 
     def show_outputs(self):
         self.output_window.show()

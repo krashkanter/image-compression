@@ -2,6 +2,7 @@ import subprocess
 from collections import Counter
 from math import ceil, log2
 import numpy as np
+import os
 
 
 def get_espresso_cost(min_data, use_3_bit_cube_count=False):
@@ -18,6 +19,28 @@ def get_espresso_cost(min_data, use_3_bit_cube_count=False):
     cube_count_cost = 3 if use_3_bit_cube_count else 7
     data_cost = input_pattern_cost + num_cubes * 1
     return header_cost + cube_count_cost + data_cost
+
+
+def load_templates(grid_size=8):
+    """Loads templates from config/templates.txt"""
+    templates = []
+    try:
+        path = os.path.join("config", "templates.txt")
+        if os.path.exists(path):
+            with open(path, "r") as f:
+                for line in f:
+                    line = line.strip()
+                    if len(line) == grid_size * grid_size:
+                        try:
+                            arr = np.array(list(line), dtype=int).reshape(
+                                (grid_size, grid_size)
+                            )
+                            templates.append(arr)
+                        except ValueError:
+                            continue
+    except Exception:
+        pass
+    return templates
 
 
 def zigzag_indices(width, height):
@@ -195,7 +218,9 @@ def minimize_block(block):
             code = "11"
             selected_cubes = []
         else:
-            print(f"Warning: Espresso failed and block size {h}x{w} is heterogeneous. Encoding as all 0s (empty ON-set).")
+            print(
+                f"Warning: Espresso failed and block size {h}x{w} is heterogeneous. Encoding as all 0s (empty ON-set)."
+            )
             code = "00"
             selected_cubes = []
     elif not o_cubes:
@@ -221,10 +246,9 @@ def minimize_block(block):
         "n_bits": n_bits,
         "encoding_map": encoding_map,
         "map_value": map_value,
-        "on_set_cubes": on_set_cubes,    # NEW: track on-set cubes
+        "on_set_cubes": on_set_cubes,  # NEW: track on-set cubes
         "off_set_cubes": off_set_cubes,  # NEW: track off-set cubes
     }
-
 
 
 def reconstruct_block(info, w, h):

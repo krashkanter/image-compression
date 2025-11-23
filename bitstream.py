@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import io
 import flags
+import concurrent.futures
 from utils import (
     reconstruct_block,
     decode_char_code_mapping,
@@ -10,6 +11,7 @@ from utils import (
     BitStreamWriter,
     BitStreamReader,
     get_espresso_cost,
+    load_templates,
 )
 from stats import CompressionStats, _collect_stats_from_node
 
@@ -17,6 +19,28 @@ ENCODING_HOMOGENEOUS_0 = 0b00
 ENCODING_HOMOGENEOUS_1 = 0b01
 ENCODING_INTERNAL = 0b10
 ENCODING_HETEROGENEOUS = 0b11
+
+
+class IntCaptureWriter:
+    """Helper class to capture bits into an integer for parallel processing."""
+
+    def __init__(self):
+        self.value = 0
+        self.count = 0
+
+    def write_bit(self, bit):
+        self.value = (self.value << 1) | bit
+        self.count += 1
+
+    def write_bits(self, value, num_bits):
+        if num_bits > 0:
+            # Mask value to ensure it fits in num_bits
+            val_masked = value & ((1 << num_bits) - 1)
+            self.value = (self.value << num_bits) | val_masked
+            self.count += num_bits
+
+    def flush(self):
+        pass
 
 
 class QuadTree:
@@ -28,7 +52,9 @@ class QuadTree:
         self.subtype = None
         self.children = []
         self.discarded_minimized_data = None
-        self.alternative_subdivision = None  # Store 4x4 subdivision for comparison
+        self.alternative_subdivision = None
+        self.template_id = 0  # 0 = Raw/None, 1-7 = Template ID
+        self.bits_saved = 0
 
     def subdivide(self, block_data):
         blk = block_data
@@ -51,24 +77,59 @@ class QuadTree:
                 return
 
             if self.w == 8 and self.h == 8:
-                raw_cost = self.w * self.h
+                raw_cost = self.w * self.h  # 64 bits
                 min_data = minimize_block(blk)
                 espresso_cost = get_espresso_cost(min_data, use_3_bit_cube_count=True)
 
                 if raw_cost <= espresso_cost:
-                    self.subtype = "raw"
-                    self.raw_block_data = blk
-                    self.discarded_minimized_data = min_data
+                    # Incompressible Block logic
+                    # Check if templates can help
+                    best_template_id = 0
+                    best_template_min = None
+                    best_template_cost = raw_cost
+
+                    templates = load_templates()
+                    # Only check up to 7 templates (001-111)
+                    for i, tmpl in enumerate(templates[:7]):
+                        if tmpl.shape != (8, 8):
+                            continue
+
+                        # XOR Operation
+                        xor_diff = blk ^ tmpl
+
+                        # Minimize difference
+                        diff_min = minimize_block(xor_diff)
+
+                        # Cost: Espresso Cost + 3 bits (Header)
+                        diff_cost = (
+                            get_espresso_cost(diff_min, use_3_bit_cube_count=True) + 3
+                        )
+
+                        if diff_cost < best_template_cost:
+                            best_template_cost = diff_cost
+                            best_template_id = i + 1
+                            best_template_min = diff_min
+
+                    if best_template_id > 0:
+                        # Success: Resolved by template
+                        self.subtype = "template_match"
+                        self.template_id = best_template_id
+                        self.minimized = best_template_min
+                        self.bits_saved = raw_cost - best_template_cost
+                    else:
+                        # Fallback to Raw
+                        self.subtype = "raw"
+                        self.raw_block_data = blk
+                        self.discarded_minimized_data = min_data
+
                 else:
                     self.subtype = "espresso"
                     self.minimized = min_data
-
-                    # Store 4x4 subdivision for comparison
                     self.alternative_subdivision = self._create_4x4_subdivision(blk)
 
                 return
 
-        # Default subdivision for blocks larger than 8x8
+        # Default subdivision
         w1, h1 = (self.w + 1) // 2, (self.h + 1) // 2
         w2, h2 = self.w - w1, self.h - h1
 
@@ -86,7 +147,6 @@ class QuadTree:
                 self.children.append(child)
 
     def _create_4x4_subdivision(self, blk):
-        """Create 4x4 subdivision structure for comparison (not actual QuadTree nodes)"""
         w1, h1 = (self.w + 1) // 2, (self.h + 1) // 2
         w2, h2 = self.w - w1, self.h - h1
 
@@ -106,15 +166,12 @@ class QuadTree:
                     "w": ww,
                     "h": hh,
                 }
-
-                # Check if uniform
                 if np.all(child_slice == child_slice.flat[0]):
                     child_data["color"] = int(child_slice.flat[0])
                     child_data["cost"] = 1
                 else:
                     child_data["data"] = child_slice.tolist()
                     child_data["cost"] = ww * hh
-
                 subdivision_data.append(child_data)
 
         return {
@@ -132,6 +189,11 @@ class QuadTree:
                 node["data"] = self.minimized
                 if self.alternative_subdivision:
                     node["alternative_subdivision"] = self.alternative_subdivision
+            elif self.subtype == "template_match":
+                node["subtype"] = "template_match"
+                node["template_id"] = self.template_id
+                node["data"] = self.minimized
+                node["bits_saved"] = self.bits_saved
             elif self.subtype == "raw":
                 node["subtype"] = "raw"
                 node["data"] = self.raw_block_data.tolist()
@@ -148,6 +210,33 @@ class QuadTree:
             "h": self.h,
             "children": [c.to_dict() for c in self.children],
         }
+
+
+def _worker_process_tile(tile, bit):
+    """Worker function to process a single 64x64 tile."""
+    root = QuadTree(0, 0, 64, 64)
+    root.subdivide(tile)
+    node_dict = root.to_dict()
+
+    # Calculate cost using temporary writer
+    temp_writer = IntCaptureWriter()
+    encode_quadtree_node_bitstream(node_dict, temp_writer)
+    quadtree_cost_bits = temp_writer.count
+
+    final_writer = IntCaptureWriter()
+    is_overflow = False
+
+    if quadtree_cost_bits >= tile.size:
+        is_overflow = True
+        final_writer.write_bit(1)
+        for pixel in tile.flat:
+            final_writer.write_bit(int(pixel))
+    else:
+        is_overflow = False
+        final_writer.write_bit(0)
+        encode_quadtree_node_bitstream(node_dict, final_writer)
+
+    return (bit, is_overflow, final_writer.value, final_writer.count, node_dict)
 
 
 def compress_image_to_bitstream(image_path):
@@ -168,31 +257,34 @@ def compress_image_to_bitstream(image_path):
     stats = CompressionStats()
     stats.raw_bits = h * w * 8
 
-    for bit in range(8):
-        stats._init_plane_stats(bit)
-        plane_arr = ((padded_arr >> bit) & 1).astype(np.uint8)
-        for y0 in range(0, h, 64):
-            for x0 in range(0, w, 64):
-                tile = plane_arr[y0 : y0 + 64, x0 : x0 + 64]
-                root = QuadTree(0, 0, 64, 64)
-                root.subdivide(tile)
-                node_dict = root.to_dict()
-                temp_stream = io.BytesIO()
-                temp_writer = BitStreamWriter(temp_stream)
-                encode_quadtree_node_bitstream(node_dict, temp_writer)
-                temp_writer.flush()
-                quadtree_cost_bits = len(temp_stream.getvalue()) * 8
-                if quadtree_cost_bits >= tile.size:
-                    stats.plane_stats[bit]["raw_64_blocks"] += 1
-                    _collect_stats_from_node(node_dict, stats, bit, is_overflow=True)
-                    writer.write_bit(1)
-                    for pixel in tile.flat:
-                        writer.write_bit(int(pixel))
-                else:
-                    stats.plane_stats[bit]["quadtree_64_blocks"] += 1
-                    _collect_stats_from_node(node_dict, stats, bit, is_overflow=False)
-                    writer.write_bit(0)
-                    encode_quadtree_node_bitstream(node_dict, writer)
+    # Use ProcessPoolExecutor for parallel processing
+    # This speeds up the heavy lifting (Espresso calls and QuadTree logic)
+    # We maintain order by appending futures to a list and retrieving them sequentially
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        futures = []
+        for bit in range(8):
+            stats._init_plane_stats(bit)
+            plane_arr = ((padded_arr >> bit) & 1).astype(np.uint8)
+            for y0 in range(0, h, 64):
+                for x0 in range(0, w, 64):
+                    # Copying the tile ensures it's picklable and independent
+                    tile = plane_arr[y0 : y0 + 64, x0 : x0 + 64].copy()
+                    futures.append(executor.submit(_worker_process_tile, tile, bit))
+
+        # Collect results in order of submission
+        for f in futures:
+            bit, is_overflow, bits_val, bits_count, node_dict = f.result()
+
+            # Aggregate stats
+            if is_overflow:
+                stats.plane_stats[bit]["raw_64_blocks"] += 1
+                _collect_stats_from_node(node_dict, stats, bit, is_overflow=True)
+            else:
+                stats.plane_stats[bit]["quadtree_64_blocks"] += 1
+                _collect_stats_from_node(node_dict, stats, bit, is_overflow=False)
+
+            # Write aggregated bits to main stream
+            writer.write_bits(bits_val, bits_count)
 
     writer.flush()
     compressed_data = byte_stream.getvalue()
@@ -212,6 +304,10 @@ def decompress_image_from_bitstream(bitstream, padded_width, padded_height):
     reader = BitStreamReader(byte_stream)
     final_arr = np.zeros((padded_height, padded_width), dtype=np.uint8)
 
+    # Load templates globally for decompression if not passed explicitly
+    # In a real system, templates might need to be embedded in the header or standard
+    templates = load_templates()
+
     for bit in range(8):
         plane_arr = np.zeros((padded_height, padded_width), dtype=np.uint8)
         for y0 in range(0, padded_height, 64):
@@ -228,12 +324,14 @@ def decompress_image_from_bitstream(bitstream, padded_width, padded_height):
                                 plane_arr[y0 + r_offset, x0 + c_offset] = pixel
                 else:
                     root_node_dict = decode_quadtree_node_bitstream(
-                        reader, 0, 0, 64, 64
+                        reader, 0, 0, 64, 64, templates
                     )
                     if root_node_dict is None:
                         return None
                     tile_plane = np.zeros((64, 64), dtype=np.uint8)
-                    reconstruct_from_quadtree_node(root_node_dict, tile_plane)
+                    reconstruct_from_quadtree_node(
+                        root_node_dict, tile_plane, templates
+                    )
                     plane_arr[y0 : y0 + 64, x0 : x0 + 64] = tile_plane
         final_arr |= plane_arr << bit
     return final_arr
@@ -242,15 +340,25 @@ def decompress_image_from_bitstream(bitstream, padded_width, padded_height):
 def encode_quadtree_node_bitstream(node, writer):
     if node["type"] == "leaf":
         if node.get("subtype") == "espresso":
-            writer.write_bits(ENCODING_HETEROGENEOUS, 2)
-            writer.write_bit(0)
+            writer.write_bits(ENCODING_HETEROGENEOUS, 2)  # 11
+            writer.write_bit(0)  # 0 = Standard Espresso
             encode_minimized_block_bitstream(node["data"], writer)
+
         elif node.get("subtype") == "raw":
-            writer.write_bits(ENCODING_HETEROGENEOUS, 2)
-            writer.write_bit(1)
+            writer.write_bits(ENCODING_HETEROGENEOUS, 2)  # 11
+            writer.write_bit(1)  # 1 = Extended/Raw
+            writer.write_bits(0, 3)  # 000 = Raw Pixels
             raw_block_data = np.array(node["data"])
             for pixel in raw_block_data.flat:
                 writer.write_bit(int(pixel))
+
+        elif node.get("subtype") == "template_match":
+            writer.write_bits(ENCODING_HETEROGENEOUS, 2)  # 11
+            writer.write_bit(1)  # 1 = Extended/Raw
+            t_id = node.get("template_id", 0)
+            writer.write_bits(t_id, 3)  # 001-111 = Template ID
+            encode_minimized_block_bitstream(node["data"], writer)
+
         elif "code" in node:
             if node["code"] == "10":
                 writer.write_bits(ENCODING_HOMOGENEOUS_0, 2)
@@ -282,7 +390,7 @@ def encode_minimized_block_bitstream(minimized_data, writer):
         writer.write_bit(int(out))
 
 
-def decode_quadtree_node_bitstream(reader, x, y, w, h):
+def decode_quadtree_node_bitstream(reader, x, y, w, h, templates=None):
     node_encoding = reader.read_bits(2)
     if node_encoding is None:
         return None
@@ -304,13 +412,15 @@ def decode_quadtree_node_bitstream(reader, x, y, w, h):
         for dx, dy, ww, hh in child_positions:
             if ww > 0 and hh > 0:
                 child_node = decode_quadtree_node_bitstream(
-                    reader, x + dx, y + dy, ww, hh
+                    reader, x + dx, y + dy, ww, hh, templates
                 )
                 if child_node:
                     node["children"].append(child_node)
     elif node_encoding == ENCODING_HETEROGENEOUS:
         node["type"] = "leaf"
+        # Bit 1: Standard vs Extended
         if reader.read_bit() == 0:
+            # Standard Espresso
             node.update(
                 {
                     "subtype": "espresso",
@@ -318,13 +428,30 @@ def decode_quadtree_node_bitstream(reader, x, y, w, h):
                 }
             )
         else:
-            raw_block = [reader.read_bit() for _ in range(w * h)]
-            node.update(
-                {
-                    "subtype": "raw",
-                    "data": np.array(raw_block, dtype=np.uint8).reshape((h, w)),
-                }
-            )
+            # Extended (Raw or Template)
+            # Read 3-bit header
+            header_val = reader.read_bits(3)
+
+            if header_val == 0:
+                # 000 = Raw Pixels
+                raw_block = [reader.read_bit() for _ in range(w * h)]
+                node.update(
+                    {
+                        "subtype": "raw",
+                        "data": np.array(raw_block, dtype=np.uint8).reshape((h, w)),
+                    }
+                )
+            else:
+                # 001-111 = Template Match
+                # The data following this is the minimized XOR difference
+                node.update(
+                    {
+                        "subtype": "template_match",
+                        "template_id": header_val,
+                        "data": decode_minimized_block_bitstream(reader),
+                    }
+                )
+
     return node
 
 
@@ -344,16 +471,33 @@ def decode_minimized_block_bitstream(reader):
     return {"code": code, "cubes": cubes, "n_bits": n_bits}
 
 
-def reconstruct_from_quadtree_node(node, plane_arr):
+def reconstruct_from_quadtree_node(node, plane_arr, templates=None):
     x, y, w, h = node["x"], node["y"], node["w"], node["h"]
     if node["type"] == "leaf":
         if node.get("subtype") == "espresso":
             blk = reconstruct_block(node["data"], w, h)
         elif node.get("subtype") == "raw":
             blk = node["data"]
+        elif node.get("subtype") == "template_match":
+            # Reconstruct XOR Difference
+            diff = reconstruct_block(node["data"], w, h)
+
+            # Fetch Template
+            t_id = node.get("template_id", 0)
+            if templates and 1 <= t_id <= len(templates):
+                # t_id is 1-based index
+                tmpl = templates[t_id - 1]
+                # A = Diff ^ B
+                # Ensure dimensions match
+                if tmpl.shape == diff.shape:
+                    blk = diff ^ tmpl
+                else:
+                    blk = diff  # Fallback error
+            else:
+                blk = diff  # Fallback error
         else:
             blk = 1 if node.get("code") == "11" else 0
         plane_arr[y : y + h, x : x + w] = blk
     elif node["type"] == "node" and "children" in node:
         for child in node["children"]:
-            reconstruct_from_quadtree_node(child, plane_arr)
+            reconstruct_from_quadtree_node(child, plane_arr, templates)
