@@ -61,6 +61,8 @@ def main():
 
     bitstream = compressed_result["bitstream"]
     stats_obj = compressed_result["stats"]
+    stats_obj.compression_time = compression_time_taken
+    
     initial_size_bits = (
         compressed_result["original_width"] * compressed_result["original_height"] * 8
     )
@@ -85,8 +87,10 @@ def main():
 
     if args.dump_bin:
         try:
+            # Pack bits to bytes for saving
+            packed_bytes = np.packbits(bitstream)
             with open(compressed_bitstream_path, "wb") as f:
-                f.write(bitstream)
+                f.write(packed_bytes.tobytes())
             print(f"\nCompressed bitstream saved to '{compressed_bitstream_path}'")
         except Exception as e:
             print(f"Error saving compressed bitstream file: {e}")
@@ -98,6 +102,7 @@ def main():
     )
     decompression_end_time = time.time()
     decompression_time_taken = decompression_end_time - decompression_start_time
+    stats_obj.decompression_time = decompression_time_taken
 
     if reconstructed_arr is not None:
         print(f"Decompression finished in {decompression_time_taken:.4f} seconds.")
@@ -107,13 +112,7 @@ def main():
 
     if args.dump_stats:
         print(f"Dumping statistics to '{stats_output_path}'...")
-        stats_obj.dump_to_file(
-            stats_output_path,
-            compression_time_taken,
-            decompression_time_taken,
-            initial_size_bits,
-            padded_size_bits,
-        )
+        stats_obj.dump_to_file(stats_output_path)
 
     if reconstructed_arr is not None:
         try:

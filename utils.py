@@ -66,8 +66,11 @@ def run_espresso(terms, n_bits):
             pla_content.append(f"{inp} {out}")
         pla_content.append(".e")
         pla_input_str = "\n".join(pla_content)
+        espresso_cmd = (
+            ".\\bin\\espresso.exe" if os.name == "nt" else "./bin/espresso"
+        )
         res = subprocess.run(
-            [".\\bin\\espresso"],
+            [espresso_cmd],
             input=pla_input_str,
             capture_output=True,
             text=True,
@@ -300,89 +303,7 @@ def reconstruct_block(info, w, h):
     return blk
 
 
-class BitStreamWriter:
-    def __init__(self, byte_stream):
-        self._byte_stream = byte_stream
-        self._current_byte = 0
-        self._bits_in_byte = 0
-
-    def write_bit(self, bit):
-        if bit not in (0, 1):
-            raise ValueError("Bit must be 0 or 1")
-        self._current_byte |= bit << (7 - self._bits_in_byte)
-        self._bits_in_byte += 1
-        if self._bits_in_byte == 8:
-            self._byte_stream.write(bytes([self._current_byte]))
-            self._current_byte = 0
-            self._bits_in_byte = 0
-
-    def write_bits(self, value, num_bits):
-        if num_bits < 0:
-            raise ValueError("Number of bits must be non-negative")
-        if num_bits > 0 and (value < 0 or value >= (1 << num_bits)):
-            raise ValueError(f"Value {value} out of range for {num_bits} bits")
-        for i in range(num_bits):
-            bit = (value >> (num_bits - 1 - i)) & 1
-            self.write_bit(bit)
-
-    def flush(self):
-        if self._bits_in_byte > 0:
-            self._byte_stream.write(bytes([self._current_byte]))
-            self._current_byte = 0
-            self._bits_in_byte = 0
 
 
-class BitStreamReader:
-    def __init__(self, byte_stream):
-        self._byte_stream = byte_stream
-        self._current_byte = 0
-        self._bits_in_byte = 0
-        self._byte_buffer = b""
-        self._eof = False
 
-    def _read_next_byte(self):
-        if self._eof:
-            return False
-        byte = self._byte_stream.read(1)
-        if not byte:
-            self._eof = True
-            return False
-        self._byte_buffer += byte
-        return True
 
-    def read_bit(self):
-        if self._bits_in_byte == 0:
-            if not self._read_next_byte():
-                return None
-            self._current_byte = self._byte_buffer[0]
-            self._byte_buffer = self._byte_buffer[1:]
-            self._bits_in_byte = 8
-        bit = (self._current_byte >> (self._bits_in_byte - 1)) & 1
-        self._bits_in_byte -= 1
-        return bit
-
-    def read_bits(self, num_bits):
-        if num_bits < 0:
-            raise ValueError("Number of bits must be non-negative")
-        if num_bits == 0:
-            return 0
-        value = 0
-        for _ in range(num_bits):
-            bit = self.read_bit()
-            if bit is None:
-                return None
-            value = (value << 1) | bit
-        return value
-
-    def read_variable_code(self, decoding_map):
-        buffer = []
-        max_code_len = 2
-        while len(buffer) < max_code_len:
-            bit = self.read_bit()
-            if bit is None:
-                return None
-            buffer.append(str(bit))
-            current_code = "".join(buffer)
-            if current_code in decoding_map:
-                return decoding_map[current_code]
-        return None
