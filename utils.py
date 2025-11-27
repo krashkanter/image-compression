@@ -67,7 +67,7 @@ def run_espresso(terms, n_bits):
         pla_content.append(".e")
         pla_input_str = "\n".join(pla_content)
         res = subprocess.run(
-            ["espresso"],
+            [".\\bin\\espresso"],
             input=pla_input_str,
             capture_output=True,
             text=True,

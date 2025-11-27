@@ -4,7 +4,10 @@ import time
 import argparse
 import cv2
 import numpy as np
-from bitstream import compress_image_to_bitstream, decompress_image_from_bitstream
+from bitstream import (
+    compress_image_to_bitstream,
+    decompress_image_from_bitstream
+)
 import flags as config
 
 
