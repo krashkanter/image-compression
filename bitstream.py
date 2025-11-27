@@ -35,6 +35,7 @@ class QuadTree:
         self.alternative_subdivision = None
         self.template_id = 0
         self.bits_saved = 0
+        self.best_candidate = None # (id, cube_count)
 
     def subdivide(self, block_data, templates=None):
         blk = block_data
@@ -59,7 +60,8 @@ class QuadTree:
             if self.w == 8 and self.h == 8:
                 raw_cost = self.w * self.h  # 64 bits
                 min_data = minimize_block(blk)
-                espresso_cost = get_espresso_cost(min_data, use_3_bit_cube_count=True)
+                # Add 4 bits for Subtype Header (1100)
+                espresso_cost = get_espresso_cost(min_data, use_3_bit_cube_count=True) + 4
 
                 # Incompressible Block logic
                 best_template_id = 0
@@ -94,12 +96,17 @@ class QuadTree:
                         # but we can estimate or just use the cost function.
                         
                         # Let's use the raw cost comparison first to pick the best template.
-                        diff_cost = get_espresso_cost(diff_min, use_3_bit_cube_count=True)
+                        # Add 4 bits for Subtype Header (1101)
+                        diff_cost = get_espresso_cost(diff_min, use_3_bit_cube_count=True) + 4
                         
                         if diff_cost < best_template_cost:
                             best_template_cost = diff_cost
                             best_template_id = i + 1
                             best_template_min = diff_min
+
+                if best_template_id > 0 and best_template_min:
+                    cube_count = len(best_template_min.get("cubes", []))
+                    self.best_candidate = (best_template_id, cube_count)
 
                 # Now decide between Raw, Espresso, and Template
                 
@@ -209,6 +216,10 @@ class QuadTree:
                     node["discarded_minimized_data"] = self.discarded_minimized_data
             else:
                 node["code"] = "10"
+            
+            if self.best_candidate:
+                node["best_candidate"] = self.best_candidate
+                
             return node
         return {
             "type": "node",
@@ -278,6 +289,7 @@ def compress_image_to_bitstream(image_path):
     templates = load_templates()
 
     # Sequential processing
+    # Sequential processing
     for bit in range(8):
         plane_arr = ((padded_arr >> bit) & 1).astype(np.uint8)
 
@@ -298,10 +310,22 @@ def compress_image_to_bitstream(image_path):
                     bitstream.append(1)
                     for pixel in tile.flat:
                         bitstream.append(int(pixel))
+                    
+                    # Record stats for RAW overflow
+                    raw_stats = stats._create_empty_plane_stats()
+                    raw_stats["total_blocks"] = 1
+                    raw_stats["block_counts"]["raw"] = 1
+                    stats.update_plane_stats(bit, raw_stats)
+
                 else:
                     # Quadtree is better
                     bitstream.append(0)
                     bitstream.extend(temp_bitstream)
+                    
+                    # Collect stats for Quadtree
+                    node_stats = stats._create_empty_plane_stats()
+                    _collect_stats_from_node(node_dict, node_stats)
+                    stats.update_plane_stats(bit, node_stats)
 
     # Convert to numpy array for final storage
     compressed_data = np.array(bitstream, dtype=np.uint8)

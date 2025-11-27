@@ -1,0 +1,130 @@
+Compression Statistics
+======================
+Original Size: 2621440 bits
+Compressed Size: 1343374 bits
+Compression Ratio: 1.9514
+Compression Time: 184.5590 s
+Decompression Time: 229.2727 s
+
+Per-Bitplane Details
+--------------------
+
+Bitplane 0:
+  Total Blocks: 731
+  Cube Count:   84
+  Block Types:
+    raw            : 470 (64.30%)
+    espresso       : 25 (3.42%)
+    template_match : 0 (0.00%)
+    homogeneous    : 236 (32.28%)
+  Potential Template Analysis:
+    Best Candidate: 1 (found 2 times)
+    Best Cube Count:  5
+    Worst Cube Count: 5
+
+Bitplane 1:
+  Total Blocks: 725
+  Cube Count:   146
+  Block Types:
+    raw            : 432 (59.59%)
+    espresso       : 39 (5.38%)
+    template_match : 0 (0.00%)
+    homogeneous    : 254 (35.03%)
+  Potential Template Analysis:
+    Best Candidate: 1 (found 1 times)
+    Best Cube Count:  5
+    Worst Cube Count: 5
+
+Bitplane 2:
+  Total Blocks: 719
+  Cube Count:   175
+  Block Types:
+    raw            : 410 (57.02%)
+    espresso       : 47 (6.54%)
+    template_match : 3 (0.42%)
+    homogeneous    : 259 (36.02%)
+  Template Analysis:
+    Most Used ID:   2 (used 3 times)
+    Best Cube Count:  5
+    Worst Cube Count: 5
+    Total Bits Saved: 9
+
+Bitplane 3:
+  Total Blocks: 992
+  Cube Count:   380
+  Block Types:
+    raw            : 623 (62.80%)
+    espresso       : 95 (9.58%)
+    template_match : 10 (1.01%)
+    homogeneous    : 264 (26.61%)
+  Template Analysis:
+    Most Used ID:   2 (used 8 times)
+    Best Cube Count:  3
+    Worst Cube Count: 5
+    Total Bits Saved: 90
+
+Bitplane 4:
+  Total Blocks: 2183
+  Cube Count:   1453
+  Block Types:
+    raw            : 1273 (58.31%)
+    espresso       : 420 (19.24%)
+    template_match : 31 (1.42%)
+    homogeneous    : 459 (21.03%)
+  Template Analysis:
+    Most Used ID:   3 (used 14 times)
+    Best Cube Count:  2
+    Worst Cube Count: 5
+    Total Bits Saved: 252
+
+Bitplane 5:
+  Total Blocks: 2726
+  Cube Count:   1846
+  Block Types:
+    raw            : 1518 (55.69%)
+    espresso       : 519 (19.04%)
+    template_match : 38 (1.39%)
+    homogeneous    : 651 (23.88%)
+  Template Analysis:
+    Most Used ID:   3 (used 15 times)
+    Best Cube Count:  2
+    Worst Cube Count: 5
+    Total Bits Saved: 367
+
+Bitplane 6:
+  Total Blocks: 2474
+  Cube Count:   2152
+  Block Types:
+    raw            : 1060 (42.85%)
+    espresso       : 595 (24.05%)
+    template_match : 61 (2.47%)
+    homogeneous    : 758 (30.64%)
+  Template Analysis:
+    Most Used ID:   2 (used 24 times)
+    Best Cube Count:  1
+    Worst Cube Count: 5
+    Total Bits Saved: 635
+
+Bitplane 7:
+  Total Blocks: 2183
+  Cube Count:   2071
+  Block Types:
+    raw            : 757 (34.68%)
+    espresso       : 571 (26.16%)
+    template_match : 69 (3.16%)
+    homogeneous    : 786 (36.01%)
+  Template Analysis:
+    Most Used ID:   2 (used 30 times)
+    Best Cube Count:  1
+    Worst Cube Count: 5
+    Total Bits Saved: 790
+
+Overall Breakdown
+-----------------
+Total Blocks: 12733
+Total Cubes:  8307
+Block Type Distribution:
+  raw            : 6543 (51.39%)
+  espresso       : 2311 (18.15%)
+  template_match : 212 (1.66%)
+  homogeneous    : 3667 (28.80%)

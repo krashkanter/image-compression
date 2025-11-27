@@ -34,6 +34,11 @@ def main():
         action="store_true",
         help="Use pure quadtree compression without minimization.",
     )
+    parser.add_argument(
+        "--dump-plot",
+        action="store_true",
+        help="Dump plots of template stats",
+    )
     args = parser.parse_args()
 
     if args.pure_quadtree:
@@ -113,6 +118,9 @@ def main():
     if args.dump_stats:
         print(f"Dumping statistics to '{stats_output_path}'...")
         stats_obj.dump_to_file(stats_output_path)
+        
+    if args.dump_plot:
+        stats_obj.dump_plots(base_name)
 
     if reconstructed_arr is not None:
         try:
