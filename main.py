@@ -31,10 +31,17 @@ def main():
         action="store_true",
         help="Use pure quadtree compression without minimization.",
     )
+    parser.add_argument(
+        "--predictive-xor",
+        action="store_true",
+        help="Use predictive XOR technique.",
+    )
     args = parser.parse_args()
 
     if args.pure_quadtree:
         config.PURE_QUADTREE_MODE = True
+    if args.predictive_xor:
+        config.PREDICTIVE_XOR_MODE = True
 
     base_name = os.path.splitext(os.path.basename(args.input_image))[0]
     output_path = (

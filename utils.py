@@ -44,7 +44,7 @@ def run_espresso(terms, n_bits):
         pla_content.append(".e")
         pla_input_str = "\n".join(pla_content)
         res = subprocess.run(
-            ["espresso"],
+            ["./bin/espresso"],
             input=pla_input_str,
             capture_output=True,
             text=True,
@@ -362,3 +362,60 @@ class BitStreamReader:
             if current_code in decoding_map:
                 return decoding_map[current_code]
         return None
+
+def apply_zigzag_xor(plane_arr):
+    h, w = plane_arr.shape
+    rows_8 = h // 8
+    cols_8 = w // 8
+    
+    block_order = zigzag_indices(cols_8, rows_8)
+    
+    if not block_order:
+        return
+
+    # First block is kept as is, so we start tracking from it
+    first_idx = block_order[0]
+    r0, c0 = divmod(first_idx, cols_8)
+    prev_block = plane_arr[r0*8 : r0*8+8, c0*8 : c0*8+8].copy()
+    
+    for i in range(1, len(block_order)):
+        curr_idx = block_order[i]
+        curr_r, curr_c = divmod(curr_idx, cols_8)
+        curr_y, curr_x = curr_r * 8, curr_c * 8
+        
+        curr_block = plane_arr[curr_y : curr_y+8, curr_x : curr_x+8].copy()
+        
+        # XOR with previous original block
+        plane_arr[curr_y : curr_y+8, curr_x : curr_x+8] = prev_block ^ curr_block
+        
+        prev_block = curr_block
+
+
+def reverse_zigzag_xor(plane_arr):
+    h, w = plane_arr.shape
+    rows_8 = h // 8
+    cols_8 = w // 8
+    
+    block_order = zigzag_indices(cols_8, rows_8)
+    
+    if not block_order:
+        return
+
+    # First block was kept as is
+    first_idx = block_order[0]
+    r0, c0 = divmod(first_idx, cols_8)
+    prev_reconstructed_block = plane_arr[r0*8 : r0*8+8, c0*8 : c0*8+8].copy()
+    
+    for i in range(1, len(block_order)):
+        curr_idx = block_order[i]
+        curr_r, curr_c = divmod(curr_idx, cols_8)
+        curr_y, curr_x = curr_r * 8, curr_c * 8
+        
+        current_modified_block = plane_arr[curr_y : curr_y+8, curr_x : curr_x+8]
+        
+        # Recover original: Original[i] = Modified[i] ^ Original[i-1]
+        reconstructed_block = current_modified_block ^ prev_reconstructed_block
+        
+        plane_arr[curr_y : curr_y+8, curr_x : curr_x+8] = reconstructed_block
+        
+        prev_reconstructed_block = reconstructed_block

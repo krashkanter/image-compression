@@ -10,6 +10,8 @@ from utils import (
     BitStreamWriter,
     BitStreamReader,
     get_espresso_cost,
+    apply_zigzag_xor,
+    reverse_zigzag_xor,
 )
 from stats import CompressionStats, _collect_stats_from_node
 
@@ -121,6 +123,8 @@ def compress_image_to_bitstream(image_path):
     for bit in range(8):
         stats._init_plane_stats(bit)
         plane_arr = ((padded_arr >> bit) & 1).astype(np.uint8)
+        if flags.PREDICTIVE_XOR_MODE:
+            apply_zigzag_xor(plane_arr)
         for y0 in range(0, h, 64):
             for x0 in range(0, w, 64):
                 tile = plane_arr[y0 : y0 + 64, x0 : x0 + 64]
@@ -185,6 +189,8 @@ def decompress_image_from_bitstream(bitstream, padded_width, padded_height):
                     tile_plane = np.zeros((64, 64), dtype=np.uint8)
                     reconstruct_from_quadtree_node(root_node_dict, tile_plane)
                     plane_arr[y0 : y0 + 64, x0 : x0 + 64] = tile_plane
+        if flags.PREDICTIVE_XOR_MODE:
+            reverse_zigzag_xor(plane_arr)
         final_arr |= plane_arr << bit
     return final_arr
 
