@@ -12,6 +12,12 @@ from utils import (
     get_espresso_cost,
     apply_zigzag_xor,
     reverse_zigzag_xor,
+    apply_zigzag_xor_4x4,
+    reverse_zigzag_xor_4x4,
+    numpy_binary_to_gray,
+    numpy_gray_to_binary,
+    rle_encode,
+    rle_decode,
 )
 from stats import CompressionStats, _collect_stats_from_node
 
@@ -30,6 +36,7 @@ class QuadTree:
         self.subtype = None
         self.children = []
         self.discarded_minimized_data = None
+        self.xor_applied = False
 
     def subdivide(self, block_data):
         blk = block_data
@@ -46,17 +53,54 @@ class QuadTree:
                 return
         else:
             if self.w <= 8 and self.h <= 8:
+                work_blk = blk.copy()
+                
+                # First pass: Try Standard Espresso (No XOR)
                 raw_cost = self.w * self.h
-                min_data = minimize_block(blk)
+                min_data = minimize_block(work_blk)
                 espresso_cost = get_espresso_cost(min_data, use_3_bit_cube_count=True)
                 
-                if raw_cost <= espresso_cost:
-                    self.subtype = "raw"
-                    self.raw_block_data = blk
-                    self.discarded_minimized_data = min_data
-                else:
+                if espresso_cost < raw_cost:
+                    # Compressible without XOR
                     self.subtype = "espresso"
                     self.minimized = min_data
+                    self.xor_applied = False
+                    return
+
+                # If we are here, it was incompressible (or barely compressible).
+                # Try XOR if enabled.
+                if flags.PREDICTIVE_XOR_8X8_MODE:
+                    xor_blk = blk.copy()
+                    apply_zigzag_xor_4x4(xor_blk)
+                    
+                    min_data_xor = minimize_block(xor_blk)
+                    espresso_cost_xor = get_espresso_cost(min_data_xor, use_3_bit_cube_count=True)
+                    
+                    # Compare XOR-Espresso vs Raw (XOR'd raw is same size as original raw)
+                    # Actually, if we use XOR, we MUST store XOR'd data.
+                    # So we just check if XOR-Espresso is better than Raw.
+                    
+                    if espresso_cost_xor < raw_cost:
+                        self.subtype = "espresso"
+                        self.minimized = min_data_xor
+                        self.xor_applied = True
+                    else:
+                        # XOR didn't help make it compressible enough.
+                        # We still store it as RAW, but we MUST store the XOR'd version 
+                        # if we want to be consistent?
+                        # Wait, user said: "pick the incompressible blocks and then put the xor"
+                        # So if it was incompressible originally, we apply XOR.
+                        # Then we check again. If it's NOW compressible, we use Espresso.
+                        # If it's STILL incompressible, we use Raw (but XOR'd Raw).
+                        self.subtype = "raw"
+                        self.raw_block_data = xor_blk
+                        self.discarded_minimized_data = min_data_xor
+                        self.xor_applied = True
+                else:
+                    # No XOR mode, just standard fallback
+                    self.subtype = "raw"
+                    self.raw_block_data = work_blk
+                    self.discarded_minimized_data = min_data
                 return
 
         w1, h1 = (self.w + 1) // 2, (self.h + 1) // 2
@@ -84,11 +128,15 @@ class QuadTree:
             elif self.subtype == "espresso":
                 node["subtype"] = "espresso"
                 node["data"] = self.minimized
+                if flags.PREDICTIVE_XOR_8X8_MODE and self.w == 8 and self.h == 8:
+                    node["xor_applied"] = self.xor_applied
             elif self.subtype == "raw":
                 node["subtype"] = "raw"
                 node["data"] = self.raw_block_data.tolist()
                 if self.discarded_minimized_data:
                     node["discarded_minimized_data"] = self.discarded_minimized_data
+                if flags.PREDICTIVE_XOR_8X8_MODE and self.w == 8 and self.h == 8:
+                    node["xor_applied"] = self.xor_applied
             else:
                 node["code"] = "10"
             return node
@@ -119,6 +167,9 @@ def compress_image_to_bitstream(image_path):
     writer = BitStreamWriter(byte_stream)
     stats = CompressionStats()
     stats.raw_bits = h * w * 8
+    
+    if flags.GRAY_PIXELS_MODE:
+        padded_arr = numpy_binary_to_gray(padded_arr)
 
     for bit in range(8):
         stats._init_plane_stats(bit)
@@ -150,6 +201,10 @@ def compress_image_to_bitstream(image_path):
 
     writer.flush()
     compressed_data = byte_stream.getvalue()
+    
+    if flags.RLE_MODE:
+        compressed_data = rle_encode(compressed_data)
+        
     stats.compressed_bits = len(compressed_data) * 8
     return {
         "bitstream": compressed_data,
@@ -162,6 +217,13 @@ def compress_image_to_bitstream(image_path):
 
 
 def decompress_image_from_bitstream(bitstream, padded_width, padded_height):
+    if flags.RLE_MODE:
+        try:
+            bitstream = rle_decode(bitstream)
+        except ValueError as e:
+            print(f"RLE Decompression failed: {e}")
+            return None
+            
     byte_stream = io.BytesIO(bitstream)
     reader = BitStreamReader(byte_stream)
     final_arr = np.zeros((padded_height, padded_width), dtype=np.uint8)
@@ -192,6 +254,10 @@ def decompress_image_from_bitstream(bitstream, padded_width, padded_height):
         if flags.PREDICTIVE_XOR_MODE:
             reverse_zigzag_xor(plane_arr)
         final_arr |= plane_arr << bit
+        
+    if flags.GRAY_PIXELS_MODE:
+        final_arr = numpy_gray_to_binary(final_arr)
+        
     return final_arr
 
 
@@ -199,10 +265,14 @@ def encode_quadtree_node_bitstream(node, writer):
     if node["type"] == "leaf":
         if node.get("subtype") == "espresso":
             writer.write_bits(ENCODING_HETEROGENEOUS, 2)
+            if flags.PREDICTIVE_XOR_8X8_MODE and node["w"] == 8 and node["h"] == 8:
+                 writer.write_bit(1 if node.get("xor_applied") else 0)
             writer.write_bit(0)
             encode_minimized_block_bitstream(node["data"], writer)
         elif node.get("subtype") == "raw":
             writer.write_bits(ENCODING_HETEROGENEOUS, 2)
+            if flags.PREDICTIVE_XOR_8X8_MODE and node["w"] == 8 and node["h"] == 8:
+                 writer.write_bit(1 if node.get("xor_applied") else 0)
             writer.write_bit(1)
             raw_block_data = np.array(node["data"])
             for pixel in raw_block_data.flat:
@@ -266,6 +336,9 @@ def decode_quadtree_node_bitstream(reader, x, y, w, h):
                     node["children"].append(child_node)
     elif node_encoding == ENCODING_HETEROGENEOUS:
         node["type"] = "leaf"
+        if flags.PREDICTIVE_XOR_8X8_MODE and w == 8 and h == 8:
+            node["xor_applied"] = (reader.read_bit() == 1)
+            
         if reader.read_bit() == 0:
             node.update(
                 {
@@ -309,6 +382,14 @@ def reconstruct_from_quadtree_node(node, plane_arr):
             blk = node["data"]
         else:
             blk = 1 if node.get("code") == "11" else 0
+            blk = np.full((h, w), blk, dtype=np.uint8)
+        
+        # Only reverse XOR if the block was processed as non-homogeneous (has subtype)
+        # Homogeneous blocks (no subtype) were skipped by the encoder before XOR was applied.
+        if flags.PREDICTIVE_XOR_8X8_MODE and w == 8 and h == 8 and node.get("subtype"):
+            if node.get("xor_applied"):
+                reverse_zigzag_xor_4x4(blk)
+            
         plane_arr[y : y + h, x : x + w] = blk
     elif node["type"] == "node" and "children" in node:
         for child in node["children"]:

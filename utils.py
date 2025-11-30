@@ -419,3 +419,164 @@ def reverse_zigzag_xor(plane_arr):
         plane_arr[curr_y : curr_y+8, curr_x : curr_x+8] = reconstructed_block
         
         prev_reconstructed_block = reconstructed_block
+
+
+def apply_zigzag_xor_4x4(block_8x8):
+    # block_8x8 is expected to be an 8x8 numpy array
+    # We split it into 4x4 blocks (2x2 grid)
+    rows_4 = 2
+    cols_4 = 2
+    
+    block_order = zigzag_indices(cols_4, rows_4)
+    # block_order should be [0, 1, 3, 2] for 2x2
+    
+    if not block_order:
+        return
+
+    # First block (0,0) is kept as is
+    first_idx = block_order[0]
+    r0, c0 = divmod(first_idx, cols_4)
+    prev_block = block_8x8[r0*4 : r0*4+4, c0*4 : c0*4+4].copy()
+    
+    for i in range(1, len(block_order)):
+        curr_idx = block_order[i]
+        curr_r, curr_c = divmod(curr_idx, cols_4)
+        curr_y, curr_x = curr_r * 4, curr_c * 4
+        
+        curr_block = block_8x8[curr_y : curr_y+4, curr_x : curr_x+4].copy()
+        
+        # XOR with previous original block
+        block_8x8[curr_y : curr_y+4, curr_x : curr_x+4] = prev_block ^ curr_block
+        
+        prev_block = curr_block
+
+
+def reverse_zigzag_xor_4x4(block_8x8):
+    rows_4 = 2
+    cols_4 = 2
+    
+    block_order = zigzag_indices(cols_4, rows_4)
+    
+    if not block_order:
+        return
+
+    # First block was kept as is
+    first_idx = block_order[0]
+    r0, c0 = divmod(first_idx, cols_4)
+    prev_reconstructed_block = block_8x8[r0*4 : r0*4+4, c0*4 : c0*4+4].copy()
+    
+    for i in range(1, len(block_order)):
+        curr_idx = block_order[i]
+        curr_r, curr_c = divmod(curr_idx, cols_4)
+        curr_y, curr_x = curr_r * 4, curr_c * 4
+        
+        current_modified_block = block_8x8[curr_y : curr_y+4, curr_x : curr_x+4]
+        
+        # Recover original: Original[i] = Modified[i] ^ Original[i-1]
+        reconstructed_block = current_modified_block ^ prev_reconstructed_block
+        
+        block_8x8[curr_y : curr_y+4, curr_x : curr_x+4] = reconstructed_block
+        
+        prev_reconstructed_block = reconstructed_block
+
+
+def numpy_binary_to_gray(arr):
+    """
+    Converts a numpy array of integers from Binary to Gray code.
+    Gray = Binary ^ (Binary >> 1)
+    """
+    return arr ^ (arr >> 1)
+
+
+def numpy_gray_to_binary(arr):
+    """
+    Converts a numpy array of integers from Gray code back to Binary.
+    Binary[i] = Gray[i] ^ Binary[i+1] (MSB to LSB)
+    Since we are working with 8-bit integers, we can do this iteratively.
+    """
+    mask = arr >> 1
+    while np.any(mask != 0):
+        arr = arr ^ mask
+        mask = mask >> 1
+    return arr
+
+
+def rle_encode(data: bytes) -> bytes:
+    """
+    Compresses data using a PackBits-like RLE scheme.
+    Control byte n:
+      0 <= n <= 127: n + 1 literal bytes follow
+      128 <= n <= 255: repeat next byte (n - 127 + 1) times
+    """
+    if not data:
+        return b""
+
+    result = bytearray()
+    i = 0
+    n = len(data)
+
+    while i < n:
+        # Check for run
+        run_len = 1
+        while i + run_len < n and run_len < 129 and data[i + run_len] == data[i]:
+            run_len += 1
+
+        if run_len > 1:
+            # We have a run of run_len (2 to 129)
+            # Control byte = 127 + run_len - 1 = 126 + run_len
+            # Wait, spec said: 128 <= n <= 255.
+            # n - 127 + 1 = repetitions
+            # n = repetitions + 126
+            # Min repetitions = 2 -> n = 128. Max repetitions = 129 -> n = 255.
+            control_byte = 126 + run_len
+            result.append(control_byte)
+            result.append(data[i])
+            i += run_len
+        else:
+            # Literal run
+            lit_len = 0
+            # Look ahead to find where next run starts or max literal length reached
+            while i + lit_len < n and lit_len < 128:
+                # Check if a run of at least 2 starts at i + lit_len
+                if i + lit_len + 1 < n and data[i + lit_len] == data[i + lit_len + 1]:
+                    break
+                lit_len += 1
+            
+            # Control byte = lit_len - 1 (0 to 127)
+            control_byte = lit_len - 1
+            result.append(control_byte)
+            result.extend(data[i : i + lit_len])
+            i += lit_len
+
+    return bytes(result)
+
+
+def rle_decode(data: bytes) -> bytes:
+    """
+    Decompresses data using the PackBits-like RLE scheme.
+    """
+    result = bytearray()
+    i = 0
+    n = len(data)
+
+    while i < n:
+        control = data[i]
+        i += 1
+
+        if control <= 127:
+            # Literal run of control + 1 bytes
+            length = control + 1
+            if i + length > n:
+                raise ValueError("RLE decode error: insufficient data for literal run")
+            result.extend(data[i : i + length])
+            i += length
+        else:
+            # Repeat run
+            length = control - 126
+            if i >= n:
+                raise ValueError("RLE decode error: missing byte to repeat")
+            byte_to_repeat = data[i]
+            result.extend([byte_to_repeat] * length)
+            i += 1
+
+    return bytes(result)

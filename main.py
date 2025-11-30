@@ -36,12 +36,33 @@ def main():
         action="store_true",
         help="Use predictive XOR technique.",
     )
+    parser.add_argument(
+        "--predictive-xor-8x8",
+        action="store_true",
+        help="Use predictive XOR technique on 8x8 blocks.",
+    )
+    parser.add_argument(
+        "--gray-pixels",
+        action="store_true",
+        help="Use Gray coding for pixel values to improve bitplane correlation.",
+    )
+    parser.add_argument(
+        "--rle",
+        action="store_true",
+        help="Use Run-Length Encoding on the final bitstream.",
+    )
     args = parser.parse_args()
 
     if args.pure_quadtree:
         config.PURE_QUADTREE_MODE = True
     if args.predictive_xor:
         config.PREDICTIVE_XOR_MODE = True
+    if args.predictive_xor_8x8:
+        config.PREDICTIVE_XOR_8X8_MODE = True
+    if args.gray_pixels:
+        config.GRAY_PIXELS_MODE = True
+    if args.rle:
+        config.RLE_MODE = True
 
     base_name = os.path.splitext(os.path.basename(args.input_image))[0]
     output_path = (
