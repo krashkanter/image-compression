@@ -7,120 +7,55 @@
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
-  - Compressed with Quadtree: 45.00%
-  - Stored as Raw (64x64 Overflow): 55.00%
+  - Compressed with Quadtree: 36 (45.00%)
+  - Stored as Raw (64x64 Overflow): 44 (55.00%)
 
 Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
   Level 64x64 (Total Nodes: 80):
-    - 00 (Homo-0):    17.50%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  82.50%
+    - 00 (Homo-0):            14 (17.50%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          66 (82.50%)
   Level 32x32 (Total Nodes: 264):
-    - 00 (Homo-0):    13.64%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  86.36%
+    - 00 (Homo-0):            36 (13.64%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          228 (86.36%)
   Level 16x16 (Total Nodes: 912):
-    - 00 (Homo-0):    7.13%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  92.87%
+    - 00 (Homo-0):            65 (7.13%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          847 (92.87%)
   Level 8x8 (Total Nodes: 3388):
-    - 00 (Homo-0):    3.63%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  0.00%
-    - 11 (Hetero-Leaf):96.37%
+    - 00 (Homo-0):            123 (3.63%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          0 (0.00%)
+    - 11 (Hetero-Leaf):       3265 (96.37%)
+  Level 4x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 2x2 (Total Nodes: 0):
+    - No nodes at this level.
 
-Leaf Node Type Distribution:
+Leaf Node Type Distribution (Per Level):
+  Level 8x8 (Total Leaves: 572):
+    - Espresso:          26 (4.55%)
+    - Raw:               425 (74.30%)
+    - Homogeneous-0:     121 (21.15%)
+    - Homogeneous-1:     0 (0.00%)
+  Level 4x4 (Total Leaves: 0):
+    - No leaves at this level.
+  Level 2x2 (Total Leaves: 0):
+    - No leaves at this level.
+
+XOR Usage Statistics (Predictive XOR for Small Blocks):
+  Level 4x4 (Total Blocks: 0):
+    - No blocks at this level.
+  Level 2x2 (Total Blocks: 0):
+    - No blocks at this level.
+
+Overall Leaf Node Type Distribution:
   Total Leaf Nodes: 687
-  - Compressible:        37.99% (261 nodes)
-  - Incompressible (In-Tree Raw):62.01% (426 nodes)
-
-Espresso-Compressed Leaf Cube Distribution:
-  (For the 25 leaves compressed with Espresso)
-    - 1 Cubes: 12.00% (3 blocks)
-    - 2 Cubes: 16.00% (4 blocks)
-    - 3 Cubes: 12.00% (3 blocks)
-    - 4 Cubes: 48.00% (12 blocks)
-    - 5 Cubes: 8.00% (2 blocks)
-    - 6 Cubes: 4.00% (1 blocks)
-    - 7 Cubes: 0.00% (0 blocks)
-    - 8 Cubes: 0.00% (0 blocks)
-    - 9 Cubes: 0.00% (0 blocks)
-    - 10 Cubes:0.00% (0 blocks)
-    - 11 Cubes:0.00% (0 blocks)
-    - 12 Cubes:0.00% (0 blocks)
-    - 13 Cubes:0.00% (0 blocks)
-    - 14 Cubes:0.00% (0 blocks)
-    - 15 Cubes:0.00% (0 blocks)
-    - 16 Cubes:0.00% (0 blocks)
-    - 17 Cubes:0.00% (0 blocks)
-    - 18 Cubes:0.00% (0 blocks)
-    - 19 Cubes:0.00% (0 blocks)
-    - 20 Cubes:0.00% (0 blocks)
-    - 21 Cubes:0.00% (0 blocks)
-    - 22 Cubes:0.00% (0 blocks)
-    - 23 Cubes:0.00% (0 blocks)
-    - 24 Cubes:0.00% (0 blocks)
-    - 25 Cubes:0.00% (0 blocks)
-    - 26 Cubes:0.00% (0 blocks)
-    - 27 Cubes:0.00% (0 blocks)
-    - 28 Cubes:0.00% (0 blocks)
-    - 29 Cubes:0.00% (0 blocks)
-    - 30 Cubes:0.00% (0 blocks)
-    - 31 Cubes:0.00% (0 blocks)
-    - 32 Cubes:0.00% (0 blocks)
-
-Analysis of Discarded Espresso Results (In-Tree Raw Leaves):
-  (For the 426 leaves where Espresso was costlier than raw pixels or had >7 cubes)
-    - 1 Cubes: 0.00% (0 blocks)
-    - 2 Cubes: 0.00% (0 blocks)
-    - 3 Cubes: 0.00% (0 blocks)
-    - 4 Cubes: 0.00% (0 blocks)
-    - 5 Cubes: 0.00% (0 blocks)
-    - 6 Cubes: 0.94% (4 blocks)
-    - 7 Cubes: 2.58% (11 blocks)
-    - 8 Cubes: 2.82% (12 blocks)
-    - 9 Cubes: 3.29% (14 blocks)
-    - 10 Cubes:5.87% (25 blocks)
-    - 11 Cubes:11.03% (47 blocks)
-    - 12 Cubes:18.78% (80 blocks)
-    - 13 Cubes:22.30% (95 blocks)
-    - 14 Cubes:14.55% (62 blocks)
-    - 15 Cubes:12.68% (54 blocks)
-    - 16 Cubes:2.35% (10 blocks)
-    - 17 Cubes:1.17% (5 blocks)
-    - 18 Cubes:0.94% (4 blocks)
-    - 19 Cubes:0.47% (2 blocks)
-    - 20 Cubes:0.23% (1 blocks)
-    - 21 Cubes:0.00% (0 blocks)
-    - 22 Cubes:0.00% (0 blocks)
-    - 23 Cubes:0.00% (0 blocks)
-    - 24 Cubes:0.00% (0 blocks)
-    - 25 Cubes:0.00% (0 blocks)
-    - 26 Cubes:0.00% (0 blocks)
-    - 27 Cubes:0.00% (0 blocks)
-    - 28 Cubes:0.00% (0 blocks)
-    - 29 Cubes:0.00% (0 blocks)
-    - 30 Cubes:0.00% (0 blocks)
-    - 31 Cubes:0.00% (0 blocks)
-    - 32 Cubes:0.00% (0 blocks)
-
-On-Set Cube Distribution (Before Selection):
- (For the 25 blocks that underwent Espresso analysis)
- - 1 Cubes:    12.00% (3 blocks)
- - 2 Cubes:    16.00% (4 blocks)
- - 3 Cubes:    12.00% (3 blocks)
- - 4 Cubes:    48.00% (12 blocks)
- - 5 Cubes:    8.00% (2 blocks)
- - 6 Cubes:    4.00% (1 blocks)
-
-Off-Set Cube Distribution (Before Selection):
- (For the 25 blocks that underwent Espresso analysis)
- - 3 Cubes:    4.00% (1 blocks)
- - 5 Cubes:    8.00% (2 blocks)
- - 6 Cubes:    24.00% (6 blocks)
- - 7 Cubes:    40.00% (10 blocks)
- - 8 Cubes:    20.00% (5 blocks)
- - 10 Cubes:   4.00% (1 blocks)
+  - Homogeneous-0:            236 (34.35%)
+  - Homogeneous-1:            0 (0.00%)
+  - Espresso:                 26 (3.78%)
+  - Raw:                      425 (61.86%)
 
 
 --- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
@@ -128,129 +63,65 @@ Off-Set Cube Distribution (Before Selection):
 
   Leaf Node Type Distribution (Overflow Trees):
     Total Leaf Nodes: 2816
-    - Compressible:      0.11%
-    - Incompressible (In-Tree Raw):99.89%
+    - Homogeneous-0:          2 (0.07%)
+    - Homogeneous-1:          0 (0.00%)
+    - Espresso:               0 (0.00%)
+    - Raw:                    2814 (99.93%)
 
 ----------------------------------------
   Bitplane 1
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
-  - Compressed with Quadtree: 45.00%
-  - Stored as Raw (64x64 Overflow): 55.00%
+  - Compressed with Quadtree: 36 (45.00%)
+  - Stored as Raw (64x64 Overflow): 44 (55.00%)
 
 Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
   Level 64x64 (Total Nodes: 80):
-    - 00 (Homo-0):    17.50%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  82.50%
+    - 00 (Homo-0):            14 (17.50%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          66 (82.50%)
   Level 32x32 (Total Nodes: 264):
-    - 00 (Homo-0):    13.64%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  86.36%
+    - 00 (Homo-0):            36 (13.64%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          228 (86.36%)
   Level 16x16 (Total Nodes: 912):
-    - 00 (Homo-0):    7.35%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  92.65%
+    - 00 (Homo-0):            67 (7.35%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          845 (92.65%)
   Level 8x8 (Total Nodes: 3380):
-    - 00 (Homo-0):    4.11%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  0.00%
-    - 11 (Hetero-Leaf):95.89%
+    - 00 (Homo-0):            138 (4.08%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          0 (0.00%)
+    - 11 (Hetero-Leaf):       3242 (95.92%)
+  Level 4x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 2x2 (Total Nodes: 0):
+    - No nodes at this level.
 
-Leaf Node Type Distribution:
+Leaf Node Type Distribution (Per Level):
+  Level 8x8 (Total Leaves: 564):
+    - Espresso:          39 (6.91%)
+    - Raw:               389 (68.97%)
+    - Homogeneous-0:     136 (24.11%)
+    - Homogeneous-1:     0 (0.00%)
+  Level 4x4 (Total Leaves: 0):
+    - No leaves at this level.
+  Level 2x2 (Total Leaves: 0):
+    - No leaves at this level.
+
+XOR Usage Statistics (Predictive XOR for Small Blocks):
+  Level 4x4 (Total Blocks: 0):
+    - No blocks at this level.
+  Level 2x2 (Total Blocks: 0):
+    - No blocks at this level.
+
+Overall Leaf Node Type Distribution:
   Total Leaf Nodes: 681
-  - Compressible:        43.02% (293 nodes)
-  - Incompressible (In-Tree Raw):56.98% (388 nodes)
-
-Espresso-Compressed Leaf Cube Distribution:
-  (For the 39 leaves compressed with Espresso)
-    - 1 Cubes: 2.56% (1 blocks)
-    - 2 Cubes: 17.95% (7 blocks)
-    - 3 Cubes: 17.95% (7 blocks)
-    - 4 Cubes: 30.77% (12 blocks)
-    - 5 Cubes: 25.64% (10 blocks)
-    - 6 Cubes: 5.13% (2 blocks)
-    - 7 Cubes: 0.00% (0 blocks)
-    - 8 Cubes: 0.00% (0 blocks)
-    - 9 Cubes: 0.00% (0 blocks)
-    - 10 Cubes:0.00% (0 blocks)
-    - 11 Cubes:0.00% (0 blocks)
-    - 12 Cubes:0.00% (0 blocks)
-    - 13 Cubes:0.00% (0 blocks)
-    - 14 Cubes:0.00% (0 blocks)
-    - 15 Cubes:0.00% (0 blocks)
-    - 16 Cubes:0.00% (0 blocks)
-    - 17 Cubes:0.00% (0 blocks)
-    - 18 Cubes:0.00% (0 blocks)
-    - 19 Cubes:0.00% (0 blocks)
-    - 20 Cubes:0.00% (0 blocks)
-    - 21 Cubes:0.00% (0 blocks)
-    - 22 Cubes:0.00% (0 blocks)
-    - 23 Cubes:0.00% (0 blocks)
-    - 24 Cubes:0.00% (0 blocks)
-    - 25 Cubes:0.00% (0 blocks)
-    - 26 Cubes:0.00% (0 blocks)
-    - 27 Cubes:0.00% (0 blocks)
-    - 28 Cubes:0.00% (0 blocks)
-    - 29 Cubes:0.00% (0 blocks)
-    - 30 Cubes:0.00% (0 blocks)
-    - 31 Cubes:0.00% (0 blocks)
-    - 32 Cubes:0.00% (0 blocks)
-
-Analysis of Discarded Espresso Results (In-Tree Raw Leaves):
-  (For the 388 leaves where Espresso was costlier than raw pixels or had >7 cubes)
-    - 1 Cubes: 0.00% (0 blocks)
-    - 2 Cubes: 0.00% (0 blocks)
-    - 3 Cubes: 0.00% (0 blocks)
-    - 4 Cubes: 0.00% (0 blocks)
-    - 5 Cubes: 0.00% (0 blocks)
-    - 6 Cubes: 2.32% (9 blocks)
-    - 7 Cubes: 2.84% (11 blocks)
-    - 8 Cubes: 5.15% (20 blocks)
-    - 9 Cubes: 3.87% (15 blocks)
-    - 10 Cubes:7.73% (30 blocks)
-    - 11 Cubes:10.82% (42 blocks)
-    - 12 Cubes:19.59% (76 blocks)
-    - 13 Cubes:19.59% (76 blocks)
-    - 14 Cubes:14.95% (58 blocks)
-    - 15 Cubes:7.73% (30 blocks)
-    - 16 Cubes:2.84% (11 blocks)
-    - 17 Cubes:0.52% (2 blocks)
-    - 18 Cubes:0.77% (3 blocks)
-    - 19 Cubes:0.77% (3 blocks)
-    - 20 Cubes:0.00% (0 blocks)
-    - 21 Cubes:0.52% (2 blocks)
-    - 22 Cubes:0.00% (0 blocks)
-    - 23 Cubes:0.00% (0 blocks)
-    - 24 Cubes:0.00% (0 blocks)
-    - 25 Cubes:0.00% (0 blocks)
-    - 26 Cubes:0.00% (0 blocks)
-    - 27 Cubes:0.00% (0 blocks)
-    - 28 Cubes:0.00% (0 blocks)
-    - 29 Cubes:0.00% (0 blocks)
-    - 30 Cubes:0.00% (0 blocks)
-    - 31 Cubes:0.00% (0 blocks)
-    - 32 Cubes:0.00% (0 blocks)
-
-On-Set Cube Distribution (Before Selection):
- (For the 39 blocks that underwent Espresso analysis)
- - 1 Cubes:    2.56% (1 blocks)
- - 2 Cubes:    17.95% (7 blocks)
- - 3 Cubes:    15.38% (6 blocks)
- - 4 Cubes:    33.33% (13 blocks)
- - 5 Cubes:    25.64% (10 blocks)
- - 6 Cubes:    5.13% (2 blocks)
-
-Off-Set Cube Distribution (Before Selection):
- (For the 39 blocks that underwent Espresso analysis)
- - 3 Cubes:    2.56% (1 blocks)
- - 6 Cubes:    30.77% (12 blocks)
- - 7 Cubes:    28.21% (11 blocks)
- - 8 Cubes:    20.51% (8 blocks)
- - 9 Cubes:    12.82% (5 blocks)
- - 10 Cubes:   2.56% (1 blocks)
- - 11 Cubes:   2.56% (1 blocks)
+  - Homogeneous-0:            253 (37.15%)
+  - Homogeneous-1:            0 (0.00%)
+  - Espresso:                 39 (5.73%)
+  - Raw:                      389 (57.12%)
 
 
 --- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
@@ -258,684 +129,322 @@ Off-Set Cube Distribution (Before Selection):
 
   Leaf Node Type Distribution (Overflow Trees):
     Total Leaf Nodes: 2816
-    - Compressible:      0.25%
-    - Incompressible (In-Tree Raw):99.75%
+    - Homogeneous-0:          2 (0.07%)
+    - Homogeneous-1:          0 (0.00%)
+    - Espresso:               12 (0.43%)
+    - Raw:                    2802 (99.50%)
 
 ----------------------------------------
   Bitplane 2
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
-  - Compressed with Quadtree: 45.00%
-  - Stored as Raw (64x64 Overflow): 55.00%
+  - Compressed with Quadtree: 42 (52.50%)
+  - Stored as Raw (64x64 Overflow): 38 (47.50%)
 
 Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
   Level 64x64 (Total Nodes: 80):
-    - 00 (Homo-0):    17.50%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  82.50%
+    - 00 (Homo-0):            14 (17.50%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          66 (82.50%)
   Level 32x32 (Total Nodes: 264):
-    - 00 (Homo-0):    13.64%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  86.36%
+    - 00 (Homo-0):            36 (13.64%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          228 (86.36%)
   Level 16x16 (Total Nodes: 912):
-    - 00 (Homo-0):    7.57%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  92.43%
+    - 00 (Homo-0):            69 (7.57%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          843 (92.43%)
   Level 8x8 (Total Nodes: 3372):
-    - 00 (Homo-0):    4.33%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  0.00%
-    - 11 (Hetero-Leaf):95.67%
+    - 00 (Homo-0):            152 (4.51%)
+    - 01 (Homo-1):            6 (0.18%)
+    - 10 (Internal):          0 (0.00%)
+    - 11 (Hetero-Leaf):       3214 (95.31%)
+  Level 4x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 2x2 (Total Nodes: 0):
+    - No nodes at this level.
 
-Leaf Node Type Distribution:
-  Total Leaf Nodes: 675
-  - Compressible:        45.33% (306 nodes)
-  - Incompressible (In-Tree Raw):54.67% (369 nodes)
+Leaf Node Type Distribution (Per Level):
+  Level 8x8 (Total Leaves: 940):
+    - Espresso:          142 (15.11%)
+    - Raw:               648 (68.94%)
+    - Homogeneous-0:     146 (15.53%)
+    - Homogeneous-1:     4 (0.43%)
+  Level 4x4 (Total Leaves: 0):
+    - No leaves at this level.
+  Level 2x2 (Total Leaves: 0):
+    - No leaves at this level.
 
-Espresso-Compressed Leaf Cube Distribution:
-  (For the 47 leaves compressed with Espresso)
-    - 1 Cubes: 10.64% (5 blocks)
-    - 2 Cubes: 17.02% (8 blocks)
-    - 3 Cubes: 27.66% (13 blocks)
-    - 4 Cubes: 19.15% (9 blocks)
-    - 5 Cubes: 17.02% (8 blocks)
-    - 6 Cubes: 8.51% (4 blocks)
-    - 7 Cubes: 0.00% (0 blocks)
-    - 8 Cubes: 0.00% (0 blocks)
-    - 9 Cubes: 0.00% (0 blocks)
-    - 10 Cubes:0.00% (0 blocks)
-    - 11 Cubes:0.00% (0 blocks)
-    - 12 Cubes:0.00% (0 blocks)
-    - 13 Cubes:0.00% (0 blocks)
-    - 14 Cubes:0.00% (0 blocks)
-    - 15 Cubes:0.00% (0 blocks)
-    - 16 Cubes:0.00% (0 blocks)
-    - 17 Cubes:0.00% (0 blocks)
-    - 18 Cubes:0.00% (0 blocks)
-    - 19 Cubes:0.00% (0 blocks)
-    - 20 Cubes:0.00% (0 blocks)
-    - 21 Cubes:0.00% (0 blocks)
-    - 22 Cubes:0.00% (0 blocks)
-    - 23 Cubes:0.00% (0 blocks)
-    - 24 Cubes:0.00% (0 blocks)
-    - 25 Cubes:0.00% (0 blocks)
-    - 26 Cubes:0.00% (0 blocks)
-    - 27 Cubes:0.00% (0 blocks)
-    - 28 Cubes:0.00% (0 blocks)
-    - 29 Cubes:0.00% (0 blocks)
-    - 30 Cubes:0.00% (0 blocks)
-    - 31 Cubes:0.00% (0 blocks)
-    - 32 Cubes:0.00% (0 blocks)
+XOR Usage Statistics (Predictive XOR for Small Blocks):
+  Level 4x4 (Total Blocks: 0):
+    - No blocks at this level.
+  Level 2x2 (Total Blocks: 0):
+    - No blocks at this level.
 
-Analysis of Discarded Espresso Results (In-Tree Raw Leaves):
-  (For the 369 leaves where Espresso was costlier than raw pixels or had >7 cubes)
-    - 1 Cubes: 0.00% (0 blocks)
-    - 2 Cubes: 0.00% (0 blocks)
-    - 3 Cubes: 0.00% (0 blocks)
-    - 4 Cubes: 0.00% (0 blocks)
-    - 5 Cubes: 0.00% (0 blocks)
-    - 6 Cubes: 2.71% (10 blocks)
-    - 7 Cubes: 5.42% (20 blocks)
-    - 8 Cubes: 6.23% (23 blocks)
-    - 9 Cubes: 7.05% (26 blocks)
-    - 10 Cubes:8.40% (31 blocks)
-    - 11 Cubes:12.47% (46 blocks)
-    - 12 Cubes:14.63% (54 blocks)
-    - 13 Cubes:16.53% (61 blocks)
-    - 14 Cubes:10.84% (40 blocks)
-    - 15 Cubes:9.76% (36 blocks)
-    - 16 Cubes:4.34% (16 blocks)
-    - 17 Cubes:0.54% (2 blocks)
-    - 18 Cubes:0.54% (2 blocks)
-    - 19 Cubes:0.00% (0 blocks)
-    - 20 Cubes:0.27% (1 blocks)
-    - 21 Cubes:0.00% (0 blocks)
-    - 22 Cubes:0.27% (1 blocks)
-    - 23 Cubes:0.00% (0 blocks)
-    - 24 Cubes:0.00% (0 blocks)
-    - 25 Cubes:0.00% (0 blocks)
-    - 26 Cubes:0.00% (0 blocks)
-    - 27 Cubes:0.00% (0 blocks)
-    - 28 Cubes:0.00% (0 blocks)
-    - 29 Cubes:0.00% (0 blocks)
-    - 30 Cubes:0.00% (0 blocks)
-    - 31 Cubes:0.00% (0 blocks)
-    - 32 Cubes:0.00% (0 blocks)
-
-On-Set Cube Distribution (Before Selection):
- (For the 47 blocks that underwent Espresso analysis)
- - 1 Cubes:    10.64% (5 blocks)
- - 2 Cubes:    17.02% (8 blocks)
- - 3 Cubes:    27.66% (13 blocks)
- - 4 Cubes:    19.15% (9 blocks)
- - 5 Cubes:    17.02% (8 blocks)
- - 6 Cubes:    8.51% (4 blocks)
-
-Off-Set Cube Distribution (Before Selection):
- (For the 47 blocks that underwent Espresso analysis)
- - 4 Cubes:    6.38% (3 blocks)
- - 5 Cubes:    12.77% (6 blocks)
- - 6 Cubes:    25.53% (12 blocks)
- - 7 Cubes:    29.79% (14 blocks)
- - 8 Cubes:    8.51% (4 blocks)
- - 9 Cubes:    12.77% (6 blocks)
- - 10 Cubes:   4.26% (2 blocks)
+Overall Leaf Node Type Distribution:
+  Total Leaf Nodes: 1059
+  - Homogeneous-0:            265 (25.02%)
+  - Homogeneous-1:            4 (0.38%)
+  - Espresso:                 142 (13.41%)
+  - Raw:                      648 (61.19%)
 
 
 --- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
-  (For the 44 blocks where the entire Quadtree was larger than raw)
+  (For the 38 blocks where the entire Quadtree was larger than raw)
 
   Leaf Node Type Distribution (Overflow Trees):
-    Total Leaf Nodes: 2816
-    - Compressible:      0.82%
-    - Incompressible (In-Tree Raw):99.18%
+    Total Leaf Nodes: 2432
+    - Homogeneous-0:          6 (0.25%)
+    - Homogeneous-1:          2 (0.08%)
+    - Espresso:               104 (4.28%)
+    - Raw:                    2320 (95.39%)
 
 ----------------------------------------
   Bitplane 3
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
-  - Compressed with Quadtree: 56.25%
-  - Stored as Raw (64x64 Overflow): 43.75%
+  - Compressed with Quadtree: 61 (76.25%)
+  - Stored as Raw (64x64 Overflow): 19 (23.75%)
 
 Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
   Level 64x64 (Total Nodes: 80):
-    - 00 (Homo-0):    20.00%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  80.00%
+    - 00 (Homo-0):            16 (20.00%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          64 (80.00%)
   Level 32x32 (Total Nodes: 256):
-    - 00 (Homo-0):    12.11%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  87.89%
+    - 00 (Homo-0):            31 (12.11%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          225 (87.89%)
   Level 16x16 (Total Nodes: 900):
-    - 00 (Homo-0):    7.33%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  92.67%
-  Level 8x8 (Total Nodes: 3336):
-    - 00 (Homo-0):    4.62%
-    - 01 (Homo-1):    0.27%
-    - 10 (Internal):  0.00%
-    - 11 (Hetero-Leaf):95.11%
+    - 00 (Homo-0):            66 (7.33%)
+    - 01 (Homo-1):            8 (0.89%)
+    - 10 (Internal):          826 (91.78%)
+  Level 8x8 (Total Nodes: 3304):
+    - 00 (Homo-0):            207 (6.27%)
+    - 01 (Homo-1):            105 (3.18%)
+    - 10 (Internal):          0 (0.00%)
+    - 11 (Hetero-Leaf):       2992 (90.56%)
+  Level 4x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 2x2 (Total Nodes: 0):
+    - No nodes at this level.
 
-Leaf Node Type Distribution:
-  Total Leaf Nodes: 1209
-  - Compressible:        33.09% (400 nodes)
-  - Incompressible (In-Tree Raw):66.91% (809 nodes)
+Leaf Node Type Distribution (Per Level):
+  Level 8x8 (Total Leaves: 2088):
+    - Espresso:          457 (21.89%)
+    - Raw:               1326 (63.51%)
+    - Homogeneous-0:     203 (9.72%)
+    - Homogeneous-1:     102 (4.89%)
+  Level 4x4 (Total Leaves: 0):
+    - No leaves at this level.
+  Level 2x2 (Total Leaves: 0):
+    - No leaves at this level.
 
-Espresso-Compressed Leaf Cube Distribution:
-  (For the 132 leaves compressed with Espresso)
-    - 1 Cubes: 11.36% (15 blocks)
-    - 2 Cubes: 15.91% (21 blocks)
-    - 3 Cubes: 18.94% (25 blocks)
-    - 4 Cubes: 18.18% (24 blocks)
-    - 5 Cubes: 33.33% (44 blocks)
-    - 6 Cubes: 2.27% (3 blocks)
-    - 7 Cubes: 0.00% (0 blocks)
-    - 8 Cubes: 0.00% (0 blocks)
-    - 9 Cubes: 0.00% (0 blocks)
-    - 10 Cubes:0.00% (0 blocks)
-    - 11 Cubes:0.00% (0 blocks)
-    - 12 Cubes:0.00% (0 blocks)
-    - 13 Cubes:0.00% (0 blocks)
-    - 14 Cubes:0.00% (0 blocks)
-    - 15 Cubes:0.00% (0 blocks)
-    - 16 Cubes:0.00% (0 blocks)
-    - 17 Cubes:0.00% (0 blocks)
-    - 18 Cubes:0.00% (0 blocks)
-    - 19 Cubes:0.00% (0 blocks)
-    - 20 Cubes:0.00% (0 blocks)
-    - 21 Cubes:0.00% (0 blocks)
-    - 22 Cubes:0.00% (0 blocks)
-    - 23 Cubes:0.00% (0 blocks)
-    - 24 Cubes:0.00% (0 blocks)
-    - 25 Cubes:0.00% (0 blocks)
-    - 26 Cubes:0.00% (0 blocks)
-    - 27 Cubes:0.00% (0 blocks)
-    - 28 Cubes:0.00% (0 blocks)
-    - 29 Cubes:0.00% (0 blocks)
-    - 30 Cubes:0.00% (0 blocks)
-    - 31 Cubes:0.00% (0 blocks)
-    - 32 Cubes:0.00% (0 blocks)
+XOR Usage Statistics (Predictive XOR for Small Blocks):
+  Level 4x4 (Total Blocks: 0):
+    - No blocks at this level.
+  Level 2x2 (Total Blocks: 0):
+    - No blocks at this level.
 
-Analysis of Discarded Espresso Results (In-Tree Raw Leaves):
-  (For the 809 leaves where Espresso was costlier than raw pixels or had >7 cubes)
-    - 1 Cubes: 0.00% (0 blocks)
-    - 2 Cubes: 0.00% (0 blocks)
-    - 3 Cubes: 0.00% (0 blocks)
-    - 4 Cubes: 0.00% (0 blocks)
-    - 5 Cubes: 0.00% (0 blocks)
-    - 6 Cubes: 4.20% (34 blocks)
-    - 7 Cubes: 6.30% (51 blocks)
-    - 8 Cubes: 10.14% (82 blocks)
-    - 9 Cubes: 12.61% (102 blocks)
-    - 10 Cubes:10.75% (87 blocks)
-    - 11 Cubes:13.47% (109 blocks)
-    - 12 Cubes:12.11% (98 blocks)
-    - 13 Cubes:11.25% (91 blocks)
-    - 14 Cubes:7.91% (64 blocks)
-    - 15 Cubes:5.56% (45 blocks)
-    - 16 Cubes:2.60% (21 blocks)
-    - 17 Cubes:1.36% (11 blocks)
-    - 18 Cubes:0.62% (5 blocks)
-    - 19 Cubes:0.74% (6 blocks)
-    - 20 Cubes:0.12% (1 blocks)
-    - 21 Cubes:0.12% (1 blocks)
-    - 22 Cubes:0.00% (0 blocks)
-    - 23 Cubes:0.12% (1 blocks)
-    - 24 Cubes:0.00% (0 blocks)
-    - 25 Cubes:0.00% (0 blocks)
-    - 26 Cubes:0.00% (0 blocks)
-    - 27 Cubes:0.00% (0 blocks)
-    - 28 Cubes:0.00% (0 blocks)
-    - 29 Cubes:0.00% (0 blocks)
-    - 30 Cubes:0.00% (0 blocks)
-    - 31 Cubes:0.00% (0 blocks)
-    - 32 Cubes:0.00% (0 blocks)
-
-On-Set Cube Distribution (Before Selection):
- (For the 132 blocks that underwent Espresso analysis)
- - 1 Cubes:    10.61% (14 blocks)
- - 2 Cubes:    12.12% (16 blocks)
- - 3 Cubes:    12.88% (17 blocks)
- - 4 Cubes:    12.12% (16 blocks)
- - 5 Cubes:    23.48% (31 blocks)
- - 6 Cubes:    10.61% (14 blocks)
- - 7 Cubes:    8.33% (11 blocks)
- - 8 Cubes:    6.06% (8 blocks)
- - 9 Cubes:    3.03% (4 blocks)
- - 10 Cubes:   0.76% (1 blocks)
-
-Off-Set Cube Distribution (Before Selection):
- (For the 132 blocks that underwent Espresso analysis)
- - 1 Cubes:    0.76% (1 blocks)
- - 2 Cubes:    3.79% (5 blocks)
- - 3 Cubes:    6.06% (8 blocks)
- - 4 Cubes:    6.82% (9 blocks)
- - 5 Cubes:    21.21% (28 blocks)
- - 6 Cubes:    25.00% (33 blocks)
- - 7 Cubes:    21.21% (28 blocks)
- - 8 Cubes:    6.82% (9 blocks)
- - 9 Cubes:    7.58% (10 blocks)
- - 10 Cubes:   0.76% (1 blocks)
+Overall Leaf Node Type Distribution:
+  Total Leaf Nodes: 2209
+  - Homogeneous-0:            316 (14.31%)
+  - Homogeneous-1:            110 (4.98%)
+  - Espresso:                 457 (20.69%)
+  - Raw:                      1326 (60.03%)
 
 
 --- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
-  (For the 35 blocks where the entire Quadtree was larger than raw)
+  (For the 19 blocks where the entire Quadtree was larger than raw)
 
   Leaf Node Type Distribution (Overflow Trees):
-    Total Leaf Nodes: 2240
-    - Compressible:      4.91%
-    - Incompressible (In-Tree Raw):95.09%
+    Total Leaf Nodes: 1216
+    - Homogeneous-0:          4 (0.33%)
+    - Homogeneous-1:          3 (0.25%)
+    - Espresso:               70 (5.76%)
+    - Raw:                    1139 (93.67%)
 
 ----------------------------------------
   Bitplane 4
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
-  - Compressed with Quadtree: 80.00%
-  - Stored as Raw (64x64 Overflow): 20.00%
+  - Compressed with Quadtree: 75 (93.75%)
+  - Stored as Raw (64x64 Overflow): 5 (6.25%)
 
 Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
   Level 64x64 (Total Nodes: 80):
-    - 00 (Homo-0):    25.00%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  75.00%
+    - 00 (Homo-0):            20 (25.00%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          60 (75.00%)
   Level 32x32 (Total Nodes: 240):
-    - 00 (Homo-0):    10.00%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  90.00%
-  Level 16x16 (Total Nodes: 864):
-    - 00 (Homo-0):    6.94%
-    - 01 (Homo-1):    0.12%
-    - 10 (Internal):  92.94%
-  Level 8x8 (Total Nodes: 3212):
-    - 00 (Homo-0):    8.19%
-    - 01 (Homo-1):    3.21%
-    - 10 (Internal):  0.00%
-    - 11 (Hetero-Leaf):88.61%
+    - 00 (Homo-0):            27 (11.25%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          213 (88.75%)
+  Level 16x16 (Total Nodes: 852):
+    - 00 (Homo-0):            95 (11.15%)
+    - 01 (Homo-1):            11 (1.29%)
+    - 10 (Internal):          746 (87.56%)
+  Level 8x8 (Total Nodes: 2984):
+    - 00 (Homo-0):            353 (11.83%)
+    - 01 (Homo-1):            162 (5.43%)
+    - 10 (Internal):          0 (0.00%)
+    - 11 (Hetero-Leaf):       2469 (82.74%)
+  Level 4x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 2x2 (Total Nodes: 0):
+    - No nodes at this level.
 
-Leaf Node Type Distribution:
-  Total Leaf Nodes: 2293
-  - Compressible:        39.16% (898 nodes)
-  - Incompressible (In-Tree Raw):60.84% (1395 nodes)
+Leaf Node Type Distribution (Per Level):
+  Level 8x8 (Total Leaves: 2664):
+    - Espresso:          569 (21.36%)
+    - Raw:               1586 (59.53%)
+    - Homogeneous-0:     348 (13.06%)
+    - Homogeneous-1:     161 (6.04%)
+  Level 4x4 (Total Leaves: 0):
+    - No leaves at this level.
+  Level 2x2 (Total Leaves: 0):
+    - No leaves at this level.
 
-Espresso-Compressed Leaf Cube Distribution:
-  (For the 436 leaves compressed with Espresso)
-    - 1 Cubes: 19.04% (83 blocks)
-    - 2 Cubes: 17.20% (75 blocks)
-    - 3 Cubes: 20.64% (90 blocks)
-    - 4 Cubes: 19.72% (86 blocks)
-    - 5 Cubes: 21.33% (93 blocks)
-    - 6 Cubes: 2.06% (9 blocks)
-    - 7 Cubes: 0.00% (0 blocks)
-    - 8 Cubes: 0.00% (0 blocks)
-    - 9 Cubes: 0.00% (0 blocks)
-    - 10 Cubes:0.00% (0 blocks)
-    - 11 Cubes:0.00% (0 blocks)
-    - 12 Cubes:0.00% (0 blocks)
-    - 13 Cubes:0.00% (0 blocks)
-    - 14 Cubes:0.00% (0 blocks)
-    - 15 Cubes:0.00% (0 blocks)
-    - 16 Cubes:0.00% (0 blocks)
-    - 17 Cubes:0.00% (0 blocks)
-    - 18 Cubes:0.00% (0 blocks)
-    - 19 Cubes:0.00% (0 blocks)
-    - 20 Cubes:0.00% (0 blocks)
-    - 21 Cubes:0.00% (0 blocks)
-    - 22 Cubes:0.00% (0 blocks)
-    - 23 Cubes:0.00% (0 blocks)
-    - 24 Cubes:0.00% (0 blocks)
-    - 25 Cubes:0.00% (0 blocks)
-    - 26 Cubes:0.00% (0 blocks)
-    - 27 Cubes:0.00% (0 blocks)
-    - 28 Cubes:0.00% (0 blocks)
-    - 29 Cubes:0.00% (0 blocks)
-    - 30 Cubes:0.00% (0 blocks)
-    - 31 Cubes:0.00% (0 blocks)
-    - 32 Cubes:0.00% (0 blocks)
+XOR Usage Statistics (Predictive XOR for Small Blocks):
+  Level 4x4 (Total Blocks: 0):
+    - No blocks at this level.
+  Level 2x2 (Total Blocks: 0):
+    - No blocks at this level.
 
-Analysis of Discarded Espresso Results (In-Tree Raw Leaves):
-  (For the 1395 leaves where Espresso was costlier than raw pixels or had >7 cubes)
-    - 1 Cubes: 0.00% (0 blocks)
-    - 2 Cubes: 0.00% (0 blocks)
-    - 3 Cubes: 0.00% (0 blocks)
-    - 4 Cubes: 0.00% (0 blocks)
-    - 5 Cubes: 0.00% (0 blocks)
-    - 6 Cubes: 7.03% (98 blocks)
-    - 7 Cubes: 8.39% (117 blocks)
-    - 8 Cubes: 12.97% (181 blocks)
-    - 9 Cubes: 12.11% (169 blocks)
-    - 10 Cubes:13.91% (194 blocks)
-    - 11 Cubes:12.90% (180 blocks)
-    - 12 Cubes:11.18% (156 blocks)
-    - 13 Cubes:7.67% (107 blocks)
-    - 14 Cubes:5.73% (80 blocks)
-    - 15 Cubes:4.66% (65 blocks)
-    - 16 Cubes:1.86% (26 blocks)
-    - 17 Cubes:0.79% (11 blocks)
-    - 18 Cubes:0.36% (5 blocks)
-    - 19 Cubes:0.14% (2 blocks)
-    - 20 Cubes:0.00% (0 blocks)
-    - 21 Cubes:0.07% (1 blocks)
-    - 22 Cubes:0.14% (2 blocks)
-    - 23 Cubes:0.07% (1 blocks)
-    - 24 Cubes:0.00% (0 blocks)
-    - 25 Cubes:0.00% (0 blocks)
-    - 26 Cubes:0.00% (0 blocks)
-    - 27 Cubes:0.00% (0 blocks)
-    - 28 Cubes:0.00% (0 blocks)
-    - 29 Cubes:0.00% (0 blocks)
-    - 30 Cubes:0.00% (0 blocks)
-    - 31 Cubes:0.00% (0 blocks)
-    - 32 Cubes:0.00% (0 blocks)
-
-On-Set Cube Distribution (Before Selection):
- (For the 436 blocks that underwent Espresso analysis)
- - 1 Cubes:    12.61% (55 blocks)
- - 2 Cubes:    11.01% (48 blocks)
- - 3 Cubes:    12.16% (53 blocks)
- - 4 Cubes:    11.93% (52 blocks)
- - 5 Cubes:    18.35% (80 blocks)
- - 6 Cubes:    14.91% (65 blocks)
- - 7 Cubes:    9.17% (40 blocks)
- - 8 Cubes:    5.50% (24 blocks)
- - 9 Cubes:    3.21% (14 blocks)
- - 10 Cubes:   0.92% (4 blocks)
- - 11 Cubes:   0.23% (1 blocks)
-
-Off-Set Cube Distribution (Before Selection):
- (For the 436 blocks that underwent Espresso analysis)
- - 1 Cubes:    6.65% (29 blocks)
- - 2 Cubes:    6.19% (27 blocks)
- - 3 Cubes:    8.94% (39 blocks)
- - 4 Cubes:    10.55% (46 blocks)
- - 5 Cubes:    17.66% (77 blocks)
- - 6 Cubes:    22.71% (99 blocks)
- - 7 Cubes:    13.99% (61 blocks)
- - 8 Cubes:    7.11% (31 blocks)
- - 9 Cubes:    4.82% (21 blocks)
- - 10 Cubes:   1.15% (5 blocks)
- - 11 Cubes:   0.23% (1 blocks)
+Overall Leaf Node Type Distribution:
+  Total Leaf Nodes: 2817
+  - Homogeneous-0:            490 (17.39%)
+  - Homogeneous-1:            172 (6.11%)
+  - Espresso:                 569 (20.20%)
+  - Raw:                      1586 (56.30%)
 
 
 --- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
-  (For the 16 blocks where the entire Quadtree was larger than raw)
+  (For the 5 blocks where the entire Quadtree was larger than raw)
 
   Leaf Node Type Distribution (Overflow Trees):
-    Total Leaf Nodes: 1024
-    - Compressible:      5.18%
-    - Incompressible (In-Tree Raw):94.82%
+    Total Leaf Nodes: 320
+    - Homogeneous-0:          5 (1.56%)
+    - Homogeneous-1:          1 (0.31%)
+    - Espresso:               33 (10.31%)
+    - Raw:                    281 (87.81%)
 
 ----------------------------------------
   Bitplane 5
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
-  - Compressed with Quadtree: 96.25%
-  - Stored as Raw (64x64 Overflow): 3.75%
+  - Compressed with Quadtree: 80 (100.00%)
+  - Stored as Raw (64x64 Overflow): 0 (0.00%)
 
 Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
   Level 64x64 (Total Nodes: 80):
-    - 00 (Homo-0):    26.25%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  73.75%
+    - 00 (Homo-0):            21 (26.25%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          59 (73.75%)
   Level 32x32 (Total Nodes: 236):
-    - 00 (Homo-0):    14.83%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  85.17%
-  Level 16x16 (Total Nodes: 804):
-    - 00 (Homo-0):    14.30%
-    - 01 (Homo-1):    0.50%
-    - 10 (Internal):  85.20%
-  Level 8x8 (Total Nodes: 2740):
-    - 00 (Homo-0):    13.83%
-    - 01 (Homo-1):    3.61%
-    - 10 (Internal):  0.00%
-    - 11 (Hetero-Leaf):82.55%
+    - 00 (Homo-0):            51 (21.61%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          185 (78.39%)
+  Level 16x16 (Total Nodes: 740):
+    - 00 (Homo-0):            157 (21.22%)
+    - 01 (Homo-1):            2 (0.27%)
+    - 10 (Internal):          581 (78.51%)
+  Level 8x8 (Total Nodes: 2324):
+    - 00 (Homo-0):            542 (23.32%)
+    - 01 (Homo-1):            74 (3.18%)
+    - 10 (Internal):          0 (0.00%)
+    - 11 (Hetero-Leaf):       1708 (73.49%)
+  Level 4x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 2x2 (Total Nodes: 0):
+    - No nodes at this level.
 
-Leaf Node Type Distribution:
-  Total Leaf Nodes: 2723
-  - Compressible:        42.97% (1170 nodes)
-  - Incompressible (In-Tree Raw):57.03% (1553 nodes)
+Leaf Node Type Distribution (Per Level):
+  Level 8x8 (Total Leaves: 2324):
+    - Espresso:          637 (27.41%)
+    - Raw:               1071 (46.08%)
+    - Homogeneous-0:     542 (23.32%)
+    - Homogeneous-1:     74 (3.18%)
+  Level 4x4 (Total Leaves: 0):
+    - No leaves at this level.
+  Level 2x2 (Total Leaves: 0):
+    - No leaves at this level.
 
-Espresso-Compressed Leaf Cube Distribution:
-  (For the 519 leaves compressed with Espresso)
-    - 1 Cubes: 17.53% (91 blocks)
-    - 2 Cubes: 15.99% (83 blocks)
-    - 3 Cubes: 20.23% (105 blocks)
-    - 4 Cubes: 20.81% (108 blocks)
-    - 5 Cubes: 23.31% (121 blocks)
-    - 6 Cubes: 2.12% (11 blocks)
-    - 7 Cubes: 0.00% (0 blocks)
-    - 8 Cubes: 0.00% (0 blocks)
-    - 9 Cubes: 0.00% (0 blocks)
-    - 10 Cubes:0.00% (0 blocks)
-    - 11 Cubes:0.00% (0 blocks)
-    - 12 Cubes:0.00% (0 blocks)
-    - 13 Cubes:0.00% (0 blocks)
-    - 14 Cubes:0.00% (0 blocks)
-    - 15 Cubes:0.00% (0 blocks)
-    - 16 Cubes:0.00% (0 blocks)
-    - 17 Cubes:0.00% (0 blocks)
-    - 18 Cubes:0.00% (0 blocks)
-    - 19 Cubes:0.00% (0 blocks)
-    - 20 Cubes:0.00% (0 blocks)
-    - 21 Cubes:0.00% (0 blocks)
-    - 22 Cubes:0.00% (0 blocks)
-    - 23 Cubes:0.00% (0 blocks)
-    - 24 Cubes:0.00% (0 blocks)
-    - 25 Cubes:0.00% (0 blocks)
-    - 26 Cubes:0.00% (0 blocks)
-    - 27 Cubes:0.00% (0 blocks)
-    - 28 Cubes:0.00% (0 blocks)
-    - 29 Cubes:0.00% (0 blocks)
-    - 30 Cubes:0.00% (0 blocks)
-    - 31 Cubes:0.00% (0 blocks)
-    - 32 Cubes:0.00% (0 blocks)
+XOR Usage Statistics (Predictive XOR for Small Blocks):
+  Level 4x4 (Total Blocks: 0):
+    - No blocks at this level.
+  Level 2x2 (Total Blocks: 0):
+    - No blocks at this level.
 
-Analysis of Discarded Espresso Results (In-Tree Raw Leaves):
-  (For the 1553 leaves where Espresso was costlier than raw pixels or had >7 cubes)
-    - 1 Cubes: 0.00% (0 blocks)
-    - 2 Cubes: 0.00% (0 blocks)
-    - 3 Cubes: 0.00% (0 blocks)
-    - 4 Cubes: 0.00% (0 blocks)
-    - 5 Cubes: 0.00% (0 blocks)
-    - 6 Cubes: 8.50% (132 blocks)
-    - 7 Cubes: 9.66% (150 blocks)
-    - 8 Cubes: 15.52% (241 blocks)
-    - 9 Cubes: 14.94% (232 blocks)
-    - 10 Cubes:15.33% (238 blocks)
-    - 11 Cubes:13.46% (209 blocks)
-    - 12 Cubes:8.69% (135 blocks)
-    - 13 Cubes:5.28% (82 blocks)
-    - 14 Cubes:3.35% (52 blocks)
-    - 15 Cubes:2.64% (41 blocks)
-    - 16 Cubes:1.48% (23 blocks)
-    - 17 Cubes:0.52% (8 blocks)
-    - 18 Cubes:0.26% (4 blocks)
-    - 19 Cubes:0.13% (2 blocks)
-    - 20 Cubes:0.13% (2 blocks)
-    - 21 Cubes:0.06% (1 blocks)
-    - 22 Cubes:0.06% (1 blocks)
-    - 23 Cubes:0.00% (0 blocks)
-    - 24 Cubes:0.00% (0 blocks)
-    - 25 Cubes:0.00% (0 blocks)
-    - 26 Cubes:0.00% (0 blocks)
-    - 27 Cubes:0.00% (0 blocks)
-    - 28 Cubes:0.00% (0 blocks)
-    - 29 Cubes:0.00% (0 blocks)
-    - 30 Cubes:0.00% (0 blocks)
-    - 31 Cubes:0.00% (0 blocks)
-    - 32 Cubes:0.00% (0 blocks)
-
-On-Set Cube Distribution (Before Selection):
- (For the 519 blocks that underwent Espresso analysis)
- - 1 Cubes:    13.29% (69 blocks)
- - 2 Cubes:    11.18% (58 blocks)
- - 3 Cubes:    13.87% (72 blocks)
- - 4 Cubes:    13.10% (68 blocks)
- - 5 Cubes:    20.04% (104 blocks)
- - 6 Cubes:    12.33% (64 blocks)
- - 7 Cubes:    9.06% (47 blocks)
- - 8 Cubes:    3.47% (18 blocks)
- - 9 Cubes:    2.12% (11 blocks)
- - 10 Cubes:   0.96% (5 blocks)
- - 11 Cubes:   0.39% (2 blocks)
- - 12 Cubes:   0.19% (1 blocks)
-
-Off-Set Cube Distribution (Before Selection):
- (For the 519 blocks that underwent Espresso analysis)
- - 1 Cubes:    4.24% (22 blocks)
- - 2 Cubes:    5.39% (28 blocks)
- - 3 Cubes:    6.94% (36 blocks)
- - 4 Cubes:    11.95% (62 blocks)
- - 5 Cubes:    18.30% (95 blocks)
- - 6 Cubes:    24.47% (127 blocks)
- - 7 Cubes:    16.38% (85 blocks)
- - 8 Cubes:    5.78% (30 blocks)
- - 9 Cubes:    5.01% (26 blocks)
- - 10 Cubes:   1.35% (7 blocks)
- - 11 Cubes:   0.19% (1 blocks)
+Overall Leaf Node Type Distribution:
+  Total Leaf Nodes: 2555
+  - Homogeneous-0:            771 (30.18%)
+  - Homogeneous-1:            76 (2.97%)
+  - Espresso:                 637 (24.93%)
+  - Raw:                      1071 (41.92%)
 
 
 --- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
-  (For the 3 blocks where the entire Quadtree was larger than raw)
-
-  Leaf Node Type Distribution (Overflow Trees):
-    Total Leaf Nodes: 192
-    - Compressible:      8.85%
-    - Incompressible (In-Tree Raw):91.15%
+  No 64x64 blocks overflowed.
 
 ----------------------------------------
   Bitplane 6
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
-  - Compressed with Quadtree: 100.00%
-  - Stored as Raw (64x64 Overflow): 0.00%
+  - Compressed with Quadtree: 80 (100.00%)
+  - Stored as Raw (64x64 Overflow): 0 (0.00%)
 
 Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
   Level 64x64 (Total Nodes: 80):
-    - 00 (Homo-0):    32.50%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  67.50%
-  Level 32x32 (Total Nodes: 216):
-    - 00 (Homo-0):    18.52%
-    - 01 (Homo-1):    0.00%
-    - 10 (Internal):  81.48%
-  Level 16x16 (Total Nodes: 704):
-    - 00 (Homo-0):    16.76%
-    - 01 (Homo-1):    2.56%
-    - 10 (Internal):  80.68%
-  Level 8x8 (Total Nodes: 2272):
-    - 00 (Homo-0):    15.67%
-    - 01 (Homo-1):    8.80%
-    - 10 (Internal):  0.00%
-    - 11 (Hetero-Leaf):75.53%
+    - 00 (Homo-0):            25 (31.25%)
+    - 01 (Homo-1):            6 (7.50%)
+    - 10 (Internal):          49 (61.25%)
+  Level 32x32 (Total Nodes: 196):
+    - 00 (Homo-0):            22 (11.22%)
+    - 01 (Homo-1):            46 (23.47%)
+    - 10 (Internal):          128 (65.31%)
+  Level 16x16 (Total Nodes: 512):
+    - 00 (Homo-0):            64 (12.50%)
+    - 01 (Homo-1):            134 (26.17%)
+    - 10 (Internal):          314 (61.33%)
+  Level 8x8 (Total Nodes: 1256):
+    - 00 (Homo-0):            109 (8.68%)
+    - 01 (Homo-1):            441 (35.11%)
+    - 10 (Internal):          0 (0.00%)
+    - 11 (Hetero-Leaf):       706 (56.21%)
+  Level 4x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 2x2 (Total Nodes: 0):
+    - No nodes at this level.
 
-Leaf Node Type Distribution:
-  Total Leaf Nodes: 2474
-  - Compressible:        54.69% (1353 nodes)
-  - Incompressible (In-Tree Raw):45.31% (1121 nodes)
+Leaf Node Type Distribution (Per Level):
+  Level 8x8 (Total Leaves: 1256):
+    - Espresso:          330 (26.27%)
+    - Raw:               376 (29.94%)
+    - Homogeneous-0:     109 (8.68%)
+    - Homogeneous-1:     441 (35.11%)
+  Level 4x4 (Total Leaves: 0):
+    - No leaves at this level.
+  Level 2x2 (Total Leaves: 0):
+    - No leaves at this level.
 
-Espresso-Compressed Leaf Cube Distribution:
-  (For the 595 leaves compressed with Espresso)
-    - 1 Cubes: 18.15% (108 blocks)
-    - 2 Cubes: 16.97% (101 blocks)
-    - 3 Cubes: 21.18% (126 blocks)
-    - 4 Cubes: 21.34% (127 blocks)
-    - 5 Cubes: 18.82% (112 blocks)
-    - 6 Cubes: 3.53% (21 blocks)
-    - 7 Cubes: 0.00% (0 blocks)
-    - 8 Cubes: 0.00% (0 blocks)
-    - 9 Cubes: 0.00% (0 blocks)
-    - 10 Cubes:0.00% (0 blocks)
-    - 11 Cubes:0.00% (0 blocks)
-    - 12 Cubes:0.00% (0 blocks)
-    - 13 Cubes:0.00% (0 blocks)
-    - 14 Cubes:0.00% (0 blocks)
-    - 15 Cubes:0.00% (0 blocks)
-    - 16 Cubes:0.00% (0 blocks)
-    - 17 Cubes:0.00% (0 blocks)
-    - 18 Cubes:0.00% (0 blocks)
-    - 19 Cubes:0.00% (0 blocks)
-    - 20 Cubes:0.00% (0 blocks)
-    - 21 Cubes:0.00% (0 blocks)
-    - 22 Cubes:0.00% (0 blocks)
-    - 23 Cubes:0.00% (0 blocks)
-    - 24 Cubes:0.00% (0 blocks)
-    - 25 Cubes:0.00% (0 blocks)
-    - 26 Cubes:0.00% (0 blocks)
-    - 27 Cubes:0.00% (0 blocks)
-    - 28 Cubes:0.00% (0 blocks)
-    - 29 Cubes:0.00% (0 blocks)
-    - 30 Cubes:0.00% (0 blocks)
-    - 31 Cubes:0.00% (0 blocks)
-    - 32 Cubes:0.00% (0 blocks)
+XOR Usage Statistics (Predictive XOR for Small Blocks):
+  Level 4x4 (Total Blocks: 0):
+    - No blocks at this level.
+  Level 2x2 (Total Blocks: 0):
+    - No blocks at this level.
 
-Analysis of Discarded Espresso Results (In-Tree Raw Leaves):
-  (For the 1121 leaves where Espresso was costlier than raw pixels or had >7 cubes)
-    - 1 Cubes: 0.00% (0 blocks)
-    - 2 Cubes: 0.00% (0 blocks)
-    - 3 Cubes: 0.00% (0 blocks)
-    - 4 Cubes: 0.00% (0 blocks)
-    - 5 Cubes: 0.00% (0 blocks)
-    - 6 Cubes: 13.11% (147 blocks)
-    - 7 Cubes: 12.40% (139 blocks)
-    - 8 Cubes: 19.63% (220 blocks)
-    - 9 Cubes: 15.08% (169 blocks)
-    - 10 Cubes:18.11% (203 blocks)
-    - 11 Cubes:11.51% (129 blocks)
-    - 12 Cubes:5.35% (60 blocks)
-    - 13 Cubes:2.14% (24 blocks)
-    - 14 Cubes:1.52% (17 blocks)
-    - 15 Cubes:0.36% (4 blocks)
-    - 16 Cubes:0.54% (6 blocks)
-    - 17 Cubes:0.18% (2 blocks)
-    - 18 Cubes:0.00% (0 blocks)
-    - 19 Cubes:0.00% (0 blocks)
-    - 20 Cubes:0.09% (1 blocks)
-    - 21 Cubes:0.00% (0 blocks)
-    - 22 Cubes:0.00% (0 blocks)
-    - 23 Cubes:0.00% (0 blocks)
-    - 24 Cubes:0.00% (0 blocks)
-    - 25 Cubes:0.00% (0 blocks)
-    - 26 Cubes:0.00% (0 blocks)
-    - 27 Cubes:0.00% (0 blocks)
-    - 28 Cubes:0.00% (0 blocks)
-    - 29 Cubes:0.00% (0 blocks)
-    - 30 Cubes:0.00% (0 blocks)
-    - 31 Cubes:0.00% (0 blocks)
-    - 32 Cubes:0.00% (0 blocks)
-
-On-Set Cube Distribution (Before Selection):
- (For the 595 blocks that underwent Espresso analysis)
- - 1 Cubes:    11.26% (67 blocks)
- - 2 Cubes:    11.26% (67 blocks)
- - 3 Cubes:    13.28% (79 blocks)
- - 4 Cubes:    12.44% (74 blocks)
- - 5 Cubes:    17.48% (104 blocks)
- - 6 Cubes:    16.47% (98 blocks)
- - 7 Cubes:    10.59% (63 blocks)
- - 8 Cubes:    2.86% (17 blocks)
- - 9 Cubes:    3.19% (19 blocks)
- - 10 Cubes:   1.01% (6 blocks)
- - 11 Cubes:   0.17% (1 blocks)
-
-Off-Set Cube Distribution (Before Selection):
- (For the 595 blocks that underwent Espresso analysis)
- - 1 Cubes:    6.89% (41 blocks)
- - 2 Cubes:    6.05% (36 blocks)
- - 3 Cubes:    8.91% (53 blocks)
- - 4 Cubes:    12.61% (75 blocks)
- - 5 Cubes:    16.30% (97 blocks)
- - 6 Cubes:    24.03% (143 blocks)
- - 7 Cubes:    14.62% (87 blocks)
- - 8 Cubes:    5.38% (32 blocks)
- - 9 Cubes:    4.54% (27 blocks)
- - 10 Cubes:   0.34% (2 blocks)
- - 11 Cubes:   0.34% (2 blocks)
+Overall Leaf Node Type Distribution:
+  Total Leaf Nodes: 1553
+  - Homogeneous-0:            220 (14.17%)
+  - Homogeneous-1:            627 (40.37%)
+  - Espresso:                 330 (21.25%)
+  - Raw:                      376 (24.21%)
 
 
 --- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
@@ -946,130 +455,55 @@ Off-Set Cube Distribution (Before Selection):
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
-  - Compressed with Quadtree: 100.00%
-  - Stored as Raw (64x64 Overflow): 0.00%
+  - Compressed with Quadtree: 80 (100.00%)
+  - Stored as Raw (64x64 Overflow): 0 (0.00%)
 
 Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
   Level 64x64 (Total Nodes: 80):
-    - 00 (Homo-0):    37.50%
-    - 01 (Homo-1):    5.00%
-    - 10 (Internal):  57.50%
+    - 00 (Homo-0):            30 (37.50%)
+    - 01 (Homo-1):            4 (5.00%)
+    - 10 (Internal):          46 (57.50%)
   Level 32x32 (Total Nodes: 184):
-    - 00 (Homo-0):    7.07%
-    - 01 (Homo-1):    6.52%
-    - 10 (Internal):  86.41%
+    - 00 (Homo-0):            13 (7.07%)
+    - 01 (Homo-1):            12 (6.52%)
+    - 10 (Internal):          159 (86.41%)
   Level 16x16 (Total Nodes: 636):
-    - 00 (Homo-0):    11.79%
-    - 01 (Homo-1):    10.22%
-    - 10 (Internal):  77.99%
+    - 00 (Homo-0):            75 (11.79%)
+    - 01 (Homo-1):            65 (10.22%)
+    - 10 (Internal):          496 (77.99%)
   Level 8x8 (Total Nodes: 1984):
-    - 00 (Homo-0):    14.77%
-    - 01 (Homo-1):    14.82%
-    - 10 (Internal):  0.00%
-    - 11 (Hetero-Leaf):70.41%
+    - 00 (Homo-0):            293 (14.77%)
+    - 01 (Homo-1):            294 (14.82%)
+    - 10 (Internal):          0 (0.00%)
+    - 11 (Hetero-Leaf):       1397 (70.41%)
+  Level 4x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 2x2 (Total Nodes: 0):
+    - No nodes at this level.
 
-Leaf Node Type Distribution:
+Leaf Node Type Distribution (Per Level):
+  Level 8x8 (Total Leaves: 1984):
+    - Espresso:          599 (30.19%)
+    - Raw:               798 (40.22%)
+    - Homogeneous-0:     293 (14.77%)
+    - Homogeneous-1:     294 (14.82%)
+  Level 4x4 (Total Leaves: 0):
+    - No leaves at this level.
+  Level 2x2 (Total Leaves: 0):
+    - No leaves at this level.
+
+XOR Usage Statistics (Predictive XOR for Small Blocks):
+  Level 4x4 (Total Blocks: 0):
+    - No blocks at this level.
+  Level 2x2 (Total Blocks: 0):
+    - No blocks at this level.
+
+Overall Leaf Node Type Distribution:
   Total Leaf Nodes: 2183
-  - Compressible:        62.16% (1357 nodes)
-  - Incompressible (In-Tree Raw):37.84% (826 nodes)
-
-Espresso-Compressed Leaf Cube Distribution:
-  (For the 571 leaves compressed with Espresso)
-    - 1 Cubes: 18.21% (104 blocks)
-    - 2 Cubes: 18.74% (107 blocks)
-    - 3 Cubes: 21.19% (121 blocks)
-    - 4 Cubes: 21.37% (122 blocks)
-    - 5 Cubes: 17.16% (98 blocks)
-    - 6 Cubes: 3.33% (19 blocks)
-    - 7 Cubes: 0.00% (0 blocks)
-    - 8 Cubes: 0.00% (0 blocks)
-    - 9 Cubes: 0.00% (0 blocks)
-    - 10 Cubes:0.00% (0 blocks)
-    - 11 Cubes:0.00% (0 blocks)
-    - 12 Cubes:0.00% (0 blocks)
-    - 13 Cubes:0.00% (0 blocks)
-    - 14 Cubes:0.00% (0 blocks)
-    - 15 Cubes:0.00% (0 blocks)
-    - 16 Cubes:0.00% (0 blocks)
-    - 17 Cubes:0.00% (0 blocks)
-    - 18 Cubes:0.00% (0 blocks)
-    - 19 Cubes:0.00% (0 blocks)
-    - 20 Cubes:0.00% (0 blocks)
-    - 21 Cubes:0.00% (0 blocks)
-    - 22 Cubes:0.00% (0 blocks)
-    - 23 Cubes:0.00% (0 blocks)
-    - 24 Cubes:0.00% (0 blocks)
-    - 25 Cubes:0.00% (0 blocks)
-    - 26 Cubes:0.00% (0 blocks)
-    - 27 Cubes:0.00% (0 blocks)
-    - 28 Cubes:0.00% (0 blocks)
-    - 29 Cubes:0.00% (0 blocks)
-    - 30 Cubes:0.00% (0 blocks)
-    - 31 Cubes:0.00% (0 blocks)
-    - 32 Cubes:0.00% (0 blocks)
-
-Analysis of Discarded Espresso Results (In-Tree Raw Leaves):
-  (For the 826 leaves where Espresso was costlier than raw pixels or had >7 cubes)
-    - 1 Cubes: 0.00% (0 blocks)
-    - 2 Cubes: 0.00% (0 blocks)
-    - 3 Cubes: 0.00% (0 blocks)
-    - 4 Cubes: 0.00% (0 blocks)
-    - 5 Cubes: 0.00% (0 blocks)
-    - 6 Cubes: 14.65% (121 blocks)
-    - 7 Cubes: 13.56% (112 blocks)
-    - 8 Cubes: 20.46% (169 blocks)
-    - 9 Cubes: 15.74% (130 blocks)
-    - 10 Cubes:18.04% (149 blocks)
-    - 11 Cubes:11.99% (99 blocks)
-    - 12 Cubes:4.36% (36 blocks)
-    - 13 Cubes:0.73% (6 blocks)
-    - 14 Cubes:0.48% (4 blocks)
-    - 15 Cubes:0.00% (0 blocks)
-    - 16 Cubes:0.00% (0 blocks)
-    - 17 Cubes:0.00% (0 blocks)
-    - 18 Cubes:0.00% (0 blocks)
-    - 19 Cubes:0.00% (0 blocks)
-    - 20 Cubes:0.00% (0 blocks)
-    - 21 Cubes:0.00% (0 blocks)
-    - 22 Cubes:0.00% (0 blocks)
-    - 23 Cubes:0.00% (0 blocks)
-    - 24 Cubes:0.00% (0 blocks)
-    - 25 Cubes:0.00% (0 blocks)
-    - 26 Cubes:0.00% (0 blocks)
-    - 27 Cubes:0.00% (0 blocks)
-    - 28 Cubes:0.00% (0 blocks)
-    - 29 Cubes:0.00% (0 blocks)
-    - 30 Cubes:0.00% (0 blocks)
-    - 31 Cubes:0.00% (0 blocks)
-    - 32 Cubes:0.00% (0 blocks)
-
-On-Set Cube Distribution (Before Selection):
- (For the 571 blocks that underwent Espresso analysis)
- - 1 Cubes:    7.18% (41 blocks)
- - 2 Cubes:    7.18% (41 blocks)
- - 3 Cubes:    9.46% (54 blocks)
- - 4 Cubes:    13.31% (76 blocks)
- - 5 Cubes:    16.11% (92 blocks)
- - 6 Cubes:    23.29% (133 blocks)
- - 7 Cubes:    14.36% (82 blocks)
- - 8 Cubes:    4.03% (23 blocks)
- - 9 Cubes:    3.85% (22 blocks)
- - 10 Cubes:   1.05% (6 blocks)
- - 11 Cubes:   0.18% (1 blocks)
-
-Off-Set Cube Distribution (Before Selection):
- (For the 571 blocks that underwent Espresso analysis)
- - 1 Cubes:    11.21% (64 blocks)
- - 2 Cubes:    12.08% (69 blocks)
- - 3 Cubes:    12.78% (73 blocks)
- - 4 Cubes:    12.43% (71 blocks)
- - 5 Cubes:    14.71% (84 blocks)
- - 6 Cubes:    16.81% (96 blocks)
- - 7 Cubes:    11.38% (65 blocks)
- - 8 Cubes:    4.55% (26 blocks)
- - 9 Cubes:    2.98% (17 blocks)
- - 10 Cubes:   0.88% (5 blocks)
- - 11 Cubes:   0.18% (1 blocks)
+  - Homogeneous-0:            411 (18.83%)
+  - Homogeneous-1:            375 (17.18%)
+  - Espresso:                 599 (27.44%)
+  - Raw:                      798 (36.56%)
 
 
 --- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
@@ -1080,11 +514,11 @@ Off-Set Cube Distribution (Before Selection):
 ==================================================
 Initial Size (before padding): 327680 bytes (2621440 bits)
 Size After Padding:            327680 bytes (2621440 bits)
-Compressed Size:               167052.00 bytes (1336416 bits)
+Compressed Size:               150150.00 bytes (1201200 bits)
 
-Compression Ratio (Initial/New): 1.9615
-Percentage Space Savings (vs Padded): 49.02%
+Compression Ratio (Initial/New): 2.1824
+Percentage Space Savings (vs Padded): 54.18%
 
-Compression Time Taken:   32.2960 seconds
-Decompression Time Taken: 0.8852 seconds
+Compression Time Taken:   50.2319 seconds
+Decompression Time Taken: 0.8836 seconds
 ==================================================

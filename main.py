@@ -27,16 +27,6 @@ def main():
         help="Save compression statistics to a .txt file.",
     )
     parser.add_argument(
-        "--pure-quadtree",
-        action="store_true",
-        help="Use pure quadtree compression without minimization.",
-    )
-    parser.add_argument(
-        "--predictive-xor",
-        action="store_true",
-        help="Use predictive XOR technique.",
-    )
-    parser.add_argument(
         "--predictive-xor-8x8",
         action="store_true",
         help="Use predictive XOR technique on 8x8 blocks.",
@@ -46,23 +36,12 @@ def main():
         action="store_true",
         help="Use Gray coding for pixel values to improve bitplane correlation.",
     )
-    parser.add_argument(
-        "--rle",
-        action="store_true",
-        help="Use Run-Length Encoding on the final bitstream.",
-    )
     args = parser.parse_args()
 
-    if args.pure_quadtree:
-        config.PURE_QUADTREE_MODE = True
-    if args.predictive_xor:
-        config.PREDICTIVE_XOR_MODE = True
     if args.predictive_xor_8x8:
         config.PREDICTIVE_XOR_8X8_MODE = True
     if args.gray_pixels:
         config.GRAY_PIXELS_MODE = True
-    if args.rle:
-        config.RLE_MODE = True
 
     base_name = os.path.splitext(os.path.basename(args.input_image))[0]
     output_path = (
@@ -70,8 +49,8 @@ def main():
         if args.output_image
         else f"./output/{base_name}_reconstructed.png"
     )
-    compressed_bitstream_path = f"./output/{base_name}_compressed{'_pure_quadtree' if config.PURE_QUADTREE_MODE else ''}.bin"
-    stats_output_path = f"./output/{base_name}_stats{'_pure_quadtree' if config.PURE_QUADTREE_MODE else ''}.txt"
+    compressed_bitstream_path = f"./output/{base_name}_compressed.bin"
+    stats_output_path = f"./output/{base_name}_stats.txt"
 
     print(f"Compressing '{args.input_image}'...")
     compression_start_time = time.time()
