@@ -49,6 +49,7 @@ class CompressionStats:
         decompression_time,
         initial_size_bits,
         padded_size_bits,
+        baseline_stats=None,
     ):
         try:
             with open(filepath, "w") as f:
@@ -62,6 +63,14 @@ class CompressionStats:
                 for bit, stats in sorted(self.plane_stats.items()):
                     f.write("-" * 40 + "\n")
                     f.write(f"  Bitplane {bit}\n")
+                    if 'compressed_bits' in stats:
+                        compressed_bits = stats['compressed_bits']
+                        f.write(f"  Compressed Bits: {compressed_bits}\n")
+                        if baseline_stats and bit in baseline_stats:
+                            baseline_bits = baseline_stats[bit]
+                            diff = baseline_bits - compressed_bits
+                            perc = (diff / baseline_bits) * 100 if baseline_bits > 0 else 0
+                            f.write(f"  Improvement vs 8x4 ({baseline_bits} bits): {diff} bits ({perc:.2f}%)\n")
                     f.write("-" * 40 + "\n")
 
                     f.write("--- Analysis of Used Quadtrees ---\n")
@@ -227,8 +236,14 @@ class CompressionStats:
                     f"Size After Padding:            {padded_size_bits / 8:.0f} bytes ({padded_size_bits} bits)\n"
                 )
                 f.write(
-                    f"Compressed Size:               {self.compressed_bits / 8:.2f} bytes ({self.compressed_bits} bits)\n\n"
+                    f"Compressed Size:               {self.compressed_bits / 8:.2f} bytes ({self.compressed_bits} bits)\n"
                 )
+                if baseline_stats and 'total' in baseline_stats:
+                    baseline_total = baseline_stats['total']
+                    diff_total = baseline_total - self.compressed_bits
+                    perc_total = (diff_total / baseline_total) * 100 if baseline_total > 0 else 0
+                    f.write(f"Improvement vs 8x4 (Total, {baseline_total} bits):    {diff_total} bits ({perc_total:.2f}%)\n")
+                f.write("\n")
                 f.write(f"Compression Ratio (Initial/New): {compression_ratio:.4f}\n")
                 f.write(
                     f"Percentage Space Savings (vs Padded): {space_savings:.2f}%\n\n"

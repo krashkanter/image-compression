@@ -145,6 +145,7 @@ def compress_image_to_bitstream(image_path):
     if flags.GRAY_PIXELS_MODE:
         padded_arr = numpy_binary_to_gray(padded_arr)
 
+    previous_total_bits = 0
     for bit in range(8):
         stats._init_plane_stats(bit)
         plane_arr = ((padded_arr >> bit) & 1).astype(np.uint8)
@@ -170,6 +171,12 @@ def compress_image_to_bitstream(image_path):
                     _collect_stats_from_node(node_dict, stats, bit, is_overflow=False)
                     writer.write_bit(0)
                     encode_quadtree_node_bitstream(node_dict, writer)
+
+        # Calculate bits for this plane
+        current_total_bits = len(byte_stream.getvalue()) * 8 + writer._bits_in_byte
+        plane_bits = current_total_bits - previous_total_bits
+        stats.plane_stats[bit]['compressed_bits'] = plane_bits
+        previous_total_bits = current_total_bits
 
     writer.flush()
     compressed_data = byte_stream.getvalue()

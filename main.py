@@ -36,6 +36,10 @@ def main():
         action="store_true",
         help="Use Gray coding for pixel values to improve bitplane correlation.",
     )
+    parser.add_argument(
+        "--compare-with",
+        help="Path to baseline stats file (e.g. 8x4) to compare against.",
+    )
     args = parser.parse_args()
 
     if args.predictive_xor_8x8:
@@ -109,6 +113,37 @@ def main():
         print("Decompression failed.")
         decompression_time_taken = 0.0
 
+    baseline_stats = None
+    if args.compare_with:
+        baseline_stats = {}
+        try:
+            with open(args.compare_with, 'r') as f:
+                lines = f.readlines()
+            current_bp = None
+            total_bits = 0
+            for line in lines:
+                line = line.strip()
+                if line.startswith("Bitplane"):
+                    parts = line.split()
+                    if len(parts) >= 2:
+                        current_bp = int(parts[1])
+                elif line.startswith("Compressed Bits:") and current_bp is not None:
+                    bits = int(line.split(":")[1].strip())
+                    baseline_stats[current_bp] = bits
+                    total_bits += bits # Summing up manually as backup
+                elif line.startswith("Compressed Size:") and "bits" in line:
+                    # Extract total from summary if available
+                    import re
+                    match = re.search(r"\((\d+) bits\)", line)
+                    if match:
+                        baseline_stats['total'] = int(match.group(1))
+            
+            if 'total' not in baseline_stats and total_bits > 0:
+                baseline_stats['total'] = total_bits
+                
+        except Exception as e:
+            print(f"Warning: Failed to parse baseline stats file: {e}")
+
     if args.dump_stats:
         print(f"Dumping statistics to '{stats_output_path}'...")
         stats_obj.dump_to_file(
@@ -117,6 +152,7 @@ def main():
             decompression_time_taken,
             initial_size_bits,
             padded_size_bits,
+            baseline_stats=baseline_stats,
         )
 
     if reconstructed_arr is not None:

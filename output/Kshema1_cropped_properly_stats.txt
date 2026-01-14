@@ -4,6 +4,8 @@
 
 ----------------------------------------
   Bitplane 0
+  Compressed Bits: 211290
+  Improvement vs 8x4 (212608 bits): 1318 bits (0.62%)
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
@@ -70,6 +72,8 @@ Overall Leaf Node Type Distribution:
 
 ----------------------------------------
   Bitplane 1
+  Compressed Bits: 209628
+  Improvement vs 8x4 (210417 bits): 789 bits (0.37%)
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
@@ -136,6 +140,8 @@ Overall Leaf Node Type Distribution:
 
 ----------------------------------------
   Bitplane 2
+  Compressed Bits: 207309
+  Improvement vs 8x4 (209262 bits): 1953 bits (0.93%)
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
@@ -202,6 +208,8 @@ Overall Leaf Node Type Distribution:
 
 ----------------------------------------
   Bitplane 3
+  Compressed Bits: 189852
+  Improvement vs 8x4 (206522 bits): 16670 bits (8.07%)
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
@@ -268,6 +276,8 @@ Overall Leaf Node Type Distribution:
 
 ----------------------------------------
   Bitplane 4
+  Compressed Bits: 155546
+  Improvement vs 8x4 (182198 bits): 26652 bits (14.63%)
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
@@ -334,6 +344,8 @@ Overall Leaf Node Type Distribution:
 
 ----------------------------------------
   Bitplane 5
+  Compressed Bits: 103543
+  Improvement vs 8x4 (143793 bits): 40250 bits (27.99%)
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
@@ -393,6 +405,8 @@ Overall Leaf Node Type Distribution:
 
 ----------------------------------------
   Bitplane 6
+  Compressed Bits: 41725
+  Improvement vs 8x4 (102862 bits): 61137 bits (59.44%)
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
@@ -452,6 +466,8 @@ Overall Leaf Node Type Distribution:
 
 ----------------------------------------
   Bitplane 7
+  Compressed Bits: 82306
+  Improvement vs 8x4 (80314 bits): -1992 bits (-2.48%)
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
@@ -515,10 +531,11 @@ Overall Leaf Node Type Distribution:
 Initial Size (before padding): 327680 bytes (2621440 bits)
 Size After Padding:            327680 bytes (2621440 bits)
 Compressed Size:               150150.00 bytes (1201200 bits)
+Improvement vs 8x4 (Total, 1347976 bits):    146776 bits (10.89%)
 
 Compression Ratio (Initial/New): 2.1824
 Percentage Space Savings (vs Padded): 54.18%
 
-Compression Time Taken:   50.2319 seconds
-Decompression Time Taken: 0.8836 seconds
+Compression Time Taken:   54.7407 seconds
+Decompression Time Taken: 0.9196 seconds
 ==================================================
