@@ -57,7 +57,7 @@ def run_espresso(terms, n_bits):
         pla_input_str = '\n'.join(pla_content)
 
         import os
-        # utils.py is in 8x4/, so parent is project root
+        # utils.py is in 4x4/, so parent is project root
         current_dir = os.path.dirname(os.path.abspath(__file__))
         project_root = os.path.dirname(current_dir)
         espresso_path = os.path.join(project_root, 'bin', 'espresso')
@@ -389,3 +389,71 @@ class BitStreamReader:
                 return decoding_map[current_code]
 
         return None
+
+
+def apply_zigzag_xor_2x2(block_4x4):
+    rows_2 = 2
+    cols_2 = 2
+
+    # zigzag_indices returns list of flat indices 0..3 for a 2x2 grid
+    block_order = zigzag_indices(cols_2, rows_2)
+
+    if not block_order:
+        return
+
+    first_idx = block_order[0]
+    r0, c0 = divmod(first_idx, cols_2)
+    # block size is 2x2
+    prev_block = block_4x4[r0 * 2 : r0 * 2 + 2, c0 * 2 : c0 * 2 + 2].copy()
+
+    for i in range(1, len(block_order)):
+        curr_idx = block_order[i]
+        curr_r, curr_c = divmod(curr_idx, cols_2)
+        curr_y, curr_x = curr_r * 2, curr_c * 2
+
+        curr_block = block_4x4[curr_y : curr_y + 2, curr_x : curr_x + 2].copy()
+
+        block_4x4[curr_y : curr_y + 2, curr_x : curr_x + 2] = prev_block ^ curr_block
+
+        prev_block = curr_block
+
+
+def reverse_zigzag_xor_2x2(block_4x4):
+    rows_2 = 2
+    cols_2 = 2
+
+    block_order = zigzag_indices(cols_2, rows_2)
+
+    if not block_order:
+        return
+
+    first_idx = block_order[0]
+    r0, c0 = divmod(first_idx, cols_2)
+    prev_reconstructed_block = block_4x4[
+        r0 * 2 : r0 * 2 + 2, c0 * 2 : c0 * 2 + 2
+    ].copy()
+
+    for i in range(1, len(block_order)):
+        curr_idx = block_order[i]
+        curr_r, curr_c = divmod(curr_idx, cols_2)
+        curr_y, curr_x = curr_r * 2, curr_c * 2
+
+        current_modified_block = block_4x4[curr_y : curr_y + 2, curr_x : curr_x + 2]
+
+        reconstructed_block = current_modified_block ^ prev_reconstructed_block
+
+        block_4x4[curr_y : curr_y + 2, curr_x : curr_x + 2] = reconstructed_block
+
+        prev_reconstructed_block = reconstructed_block
+
+
+def numpy_binary_to_gray(arr):
+    return arr ^ (arr >> 1)
+
+
+def numpy_gray_to_binary(arr):
+    mask = arr >> 1
+    while np.any(mask != 0):
+        arr = arr ^ mask
+        mask = mask >> 1
+    return arr

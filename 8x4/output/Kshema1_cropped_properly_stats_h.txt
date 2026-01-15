@@ -594,6 +594,6 @@ Compressed Size:               168497.00 bytes (1347976 bits)
 Compression Ratio (Initial/New): 1.9447
 Percentage Space Savings (vs Padded): 48.58%
 
-Compression Time Taken:   53.7133 seconds
-Decompression Time Taken: 0.6669 seconds
+Compression Time Taken:   73.6917 seconds
+Decompression Time Taken: 0.6428 seconds
 ==================================================

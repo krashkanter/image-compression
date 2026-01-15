@@ -68,6 +68,7 @@ def parse_stats(stats_path):
 def main():
     parser = argparse.ArgumentParser(description="Compare image compression versions.")
     parser.add_argument("input_image", help="Path to the input image file.")
+    parser.add_argument("--compare-4x4", action="store_true", help="Compare 8x4 vs 4x4 instead of 8x4 vs 8x8.")
     args = parser.parse_args()
 
     input_image = args.input_image
@@ -88,40 +89,49 @@ def main():
         
     bits_8x4, total_8x4 = parse_stats(stats_8x4_path)
     
-    # 2. Run Root (8x8) version
-    print("\n--- Running Root (8x8) Version ---")
-    cmd_root = f"./.venv/bin/python3 main.py {input_image} --predictive-xor-8x8 --gray-pixels --dump-stats --compare-with {stats_8x4_path}"
-    stats_root_path = run_compression(cmd_root)
-    if not stats_root_path:
-        print("Failed to run Root version.")
+    # 2. Run Second Version (Root 8x8 or 4x4)
+    if args.compare_4x4:
+        print("\n--- Running 4x4 Version ---")
+        # Run from 4x4 directory
+        cmd_4x4 = f"../.venv/bin/python3 main.py {input_image_abs} --predictive-xor-4x4 --gray-pixels --dump-stats --compare-with {stats_8x4_path}"
+        stats_other_path = run_compression(cmd_4x4, cwd="4x4")
+        other_label = "4x4 Bits"
+    else:
+        print("\n--- Running Root (8x8) Version ---")
+        cmd_root = f"./.venv/bin/python3 main.py {input_image} --predictive-xor-8x8 --gray-pixels --dump-stats --compare-with {stats_8x4_path}"
+        stats_other_path = run_compression(cmd_root)
+        other_label = "8x8 Bits"
+
+    if not stats_other_path:
+        print(f"Failed to run {other_label.split()[0]} version.")
         sys.exit(1)
 
-    bits_root, total_root = parse_stats(stats_root_path)
+    bits_other, total_other = parse_stats(stats_other_path)
 
     # 3. Compare Results
     print("\n" + "="*60)
-    print(f"{'Bitplane':<10} | {'8x4 Bits':<15} | {'8x8 Bits':<15} | {'Improvement':<15}")
+    print(f"{'Bitplane':<10} | {'8x4 Bits':<15} | {other_label:<15} | {'Improvement':<15}")
     print("-" * 60)
     
     total_savings_bits = 0
     
     for plane in range(8):
         b_8x4 = bits_8x4.get(plane, 0)
-        b_root = bits_root.get(plane, 0)
-        diff = b_8x4 - b_root
+        b_other = bits_other.get(plane, 0)
+        diff = b_8x4 - b_other
         perc = (diff / b_8x4 * 100) if b_8x4 > 0 else 0
         
-        print(f"{plane:<10} | {b_8x4:<15} | {b_root:<15} | {diff:<6} ({perc:>5.1f}%)")
+        print(f"{plane:<10} | {b_8x4:<15} | {b_other:<15} | {diff:<6} ({perc:>5.1f}%)")
         total_savings_bits += diff
         
     print("-" * 60)
     
-    total_diff = total_8x4 - total_root
+    total_diff = total_8x4 - total_other
     total_perc = (total_diff / total_8x4 * 100) if total_8x4 > 0 else 0
-    print(f"{'Total':<10} | {total_8x4:<15} | {total_root:<15} | {total_diff:<6} ({total_perc:>5.1f}%)")
+    print(f"{'Total':<10} | {total_8x4:<15} | {total_other:<15} | {total_diff:<6} ({total_perc:>5.1f}%)")
     print("="*60)
     
-    print(f"\nNote: Improvement > 0 means 8x8 uses fewer bits (better compression).")
+    print(f"\nNote: Improvement > 0 means {other_label.split()[0]} uses fewer bits (better compression).")
 
 if __name__ == "__main__":
     main()

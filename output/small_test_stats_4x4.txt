@@ -1,0 +1,391 @@
+==================================================
+      Compression Statistics Report
+==================================================
+
+----------------------------------------
+  Bitplane 0
+  Compressed Bits: 4097
+  Improvement vs 8x4 (510 bits): -3587 bits (-703.33%)
+----------------------------------------
+--- Analysis of Used Quadtrees ---
+Total 64x64 blocks processed: 1
+  - Compressed with Quadtree: 0.00%
+  - Stored as Raw (64x64 Overflow): 100.00%
+
+Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
+  Level 64x64 (Total Nodes: 1):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 32x32 (Total Nodes: 4):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 16x16 (Total Nodes: 16):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 8x8 (Total Nodes: 64):
+    - 00 (Homo-0):    3.12%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  96.88%
+    - 11 (Hetero-Leaf):0.00%
+  Level 8x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 4x8 (Total Nodes: 0):
+    - No nodes at this level.
+
+On-set/Off-set Block Counts (for Espresso leaves):
+  Level 8x4: On-set: 0, Off-set: 0
+  Level 4x8: On-set: 0, Off-set: 0
+
+Leaf Node Type Distribution:
+  Total Leaf Nodes: 0
+
+--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
+  (For the 1 blocks where the entire Quadtree was larger than raw)
+
+  Leaf Node Type Distribution (Overflow Trees):
+    Total Leaf Nodes: 250
+    - Compressible:      11.60%
+    - Incompressible (In-Tree Raw):88.40%
+
+----------------------------------------
+  Bitplane 1
+  Compressed Bits: 3925
+  Improvement vs 8x4 (4097 bits): 172 bits (4.20%)
+----------------------------------------
+--- Analysis of Used Quadtrees ---
+Total 64x64 blocks processed: 1
+  - Compressed with Quadtree: 100.00%
+  - Stored as Raw (64x64 Overflow): 0.00%
+
+Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
+  Level 64x64 (Total Nodes: 1):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 32x32 (Total Nodes: 4):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 16x16 (Total Nodes: 16):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 8x8 (Total Nodes: 64):
+    - 00 (Homo-0):    6.25%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  93.75%
+    - 11 (Hetero-Leaf):0.00%
+  Level 8x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 4x8 (Total Nodes: 0):
+    - No nodes at this level.
+
+On-set/Off-set Block Counts (for Espresso leaves):
+  Level 8x4: On-set: 0, Off-set: 0
+  Level 4x8: On-set: 0, Off-set: 0
+
+Leaf Node Type Distribution:
+  Total Leaf Nodes: 244
+  - Compressible:        88.11% (215 nodes)
+  - Incompressible (In-Tree Raw):11.89% (29 nodes)
+
+
+--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
+  No 64x64 blocks overflowed.
+
+----------------------------------------
+  Bitplane 2
+  Compressed Bits: 4097
+  Improvement vs 8x4 (4097 bits): 0 bits (0.00%)
+----------------------------------------
+--- Analysis of Used Quadtrees ---
+Total 64x64 blocks processed: 1
+  - Compressed with Quadtree: 0.00%
+  - Stored as Raw (64x64 Overflow): 100.00%
+
+Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
+  Level 64x64 (Total Nodes: 1):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 32x32 (Total Nodes: 4):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 16x16 (Total Nodes: 16):
+    - 00 (Homo-0):    6.25%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  93.75%
+  Level 8x8 (Total Nodes: 60):
+    - 00 (Homo-0):    1.67%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  98.33%
+    - 11 (Hetero-Leaf):0.00%
+  Level 8x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 4x8 (Total Nodes: 0):
+    - No nodes at this level.
+
+On-set/Off-set Block Counts (for Espresso leaves):
+  Level 8x4: On-set: 0, Off-set: 0
+  Level 4x8: On-set: 0, Off-set: 0
+
+Leaf Node Type Distribution:
+  Total Leaf Nodes: 0
+
+--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
+  (For the 1 blocks where the entire Quadtree was larger than raw)
+
+  Leaf Node Type Distribution (Overflow Trees):
+    Total Leaf Nodes: 238
+    - Compressible:      10.08%
+    - Incompressible (In-Tree Raw):89.92%
+
+----------------------------------------
+  Bitplane 3
+  Compressed Bits: 2808
+  Improvement vs 8x4 (4097 bits): 1289 bits (31.46%)
+----------------------------------------
+--- Analysis of Used Quadtrees ---
+Total 64x64 blocks processed: 1
+  - Compressed with Quadtree: 100.00%
+  - Stored as Raw (64x64 Overflow): 0.00%
+
+Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
+  Level 64x64 (Total Nodes: 1):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 32x32 (Total Nodes: 4):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 16x16 (Total Nodes: 16):
+    - 00 (Homo-0):    6.25%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  93.75%
+  Level 8x8 (Total Nodes: 60):
+    - 00 (Homo-0):    1.67%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  98.33%
+    - 11 (Hetero-Leaf):0.00%
+  Level 8x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 4x8 (Total Nodes: 0):
+    - No nodes at this level.
+
+On-set/Off-set Block Counts (for Espresso leaves):
+  Level 8x4: On-set: 0, Off-set: 0
+  Level 4x8: On-set: 0, Off-set: 0
+
+Leaf Node Type Distribution:
+  Total Leaf Nodes: 238
+  - Compressible:        52.52% (125 nodes)
+  - Incompressible (In-Tree Raw):47.48% (113 nodes)
+
+
+--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
+  No 64x64 blocks overflowed.
+
+----------------------------------------
+  Bitplane 4
+  Compressed Bits: 1654
+  Improvement vs 8x4 (4097 bits): 2443 bits (59.63%)
+----------------------------------------
+--- Analysis of Used Quadtrees ---
+Total 64x64 blocks processed: 1
+  - Compressed with Quadtree: 100.00%
+  - Stored as Raw (64x64 Overflow): 0.00%
+
+Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
+  Level 64x64 (Total Nodes: 1):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 32x32 (Total Nodes: 4):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 16x16 (Total Nodes: 16):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 8x8 (Total Nodes: 64):
+    - 00 (Homo-0):    29.69%
+    - 01 (Homo-1):    18.75%
+    - 10 (Internal):  51.56%
+    - 11 (Hetero-Leaf):0.00%
+  Level 8x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 4x8 (Total Nodes: 0):
+    - No nodes at this level.
+
+On-set/Off-set Block Counts (for Espresso leaves):
+  Level 8x4: On-set: 0, Off-set: 0
+  Level 4x8: On-set: 0, Off-set: 0
+
+Leaf Node Type Distribution:
+  Total Leaf Nodes: 163
+  - Compressible:        63.80% (104 nodes)
+  - Incompressible (In-Tree Raw):36.20% (59 nodes)
+
+
+--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
+  No 64x64 blocks overflowed.
+
+----------------------------------------
+  Bitplane 5
+  Compressed Bits: 1135
+  Improvement vs 8x4 (2298 bits): 1163 bits (50.61%)
+----------------------------------------
+--- Analysis of Used Quadtrees ---
+Total 64x64 blocks processed: 1
+  - Compressed with Quadtree: 100.00%
+  - Stored as Raw (64x64 Overflow): 0.00%
+
+Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
+  Level 64x64 (Total Nodes: 1):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 32x32 (Total Nodes: 4):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 16x16 (Total Nodes: 16):
+    - 00 (Homo-0):    31.25%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  68.75%
+  Level 8x8 (Total Nodes: 44):
+    - 00 (Homo-0):    18.18%
+    - 01 (Homo-1):    29.55%
+    - 10 (Internal):  52.27%
+    - 11 (Hetero-Leaf):0.00%
+  Level 8x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 4x8 (Total Nodes: 0):
+    - No nodes at this level.
+
+On-set/Off-set Block Counts (for Espresso leaves):
+  Level 8x4: On-set: 0, Off-set: 0
+  Level 4x8: On-set: 0, Off-set: 0
+
+Leaf Node Type Distribution:
+  Total Leaf Nodes: 118
+  - Compressible:        68.64% (81 nodes)
+  - Incompressible (In-Tree Raw):31.36% (37 nodes)
+
+
+--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
+  No 64x64 blocks overflowed.
+
+----------------------------------------
+  Bitplane 6
+  Compressed Bits: 638
+  Improvement vs 8x4 (1264 bits): 626 bits (49.53%)
+----------------------------------------
+--- Analysis of Used Quadtrees ---
+Total 64x64 blocks processed: 1
+  - Compressed with Quadtree: 100.00%
+  - Stored as Raw (64x64 Overflow): 0.00%
+
+Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
+  Level 64x64 (Total Nodes: 1):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 32x32 (Total Nodes: 4):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    50.00%
+    - 10 (Internal):  50.00%
+  Level 16x16 (Total Nodes: 8):
+    - 00 (Homo-0):    25.00%
+    - 01 (Homo-1):    12.50%
+    - 10 (Internal):  62.50%
+  Level 8x8 (Total Nodes: 20):
+    - 00 (Homo-0):    25.00%
+    - 01 (Homo-1):    10.00%
+    - 10 (Internal):  65.00%
+    - 11 (Hetero-Leaf):0.00%
+  Level 8x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 4x8 (Total Nodes: 0):
+    - No nodes at this level.
+
+On-set/Off-set Block Counts (for Espresso leaves):
+  Level 8x4: On-set: 0, Off-set: 0
+  Level 4x8: On-set: 0, Off-set: 0
+
+Leaf Node Type Distribution:
+  Total Leaf Nodes: 64
+  - Compressible:        70.31% (45 nodes)
+  - Incompressible (In-Tree Raw):29.69% (19 nodes)
+
+
+--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
+  No 64x64 blocks overflowed.
+
+----------------------------------------
+  Bitplane 7
+  Compressed Bits: 850
+  Improvement vs 8x4 (1118 bits): 268 bits (23.97%)
+----------------------------------------
+--- Analysis of Used Quadtrees ---
+Total 64x64 blocks processed: 1
+  - Compressed with Quadtree: 100.00%
+  - Stored as Raw (64x64 Overflow): 0.00%
+
+Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
+  Level 64x64 (Total Nodes: 1):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    0.00%
+    - 10 (Internal):  100.00%
+  Level 32x32 (Total Nodes: 4):
+    - 00 (Homo-0):    0.00%
+    - 01 (Homo-1):    25.00%
+    - 10 (Internal):  75.00%
+  Level 16x16 (Total Nodes: 12):
+    - 00 (Homo-0):    16.67%
+    - 01 (Homo-1):    16.67%
+    - 10 (Internal):  66.67%
+  Level 8x8 (Total Nodes: 32):
+    - 00 (Homo-0):    34.38%
+    - 01 (Homo-1):    15.62%
+    - 10 (Internal):  50.00%
+    - 11 (Hetero-Leaf):0.00%
+  Level 8x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 4x8 (Total Nodes: 0):
+    - No nodes at this level.
+
+On-set/Off-set Block Counts (for Espresso leaves):
+  Level 8x4: On-set: 0, Off-set: 0
+  Level 4x8: On-set: 0, Off-set: 0
+
+Leaf Node Type Distribution:
+  Total Leaf Nodes: 85
+  - Compressible:        69.41% (59 nodes)
+  - Incompressible (In-Tree Raw):30.59% (26 nodes)
+
+
+--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
+  No 64x64 blocks overflowed.
+
+==================================================
+      Overall Summary
+==================================================
+Initial Size (before padding): 4096 bytes (32768 bits)
+Size After Padding:            4096 bytes (32768 bits)
+Compressed Size:               2401.00 bytes (19208 bits)
+
+Compression Ratio (Initial/New): 1.7060
+Percentage Space Savings (vs Padded): 41.38%
+
+Improvement vs 8x4 (Total, 21584 bits):    2376 bits (11.01%)
+
+Compression Time Taken:   4.4878 seconds
+Decompression Time Taken: 0.0176 seconds
+==================================================

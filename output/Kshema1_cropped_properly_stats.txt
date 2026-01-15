@@ -536,6 +536,6 @@ Improvement vs 8x4 (Total, 1347976 bits):    146776 bits (10.89%)
 Compression Ratio (Initial/New): 2.1824
 Percentage Space Savings (vs Padded): 54.18%
 
-Compression Time Taken:   54.7407 seconds
-Decompression Time Taken: 0.9196 seconds
+Compression Time Taken:   72.7070 seconds
+Decompression Time Taken: 0.9216 seconds
 ==================================================
