@@ -34,7 +34,7 @@ class QuadTree:
         self.discarded_minimized_data = None
         self.xor_applied = False
 
-    def subdivide(self, block_data):
+    def subdivide(self, block_data, stats=None, bitplane=None):
         blk = block_data
 
         if np.all(blk == blk.flat[0]):
@@ -49,10 +49,22 @@ class QuadTree:
             espresso_cost = get_espresso_cost(min_data, use_3_bit_cube_count=True)
 
             if espresso_cost < raw_cost:
+                # Stats: Originally Compressible
+                if flags.PREDICTIVE_XOR_8X8_MODE and stats is not None and bitplane is not None:
+                    xor_stats = stats.plane_stats[bitplane].get("xor_comparison_stats")
+                    if xor_stats:
+                        xor_stats["originally_compressible"] += 1
+
                 self.subtype = "espresso"
                 self.minimized = min_data
                 self.xor_applied = False
                 return
+
+            # Stats: Originally Incompressible
+            if flags.PREDICTIVE_XOR_8X8_MODE and stats is not None and bitplane is not None:
+                xor_stats = stats.plane_stats[bitplane].get("xor_comparison_stats")
+                if xor_stats:
+                    xor_stats["originally_incompressible"] += 1
 
             if flags.PREDICTIVE_XOR_8X8_MODE:
                 xor_blk = blk.copy()
@@ -64,10 +76,22 @@ class QuadTree:
                 )
 
                 if espresso_cost_xor < raw_cost:
+                    # Stats: Converted to Compressible
+                    if stats is not None and bitplane is not None:
+                        xor_stats = stats.plane_stats[bitplane].get("xor_comparison_stats")
+                        if xor_stats:
+                            xor_stats["xor_converted_to_compressible"] += 1
+
                     self.subtype = "espresso"
                     self.minimized = min_data_xor
                     self.xor_applied = True
                 else:
+                    # Stats: Failed to Convert
+                    if stats is not None and bitplane is not None:
+                        xor_stats = stats.plane_stats[bitplane].get("xor_comparison_stats")
+                        if xor_stats:
+                            xor_stats["xor_failed_to_convert"] += 1
+
                     self.subtype = "raw"
                     self.raw_block_data = xor_blk
                     self.discarded_minimized_data = min_data_xor
@@ -91,7 +115,7 @@ class QuadTree:
         for (dx, dy, ww, hh), child_slice in child_info:
             if ww > 0 and hh > 0:
                 child = QuadTree(self.x + dx, self.y + dy, ww, hh)
-                child.subdivide(child_slice)
+                child.subdivide(child_slice, stats, bitplane)
                 self.children.append(child)
 
     def to_dict(self):
@@ -153,7 +177,7 @@ def compress_image_to_bitstream(image_path):
             for x0 in range(0, w, 64):
                 tile = plane_arr[y0 : y0 + 64, x0 : x0 + 64]
                 root = QuadTree(0, 0, 64, 64)
-                root.subdivide(tile)
+                root.subdivide(tile, stats, bit)
                 node_dict = root.to_dict()
                 temp_stream = io.BytesIO()
                 temp_writer = BitStreamWriter(temp_stream)

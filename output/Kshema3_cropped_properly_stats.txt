@@ -5,7 +5,6 @@
 ----------------------------------------
   Bitplane 0
   Compressed Bits: 442476
-  Improvement vs 8x4 (442476 bits): 0 bits (0.00%)
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 108
@@ -49,6 +48,13 @@ XOR Usage Statistics (Predictive XOR for Small Blocks):
   Level 2x2 (Total Blocks: 0):
     - No blocks at this level.
 
+Predictive XOR 8x8 Effectiveness (Targeted Analysis):
+  Total 8x8 Blocks Evaluated: 6912
+    Originally Compressible:   4 (0.06%)
+    Originally Incompressible: 6908 (99.94%)
+      -> Converted to Compressible via XOR: 0 (0.00% success rate)
+      -> Remained Incompressible:           6908 (100.00%)
+
 Overall Leaf Node Type Distribution:
   Total Leaf Nodes: 0
 
@@ -65,7 +71,6 @@ Overall Leaf Node Type Distribution:
 ----------------------------------------
   Bitplane 1
   Compressed Bits: 441837
-  Improvement vs 8x4 (442476 bits): 639 bits (0.14%)
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 108
@@ -112,6 +117,13 @@ XOR Usage Statistics (Predictive XOR for Small Blocks):
   Level 2x2 (Total Blocks: 0):
     - No blocks at this level.
 
+Predictive XOR 8x8 Effectiveness (Targeted Analysis):
+  Total 8x8 Blocks Evaluated: 6904
+    Originally Compressible:   230 (3.33%)
+    Originally Incompressible: 6674 (96.67%)
+      -> Converted to Compressible via XOR: 4 (0.06% success rate)
+      -> Remained Incompressible:           6670 (99.94%)
+
 Overall Leaf Node Type Distribution:
   Total Leaf Nodes: 256
   - Homogeneous-0:            3 (1.17%)
@@ -133,7 +145,6 @@ Overall Leaf Node Type Distribution:
 ----------------------------------------
   Bitplane 2
   Compressed Bits: 403701
-  Improvement vs 8x4 (442393 bits): 38692 bits (8.75%)
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 108
@@ -180,6 +191,13 @@ XOR Usage Statistics (Predictive XOR for Small Blocks):
   Level 2x2 (Total Blocks: 0):
     - No blocks at this level.
 
+Predictive XOR 8x8 Effectiveness (Targeted Analysis):
+  Total 8x8 Blocks Evaluated: 6489
+    Originally Compressible:   1332 (20.53%)
+    Originally Incompressible: 5157 (79.47%)
+      -> Converted to Compressible via XOR: 4 (0.08% success rate)
+      -> Remained Incompressible:           5153 (99.92%)
+
 Overall Leaf Node Type Distribution:
   Total Leaf Nodes: 3914
   - Homogeneous-0:            217 (5.54%)
@@ -201,7 +219,6 @@ Overall Leaf Node Type Distribution:
 ----------------------------------------
   Bitplane 3
   Compressed Bits: 273562
-  Improvement vs 8x4 (416677 bits): 143115 bits (34.35%)
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 108
@@ -248,6 +265,13 @@ XOR Usage Statistics (Predictive XOR for Small Blocks):
   Level 2x2 (Total Blocks: 0):
     - No blocks at this level.
 
+Predictive XOR 8x8 Effectiveness (Targeted Analysis):
+  Total 8x8 Blocks Evaluated: 4754
+    Originally Compressible:   1816 (38.20%)
+    Originally Incompressible: 2938 (61.80%)
+      -> Converted to Compressible via XOR: 14 (0.48% success rate)
+      -> Remained Incompressible:           2924 (99.52%)
+
 Overall Leaf Node Type Distribution:
   Total Leaf Nodes: 5980
   - Homogeneous-0:            816 (13.65%)
@@ -269,7 +293,6 @@ Overall Leaf Node Type Distribution:
 ----------------------------------------
   Bitplane 4
   Compressed Bits: 162632
-  Improvement vs 8x4 (307267 bits): 144635 bits (47.07%)
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 108
@@ -316,6 +339,13 @@ XOR Usage Statistics (Predictive XOR for Small Blocks):
   Level 2x2 (Total Blocks: 0):
     - No blocks at this level.
 
+Predictive XOR 8x8 Effectiveness (Targeted Analysis):
+  Total 8x8 Blocks Evaluated: 2834
+    Originally Compressible:   1190 (41.99%)
+    Originally Incompressible: 1644 (58.01%)
+      -> Converted to Compressible via XOR: 12 (0.73% success rate)
+      -> Remained Incompressible:           1632 (99.27%)
+
 Overall Leaf Node Type Distribution:
   Total Leaf Nodes: 4449
   - Homogeneous-0:            568 (12.77%)
@@ -330,7 +360,6 @@ Overall Leaf Node Type Distribution:
 ----------------------------------------
   Bitplane 5
   Compressed Bits: 140907
-  Improvement vs 8x4 (202919 bits): 62012 bits (30.56%)
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 108
@@ -377,6 +406,13 @@ XOR Usage Statistics (Predictive XOR for Small Blocks):
   Level 2x2 (Total Blocks: 0):
     - No blocks at this level.
 
+Predictive XOR 8x8 Effectiveness (Targeted Analysis):
+  Total 8x8 Blocks Evaluated: 2459
+    Originally Compressible:   1042 (42.37%)
+    Originally Incompressible: 1417 (57.63%)
+      -> Converted to Compressible via XOR: 16 (1.13% success rate)
+      -> Remained Incompressible:           1401 (98.87%)
+
 Overall Leaf Node Type Distribution:
   Total Leaf Nodes: 3879
   - Homogeneous-0:            992 (25.57%)
@@ -391,7 +427,6 @@ Overall Leaf Node Type Distribution:
 ----------------------------------------
   Bitplane 6
   Compressed Bits: 25588
-  Improvement vs 8x4 (81614 bits): 56026 bits (68.65%)
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 108
@@ -438,6 +473,13 @@ XOR Usage Statistics (Predictive XOR for Small Blocks):
   Level 2x2 (Total Blocks: 0):
     - No blocks at this level.
 
+Predictive XOR 8x8 Effectiveness (Targeted Analysis):
+  Total 8x8 Blocks Evaluated: 419
+    Originally Compressible:   161 (38.42%)
+    Originally Incompressible: 258 (61.58%)
+      -> Converted to Compressible via XOR: 4 (1.55% success rate)
+      -> Remained Incompressible:           254 (98.45%)
+
 Overall Leaf Node Type Distribution:
   Total Leaf Nodes: 969
   - Homogeneous-0:            253 (26.11%)
@@ -452,7 +494,6 @@ Overall Leaf Node Type Distribution:
 ----------------------------------------
   Bitplane 7
   Compressed Bits: 63508
-  Improvement vs 8x4 (63939 bits): 431 bits (0.67%)
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 108
@@ -499,6 +540,13 @@ XOR Usage Statistics (Predictive XOR for Small Blocks):
   Level 2x2 (Total Blocks: 0):
     - No blocks at this level.
 
+Predictive XOR 8x8 Effectiveness (Targeted Analysis):
+  Total 8x8 Blocks Evaluated: 1128
+    Originally Compressible:   553 (49.02%)
+    Originally Incompressible: 575 (50.98%)
+      -> Converted to Compressible via XOR: 18 (3.13% success rate)
+      -> Remained Incompressible:           557 (96.87%)
+
 Overall Leaf Node Type Distribution:
   Total Leaf Nodes: 2172
   - Homogeneous-0:            735 (33.84%)
@@ -511,16 +559,25 @@ Overall Leaf Node Type Distribution:
   No 64x64 blocks overflowed.
 
 ==================================================
+      Total Predictive XOR 8x8 Effectiveness
+==================================================
+
+Total 8x8 Blocks Evaluated (All Planes): 31899
+  Originally Compressible:   6328 (19.84%)
+  Originally Incompressible: 25571 (80.16%)
+    -> Converted to Compressible via XOR: 72 (0.28% success rate)
+    -> Remained Incompressible:           25499 (99.72%)
+
+==================================================
       Overall Summary
 ==================================================
 Initial Size (before padding): 442368 bytes (3538944 bits)
 Size After Padding:            442368 bytes (3538944 bits)
 Compressed Size:               244277.00 bytes (1954216 bits)
-Improvement vs 8x4 (Total, 2399768 bits):    445552 bits (18.57%)
 
 Compression Ratio (Initial/New): 1.8109
 Percentage Space Savings (vs Padded): 44.78%
 
-Compression Time Taken:   19887.7272 seconds
-Decompression Time Taken: 1.6818 seconds
+Compression Time Taken:   120.6053 seconds
+Decompression Time Taken: 1.7579 seconds
 ==================================================

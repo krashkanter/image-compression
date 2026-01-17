@@ -40,6 +40,12 @@ class CompressionStats:
                         "incompressible_raw": 0,
                     }
                 },
+                "xor_comparison_stats": {
+                    "originally_compressible": 0,
+                    "originally_incompressible": 0,
+                    "xor_converted_to_compressible": 0,
+                    "xor_failed_to_convert": 0,
+                },
             }
 
     def dump_to_file(
@@ -162,6 +168,31 @@ class CompressionStats:
                             f.write("    - No blocks at this level.\n")
                     f.write("\n")
 
+                    if "xor_comparison_stats" in stats:
+                         xor_s = stats["xor_comparison_stats"]
+                         orig_comp = xor_s["originally_compressible"]
+                         orig_incomp = xor_s["originally_incompressible"]
+                         total_blocks = orig_comp + orig_incomp
+                         
+                         converted = xor_s["xor_converted_to_compressible"]
+                         failed = xor_s["xor_failed_to_convert"]
+                         
+                         f.write("Predictive XOR 8x8 Effectiveness (Targeted Analysis):\n")
+                         f.write(f"  Total 8x8 Blocks Evaluated: {total_blocks}\n")
+                         
+                         if total_blocks > 0:
+                             f.write(f"    Originally Compressible:   {orig_comp} ({to_percent(orig_comp, total_blocks):.2f}%)\n")
+                             f.write(f"    Originally Incompressible: {orig_incomp} ({to_percent(orig_incomp, total_blocks):.2f}%)\n")
+                             
+                             if orig_incomp > 0:
+                                 f.write(f"      -> Converted to Compressible via XOR: {converted} ({to_percent(converted, orig_incomp):.2f}% success rate)\n")
+                                 f.write(f"      -> Remained Incompressible:           {failed} ({to_percent(failed, orig_incomp):.2f}%)\n")
+                             else:
+                                 f.write("      (No incompressible blocks to test XOR on)\n")
+                         else:
+                             f.write("    No 8x8 blocks evaluated.\n")
+                    f.write("\n")
+
                     f.write("Overall Leaf Node Type Distribution:\n")
                     leaf_counts = stats["leaf_node_counts"]
                     total_leaf_nodes = sum(leaf_counts.values())
@@ -215,6 +246,35 @@ class CompressionStats:
                             )
                     else:
                         f.write("  No 64x64 blocks overflowed.\n\n")
+
+                # Accumulate totals for XOR stats
+                total_orig_comp = 0
+                total_orig_incomp = 0
+                total_converted = 0
+                total_failed = 0
+                
+                for bit, stats in self.plane_stats.items():
+                    if "xor_comparison_stats" in stats:
+                        xor_s = stats["xor_comparison_stats"]
+                        total_orig_comp += xor_s["originally_compressible"]
+                        total_orig_incomp += xor_s["originally_incompressible"]
+                        total_converted += xor_s["xor_converted_to_compressible"]
+                        total_failed += xor_s["xor_failed_to_convert"]
+                
+                total_eval = total_orig_comp + total_orig_incomp
+
+                if total_eval > 0:
+                    f.write("=" * 50 + "\n")
+                    f.write("      Total Predictive XOR 8x8 Effectiveness\n")
+                    f.write("=" * 50 + "\n\n")
+                    f.write(f"Total 8x8 Blocks Evaluated (All Planes): {total_eval}\n")
+                    f.write(f"  Originally Compressible:   {total_orig_comp} ({to_percent(total_orig_comp, total_eval):.2f}%)\n")
+                    f.write(f"  Originally Incompressible: {total_orig_incomp} ({to_percent(total_orig_incomp, total_eval):.2f}%)\n")
+                    
+                    if total_orig_incomp > 0:
+                        f.write(f"    -> Converted to Compressible via XOR: {total_converted} ({to_percent(total_converted, total_orig_incomp):.2f}% success rate)\n")
+                        f.write(f"    -> Remained Incompressible:           {total_failed} ({to_percent(total_failed, total_orig_incomp):.2f}%)\n")
+                    f.write("\n")
 
                 f.write("=" * 50 + "\n")
                 f.write("      Overall Summary\n")
