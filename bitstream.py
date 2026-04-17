@@ -9,6 +9,8 @@ from utils import (
     minimize_block,
     get_espresso_cost,
     load_templates,
+    numpy_binary_to_gray,
+    numpy_gray_to_binary,
 )
 from stats import SimpleStats, _collect_stats_from_node
 
@@ -279,6 +281,9 @@ def compress_image_to_bitstream(image_path):
     )
     h, w = padded_arr.shape
     
+    if flags.GRAY_PIXELS_MODE:
+        padded_arr = numpy_binary_to_gray(padded_arr)
+
     # The bitstream is just a simple list of 0s and 1s
     bitstream = []
     
@@ -378,6 +383,10 @@ def decompress_image_from_bitstream(bitstream_arr, padded_width, padded_height):
                     )
                     plane_arr[y0 : y0 + 64, x0 : x0 + 64] = tile_plane
         final_arr |= plane_arr << bit
+
+    if flags.GRAY_PIXELS_MODE:
+        final_arr = numpy_gray_to_binary(final_arr)
+
     return final_arr
 
 

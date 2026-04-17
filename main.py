@@ -35,6 +35,11 @@ def main():
         help="Use pure quadtree compression without minimization.",
     )
     parser.add_argument(
+        "--gray",
+        action="store_true",
+        help="Apply Gray coding to pixel values before compression.",
+    )
+    parser.add_argument(
         "--dump-plot",
         action="store_true",
         help="Dump plots of template stats",
@@ -43,6 +48,8 @@ def main():
 
     if args.pure_quadtree:
         config.PURE_QUADTREE_MODE = True
+    if args.gray:
+        config.GRAY_PIXELS_MODE = True
 
     base_name = os.path.splitext(os.path.basename(args.input_image))[0]
     output_path = (

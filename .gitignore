@@ -209,3 +209,8 @@ __marimo__/
 # /output
 
 .idea
+
+pla/
+pla_offset/
+pla_offset_output/
+pla_output/

@@ -1,8 +1,8 @@
-import subprocess
 from collections import Counter
 from math import ceil, log2
 import numpy as np
 import os
+from pyeda.boolalg.espresso import espresso, FTYPE
 
 
 def get_espresso_cost(min_data, use_3_bit_cube_count=False):
@@ -60,38 +60,27 @@ def bin_to_gray(bin_str):
 
 
 def run_espresso(terms, n_bits):
+    if not terms:
+        return []
+
+    _PLA_TO_PCN = {'0': 1, '1': 2, '-': 3}
+    _PCN_TO_PLA = {1: '0', 2: '1', 3: '-'}
+
     try:
-        pla_content = [f".i {n_bits}", ".o 1"]
+        cover = []
         for inp, out in terms:
-            pla_content.append(f"{inp} {out}")
-        pla_content.append(".e")
-        pla_input_str = "\n".join(pla_content)
-        espresso_cmd = (
-            ".\\bin\\espresso.exe" if os.name == "nt" else "./bin/espresso"
-        )
-        res = subprocess.run(
-            [espresso_cmd],
-            input=pla_input_str,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
+            row_in = tuple(_PLA_TO_PCN[ch] for ch in inp)
+            row_out = (int(out),)
+            cover.append((row_in, row_out))
+
+        result = espresso(n_bits, 1, cover, intype=FTYPE)
+
         cubes = []
-        for line in res.stdout.splitlines():
-            parts = line.split()
-            if len(parts) == 2 and all(c in "01-" for c in parts[0]):
-                cubes.append((parts[0], parts[1]))
+        for row_in, row_out in result:
+            inp = ''.join(_PCN_TO_PLA[v] for v in row_in)
+            out = str(row_out[0])
+            cubes.append((inp, out))
         return cubes
-    except FileNotFoundError:
-        print("Error: 'espresso' command not found.")
-        print(
-            "Please ensure Espresso is installed and accessible in your system's PATH."
-        )
-        return []
-    except subprocess.CalledProcessError as e:
-        print(f"Error running Espresso (exit code {e.returncode}): {e}")
-        print(f"Stderr: {e.stderr}")
-        return []
     except Exception as e:
         print(f"An unexpected error occurred during Espresso execution: {e}")
         return []
@@ -303,7 +292,13 @@ def reconstruct_block(info, w, h):
     return blk
 
 
+def numpy_binary_to_gray(arr):
+    return arr ^ (arr >> 1)
 
 
-
-
+def numpy_gray_to_binary(arr):
+    mask = arr >> 1
+    while np.any(mask != 0):
+        arr = arr ^ mask
+        mask = mask >> 1
+    return arr
