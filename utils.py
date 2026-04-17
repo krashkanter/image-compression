@@ -188,3 +188,30 @@ def decode_cubes(bits, allotment):
 
     return decoded
 
+from pyeda.boolalg.espresso import espresso, FTYPE
+
+def run_espresso(terms, n_bits):
+    if not terms:
+        return []
+
+    _PLA_TO_PCN = {'0': 1, '1': 2, '-': 3}
+    _PCN_TO_PLA = {1: '0', 2: '1', 3: '-'}
+
+    try:
+        cover = []
+        for inp, out in terms:
+            row_in = tuple(_PLA_TO_PCN[ch] for ch in inp)
+            row_out = (int(out),)
+            cover.append((row_in, row_out))
+
+        result = espresso(n_bits, 1, cover, intype=FTYPE)
+
+        cubes = []
+        for row_in, row_out in result:
+            inp = ''.join(_PCN_TO_PLA[v] for v in row_in)
+            out = str(row_out[0])
+            cubes.append((inp, out))
+        return cubes
+    except Exception as e:
+        print(f"An unexpected error occurred during Espresso execution: {e}")
+        return []

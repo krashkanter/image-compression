@@ -1,0 +1,251 @@
+Block Shape =  4x8
+Image Shape =  1280x1600
+-------------------------------------------------------
+Reading image....
+-------------------------------------------------------
+Compressing....
+Minimizing ON-set and OFF-set with Espresso (in memory)...
+-------------------------------------------------------
+For plane 0
+
+All black:  0
+All white:  0
+Compressible:  525
+Incompressible:  63475
+One cube: 1
+Two cubes: 12
+Three cubes: 32
+OnSet blocks: 276
+OffSet blocks: 249
+One Isolated: 0
+Two Isolated: 0
+Three Isolated: 0
+
+Percentage all black: 0.0
+Percentage all white: 0.0
+Percentage compressible: 0.8203125
+Percentage incompressible: 99.1796875
+Percentage One cube: 0.0015625
+Percentage Two cubes: 0.01875
+Percentage Three cubes: 0.05
+Percentage OnSet Blocks: 0.43125
+Percentage OffSet Blocks: 0.3890625
+Percentage One Isolated: 0.0
+Percentage Two Isolated: 0.0
+Percentage Three Isolated: 0.0
+-------------------------------------------------------
+-------------------------------------------------------
+For plane 1
+
+All black:  0
+All white:  0
+Compressible:  533
+Incompressible:  63467
+One cube: 3
+Two cubes: 14
+Three cubes: 41
+OnSet blocks: 247
+OffSet blocks: 286
+One Isolated: 0
+Two Isolated: 0
+Three Isolated: 0
+
+Percentage all black: 0.0
+Percentage all white: 0.0
+Percentage compressible: 0.8328125
+Percentage incompressible: 99.1671875
+Percentage One cube: 0.0046875
+Percentage Two cubes: 0.021875
+Percentage Three cubes: 0.0640625
+Percentage OnSet Blocks: 0.3859375
+Percentage OffSet Blocks: 0.446875
+Percentage One Isolated: 0.0
+Percentage Two Isolated: 0.0
+Percentage Three Isolated: 0.0
+-------------------------------------------------------
+-------------------------------------------------------
+For plane 2
+
+All black:  2
+All white:  1
+Compressible:  1017
+Incompressible:  62980
+One cube: 18
+Two cubes: 22
+Three cubes: 90
+OnSet blocks: 525
+OffSet blocks: 492
+One Isolated: 2
+Two Isolated: 3
+Three Isolated: 2
+
+Percentage all black: 0.003125
+Percentage all white: 0.0015625
+Percentage compressible: 1.5890625
+Percentage incompressible: 98.40625
+Percentage One cube: 0.028125
+Percentage Two cubes: 0.034375
+Percentage Three cubes: 0.140625
+Percentage OnSet Blocks: 0.8203125
+Percentage OffSet Blocks: 0.76875
+Percentage One Isolated: 0.003125
+Percentage Two Isolated: 0.0046875
+Percentage Three Isolated: 0.003125
+-------------------------------------------------------
+-------------------------------------------------------
+For plane 3
+
+All black:  23
+All white:  23
+Compressible:  12514
+Incompressible:  51440
+One cube: 187
+Two cubes: 844
+Three cubes: 3037
+OnSet blocks: 6333
+OffSet blocks: 6181
+One Isolated: 32
+Two Isolated: 62
+Three Isolated: 122
+
+Percentage all black: 0.0359375
+Percentage all white: 0.0359375
+Percentage compressible: 19.553125
+Percentage incompressible: 80.375
+Percentage One cube: 0.2921875
+Percentage Two cubes: 1.31875
+Percentage Three cubes: 4.7453125
+Percentage OnSet Blocks: 9.8953125
+Percentage OffSet Blocks: 9.6578125
+Percentage One Isolated: 0.05
+Percentage Two Isolated: 0.096875
+Percentage Three Isolated: 0.190625
+-------------------------------------------------------
+-------------------------------------------------------
+For plane 4
+
+All black:  1733
+All white:  1926
+Compressible:  43901
+Incompressible:  16440
+One cube: 7085
+Two cubes: 10135
+Three cubes: 12581
+OnSet blocks: 21585
+OffSet blocks: 22316
+One Isolated: 1770
+Two Isolated: 2149
+Three Isolated: 2092
+
+Percentage all black: 2.7078125
+Percentage all white: 3.009375
+Percentage compressible: 68.5953125
+Percentage incompressible: 25.6875
+Percentage One cube: 11.0703125
+Percentage Two cubes: 15.8359375
+Percentage Three cubes: 19.6578125
+Percentage OnSet Blocks: 33.7265625
+Percentage OffSet Blocks: 34.86875
+Percentage One Isolated: 2.765625
+Percentage Two Isolated: 3.3578125
+Percentage Three Isolated: 3.26875
+-------------------------------------------------------
+-------------------------------------------------------
+For plane 5
+
+All black:  13036
+All white:  13318
+Compressible:  31335
+Incompressible:  6311
+One cube: 9871
+Two cubes: 7794
+Three cubes: 7003
+OnSet blocks: 15207
+OffSet blocks: 16128
+One Isolated: 2744
+Two Isolated: 2097
+Three Isolated: 1518
+
+Percentage all black: 20.36875
+Percentage all white: 20.809375
+Percentage compressible: 48.9609375
+Percentage incompressible: 9.8609375
+Percentage One cube: 15.4234375
+Percentage Two cubes: 12.178125
+Percentage Three cubes: 10.9421875
+Percentage OnSet Blocks: 23.7609375
+Percentage OffSet Blocks: 25.2
+Percentage One Isolated: 4.2875
+Percentage Two Isolated: 3.2765625
+Percentage Three Isolated: 2.371875
+-------------------------------------------------------
+-------------------------------------------------------
+For plane 6
+
+All black:  21459
+All white:  23677
+Compressible:  15805
+Incompressible:  3059
+One cube: 5079
+Two cubes: 3950
+Three cubes: 3404
+OnSet blocks: 7827
+OffSet blocks: 7978
+One Isolated: 1494
+Two Isolated: 1081
+Three Isolated: 767
+
+Percentage all black: 33.5296875
+Percentage all white: 36.9953125
+Percentage compressible: 24.6953125
+Percentage incompressible: 4.7796875
+Percentage One cube: 7.9359375
+Percentage Two cubes: 6.171875
+Percentage Three cubes: 5.31875
+Percentage OnSet Blocks: 12.2296875
+Percentage OffSet Blocks: 12.465625
+Percentage One Isolated: 2.334375
+Percentage Two Isolated: 1.6890625
+Percentage Three Isolated: 1.1984375
+-------------------------------------------------------
+-------------------------------------------------------
+For plane 7
+
+All black:  17250
+All white:  38258
+Compressible:  7183
+Incompressible:  1309
+One cube: 2376
+Two cubes: 1791
+Three cubes: 1537
+OnSet blocks: 4027
+OffSet blocks: 3156
+One Isolated: 808
+Two Isolated: 626
+Three Isolated: 454
+
+Percentage all black: 26.953125
+Percentage all white: 59.778125
+Percentage compressible: 11.2234375
+Percentage incompressible: 2.0453125
+Percentage One cube: 3.7125
+Percentage Two cubes: 2.7984375
+Percentage Three cubes: 2.4015625
+Percentage OnSet Blocks: 6.2921875
+Percentage OffSet Blocks: 4.93125
+Percentage One Isolated: 1.2625
+Percentage Two Isolated: 0.978125
+Percentage Three Isolated: 0.709375
+-------------------------------------------------------
+Compressed
+Total compression time - 85.81 seconds
+-------------------------------------------------------
+Json to array...
+Decompressed
+Total decompression time - 4.72 seconds
+-------------------------------------------------------
+Bits Lost: 3907178 bits
+Compression Ratio: 1.31
+Percentage Reduction: 23.85%
+Image saved to output.png
+-------------------------------------------------------
