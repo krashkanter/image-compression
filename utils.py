@@ -4,7 +4,6 @@ from math import ceil, log2
 import numpy as np
 from pyeda.boolalg.espresso import espresso, FTYPE
 
-
 def get_espresso_cost(min_data, use_3_bit_cube_count=False):
     cubes = min_data.get('cubes', [])
     num_cubes = len(cubes)

@@ -152,7 +152,7 @@ Overall Leaf Node Type Distribution:
 
 ----------------------------------------
   Bitplane 2
-  Compressed Bits: 359886
+  Compressed Bits: 359887
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 144
@@ -579,6 +579,6 @@ Compressed Size:               260712.00 bytes (2085696 bits)
 Compression Ratio (Initial/New): 2.2624
 Percentage Space Savings (vs Padded): 55.80%
 
-Compression Time Taken:   121.7192 seconds
-Decompression Time Taken: 2.0737 seconds
+Compression Time Taken:   36.2407 seconds
+Decompression Time Taken: 2.4240 seconds
 ==================================================

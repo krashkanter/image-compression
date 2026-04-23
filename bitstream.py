@@ -1,3 +1,5 @@
+import gc
+from concurrent.futures import ProcessPoolExecutor
 from math import ceil
 import cv2
 import numpy as np
@@ -17,10 +19,14 @@ from utils import (
 )
 from stats import CompressionStats, _collect_stats_from_node
 
+import multiprocessing
+import gc
+
 ENCODING_HOMOGENEOUS_0 = 0b00
 ENCODING_HOMOGENEOUS_1 = 0b01
 ENCODING_INTERNAL = 0b10
 ENCODING_HETEROGENEOUS = 0b11
+
 
 
 class QuadTree:
@@ -173,17 +179,36 @@ def compress_image_to_bitstream(image_path):
     for bit in range(8):
         stats._init_plane_stats(bit)
         plane_arr = ((padded_arr >> bit) & 1).astype(np.uint8)
+
+        tasks = []
         for y0 in range(0, h, 64):
             for x0 in range(0, w, 64):
-                tile = plane_arr[y0 : y0 + 64, x0 : x0 + 64]
-                root = QuadTree(0, 0, 64, 64)
-                root.subdivide(tile, stats, bit)
-                node_dict = root.to_dict()
+                tile = plane_arr[y0: y0 + 64, x0: x0 + 64]
+                tasks.append((tile, bit, flags.PREDICTIVE_XOR_8X8_MODE))
+
+        results = []
+        with multiprocessing.Pool(processes=1, maxtasksperchild=1) as pool:
+            results = pool.map(_process_tile_worker, tasks)
+
+        task_idx = 0
+        for y0 in range(0, h, 64):
+            for x0 in range(0, w, 64):
+                node_dict, local_xor_stats = results[task_idx]
+                tile = plane_arr[y0: y0 + 64, x0: x0 + 64]
+                task_idx += 1
+
+                if local_xor_stats:
+                    for k, v in local_xor_stats.items():
+                        stats.plane_stats[bit]["xor_comparison_stats"][k] += v
+
                 temp_stream = io.BytesIO()
                 temp_writer = BitStreamWriter(temp_stream)
                 encode_quadtree_node_bitstream(node_dict, temp_writer)
                 temp_writer.flush()
+
                 quadtree_cost_bits = len(temp_stream.getvalue()) * 8
+                temp_stream.close()
+
                 if quadtree_cost_bits >= tile.size:
                     stats.plane_stats[bit]["raw_64_blocks"] += 1
                     _collect_stats_from_node(node_dict, stats, bit, is_overflow=True)
@@ -196,11 +221,12 @@ def compress_image_to_bitstream(image_path):
                     writer.write_bit(0)
                     encode_quadtree_node_bitstream(node_dict, writer)
 
-        # Calculate bits for this plane
         current_total_bits = len(byte_stream.getvalue()) * 8 + writer._bits_in_byte
         plane_bits = current_total_bits - previous_total_bits
         stats.plane_stats[bit]['compressed_bits'] = plane_bits
         previous_total_bits = current_total_bits
+
+        gc.collect()
 
     writer.flush()
     compressed_data = byte_stream.getvalue()
@@ -398,3 +424,17 @@ def reconstruct_from_quadtree_node(node, plane_arr):
     elif node["type"] == "node" and "children" in node:
         for child in node["children"]:
             reconstruct_from_quadtree_node(child, plane_arr)
+
+
+def _process_tile_worker(args):
+    tile, bit, xor_mode = args
+    flags.PREDICTIVE_XOR_8X8_MODE = xor_mode
+
+    local_stats = CompressionStats()
+    local_stats._init_plane_stats(bit)
+
+    root = QuadTree(0, 0, 64, 64)
+    root.subdivide(tile, local_stats, bit)
+
+    xor_stats = local_stats.plane_stats[bit].get("xor_comparison_stats")
+    return root.to_dict(), xor_stats

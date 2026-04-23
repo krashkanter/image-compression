@@ -226,7 +226,7 @@ Overall Leaf Node Type Distribution:
 
 ----------------------------------------
   Bitplane 3
-  Compressed Bits: 189852
+  Compressed Bits: 189851
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 80
@@ -349,10 +349,10 @@ XOR Usage Statistics (Predictive XOR for Small Blocks):
 
 Predictive XOR 8x8 Effectiveness (Targeted Analysis):
   Total 8x8 Blocks Evaluated: 2469
-    Originally Compressible:   573 (23.21%)
-    Originally Incompressible: 1896 (76.79%)
+    Originally Compressible:   574 (23.25%)
+    Originally Incompressible: 1895 (76.75%)
       -> Converted to Compressible via XOR: 29 (1.53% success rate)
-      -> Remained Incompressible:           1867 (98.47%)
+      -> Remained Incompressible:           1866 (98.47%)
 
 Overall Leaf Node Type Distribution:
   Total Leaf Nodes: 2817
@@ -369,8 +369,8 @@ Overall Leaf Node Type Distribution:
     Total Leaf Nodes: 320
     - Homogeneous-0:          5 (1.56%)
     - Homogeneous-1:          1 (0.31%)
-    - Espresso:               33 (10.31%)
-    - Raw:                    281 (87.81%)
+    - Espresso:               34 (10.62%)
+    - Raw:                    280 (87.50%)
 
 ----------------------------------------
   Bitplane 5
@@ -578,10 +578,10 @@ Overall Leaf Node Type Distribution:
 ==================================================
 
 Total 8x8 Blocks Evaluated (All Planes): 18993
-  Originally Compressible:   2879 (15.16%)
-  Originally Incompressible: 16114 (84.84%)
+  Originally Compressible:   2880 (15.16%)
+  Originally Incompressible: 16113 (84.84%)
     -> Converted to Compressible via XOR: 139 (0.86% success rate)
-    -> Remained Incompressible:           15975 (99.14%)
+    -> Remained Incompressible:           15974 (99.14%)
 
 ==================================================
       Overall Summary
@@ -593,6 +593,6 @@ Compressed Size:               150150.00 bytes (1201200 bits)
 Compression Ratio (Initial/New): 2.1824
 Percentage Space Savings (vs Padded): 54.18%
 
-Compression Time Taken:   72.9087 seconds
-Decompression Time Taken: 0.9350 seconds
+Compression Time Taken:   22.8140 seconds
+Decompression Time Taken: 1.2270 seconds
 ==================================================

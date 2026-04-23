@@ -4,7 +4,7 @@
 
 ----------------------------------------
   Bitplane 0
-  Compressed Bits: 511345
+  Compressed Bits: 511346
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 132
@@ -78,7 +78,7 @@ Overall Leaf Node Type Distribution:
 
 ----------------------------------------
   Bitplane 1
-  Compressed Bits: 452465
+  Compressed Bits: 452466
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 132
@@ -152,7 +152,7 @@ Overall Leaf Node Type Distribution:
 
 ----------------------------------------
   Bitplane 2
-  Compressed Bits: 397661
+  Compressed Bits: 397662
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 132
@@ -226,7 +226,7 @@ Overall Leaf Node Type Distribution:
 
 ----------------------------------------
   Bitplane 3
-  Compressed Bits: 278797
+  Compressed Bits: 278798
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 132
@@ -374,7 +374,7 @@ Overall Leaf Node Type Distribution:
 
 ----------------------------------------
   Bitplane 5
-  Compressed Bits: 190914
+  Compressed Bits: 190916
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 132
@@ -448,7 +448,7 @@ Overall Leaf Node Type Distribution:
 
 ----------------------------------------
   Bitplane 6
-  Compressed Bits: 117611
+  Compressed Bits: 117612
 ----------------------------------------
 --- Analysis of Used Quadtrees ---
 Total 64x64 blocks processed: 132
@@ -595,11 +595,11 @@ Total 8x8 Blocks Evaluated (All Planes): 36965
 ==================================================
 Initial Size (before padding): 540672 bytes (4325376 bits)
 Size After Padding:            540672 bytes (4325376 bits)
-Compressed Size:               287159.00 bytes (2297272 bits)
+Compressed Size:               287160.00 bytes (2297280 bits)
 
 Compression Ratio (Initial/New): 1.8828
 Percentage Space Savings (vs Padded): 46.89%
 
-Compression Time Taken:   137.0488 seconds
-Decompression Time Taken: 2.2761 seconds
+Compression Time Taken:   40.0673 seconds
+Decompression Time Taken: 2.5369 seconds
 ==================================================

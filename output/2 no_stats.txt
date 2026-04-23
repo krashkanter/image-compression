@@ -1,0 +1,598 @@
+==================================================
+      Compression Statistics Report
+==================================================
+
+----------------------------------------
+  Bitplane 0
+  Compressed Bits: 329951
+----------------------------------------
+--- Analysis of Used Quadtrees ---
+Total 64x64 blocks processed: 81
+  - Compressed with Quadtree: 9 (11.11%)
+  - Stored as Raw (64x64 Overflow): 72 (88.89%)
+
+Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
+  Level 64x64 (Total Nodes: 81):
+    - 00 (Homo-0):            0 (0.00%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          81 (100.00%)
+  Level 32x32 (Total Nodes: 324):
+    - 00 (Homo-0):            0 (0.00%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          324 (100.00%)
+  Level 16x16 (Total Nodes: 1296):
+    - 00 (Homo-0):            0 (0.00%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          1296 (100.00%)
+  Level 8x8 (Total Nodes: 5184):
+    - 00 (Homo-0):            59 (1.14%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          0 (0.00%)
+    - 11 (Hetero-Leaf):       5125 (98.86%)
+  Level 4x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 2x2 (Total Nodes: 0):
+    - No nodes at this level.
+
+Leaf Node Type Distribution (Per Level):
+  Level 8x8 (Total Leaves: 576):
+    - Espresso:          49 (8.51%)
+    - Raw:               472 (81.94%)
+    - Homogeneous-0:     55 (9.55%)
+    - Homogeneous-1:     0 (0.00%)
+  Level 4x4 (Total Leaves: 0):
+    - No leaves at this level.
+  Level 2x2 (Total Leaves: 0):
+    - No leaves at this level.
+
+XOR Usage Statistics (Predictive XOR for Small Blocks):
+  Level 4x4 (Total Blocks: 0):
+    - No blocks at this level.
+  Level 2x2 (Total Blocks: 0):
+    - No blocks at this level.
+
+Predictive XOR 8x8 Effectiveness (Targeted Analysis):
+  Total 8x8 Blocks Evaluated: 5125
+    Originally Compressible:   176 (3.43%)
+    Originally Incompressible: 4949 (96.57%)
+      -> Converted to Compressible via XOR: 3 (0.06% success rate)
+      -> Remained Incompressible:           4946 (99.94%)
+
+Overall Leaf Node Type Distribution:
+  Total Leaf Nodes: 576
+  - Homogeneous-0:            55 (9.55%)
+  - Homogeneous-1:            0 (0.00%)
+  - Espresso:                 49 (8.51%)
+  - Raw:                      472 (81.94%)
+
+
+--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
+  (For the 72 blocks where the entire Quadtree was larger than raw)
+
+  Leaf Node Type Distribution (Overflow Trees):
+    Total Leaf Nodes: 4608
+    - Homogeneous-0:          4 (0.09%)
+    - Homogeneous-1:          0 (0.00%)
+    - Espresso:               130 (2.82%)
+    - Raw:                    4474 (97.09%)
+
+----------------------------------------
+  Bitplane 1
+  Compressed Bits: 285179
+----------------------------------------
+--- Analysis of Used Quadtrees ---
+Total 64x64 blocks processed: 81
+  - Compressed with Quadtree: 40 (49.38%)
+  - Stored as Raw (64x64 Overflow): 41 (50.62%)
+
+Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
+  Level 64x64 (Total Nodes: 81):
+    - 00 (Homo-0):            0 (0.00%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          81 (100.00%)
+  Level 32x32 (Total Nodes: 324):
+    - 00 (Homo-0):            0 (0.00%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          324 (100.00%)
+  Level 16x16 (Total Nodes: 1296):
+    - 00 (Homo-0):            2 (0.15%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          1294 (99.85%)
+  Level 8x8 (Total Nodes: 5176):
+    - 00 (Homo-0):            341 (6.59%)
+    - 01 (Homo-1):            1 (0.02%)
+    - 10 (Internal):          0 (0.00%)
+    - 11 (Hetero-Leaf):       4834 (93.39%)
+  Level 4x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 2x2 (Total Nodes: 0):
+    - No nodes at this level.
+
+Leaf Node Type Distribution (Per Level):
+  Level 8x8 (Total Leaves: 2552):
+    - Espresso:          1259 (49.33%)
+    - Raw:               959 (37.58%)
+    - Homogeneous-0:     334 (13.09%)
+    - Homogeneous-1:     0 (0.00%)
+  Level 4x4 (Total Leaves: 0):
+    - No leaves at this level.
+  Level 2x2 (Total Leaves: 0):
+    - No leaves at this level.
+
+XOR Usage Statistics (Predictive XOR for Small Blocks):
+  Level 4x4 (Total Blocks: 0):
+    - No blocks at this level.
+  Level 2x2 (Total Blocks: 0):
+    - No blocks at this level.
+
+Predictive XOR 8x8 Effectiveness (Targeted Analysis):
+  Total 8x8 Blocks Evaluated: 4834
+    Originally Compressible:   1353 (27.99%)
+    Originally Incompressible: 3481 (72.01%)
+      -> Converted to Compressible via XOR: 13 (0.37% success rate)
+      -> Remained Incompressible:           3468 (99.63%)
+
+Overall Leaf Node Type Distribution:
+  Total Leaf Nodes: 2554
+  - Homogeneous-0:            336 (13.16%)
+  - Homogeneous-1:            0 (0.00%)
+  - Espresso:                 1259 (49.30%)
+  - Raw:                      959 (37.55%)
+
+
+--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
+  (For the 41 blocks where the entire Quadtree was larger than raw)
+
+  Leaf Node Type Distribution (Overflow Trees):
+    Total Leaf Nodes: 2624
+    - Homogeneous-0:          7 (0.27%)
+    - Homogeneous-1:          1 (0.04%)
+    - Espresso:               107 (4.08%)
+    - Raw:                    2509 (95.62%)
+
+----------------------------------------
+  Bitplane 2
+  Compressed Bits: 206949
+----------------------------------------
+--- Analysis of Used Quadtrees ---
+Total 64x64 blocks processed: 81
+  - Compressed with Quadtree: 66 (81.48%)
+  - Stored as Raw (64x64 Overflow): 15 (18.52%)
+
+Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
+  Level 64x64 (Total Nodes: 81):
+    - 00 (Homo-0):            0 (0.00%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          81 (100.00%)
+  Level 32x32 (Total Nodes: 324):
+    - 00 (Homo-0):            0 (0.00%)
+    - 01 (Homo-1):            24 (7.41%)
+    - 10 (Internal):          300 (92.59%)
+  Level 16x16 (Total Nodes: 1200):
+    - 00 (Homo-0):            0 (0.00%)
+    - 01 (Homo-1):            231 (19.25%)
+    - 10 (Internal):          969 (80.75%)
+  Level 8x8 (Total Nodes: 3876):
+    - 00 (Homo-0):            122 (3.15%)
+    - 01 (Homo-1):            482 (12.44%)
+    - 10 (Internal):          0 (0.00%)
+    - 11 (Hetero-Leaf):       3272 (84.42%)
+  Level 4x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 2x2 (Total Nodes: 0):
+    - No nodes at this level.
+
+Leaf Node Type Distribution (Per Level):
+  Level 8x8 (Total Leaves: 2916):
+    - Espresso:          607 (20.82%)
+    - Raw:               1715 (58.81%)
+    - Homogeneous-0:     119 (4.08%)
+    - Homogeneous-1:     475 (16.29%)
+  Level 4x4 (Total Leaves: 0):
+    - No leaves at this level.
+  Level 2x2 (Total Leaves: 0):
+    - No leaves at this level.
+
+XOR Usage Statistics (Predictive XOR for Small Blocks):
+  Level 4x4 (Total Blocks: 0):
+    - No blocks at this level.
+  Level 2x2 (Total Blocks: 0):
+    - No blocks at this level.
+
+Predictive XOR 8x8 Effectiveness (Targeted Analysis):
+  Total 8x8 Blocks Evaluated: 3272
+    Originally Compressible:   652 (19.93%)
+    Originally Incompressible: 2620 (80.07%)
+      -> Converted to Compressible via XOR: 70 (2.67% success rate)
+      -> Remained Incompressible:           2550 (97.33%)
+
+Overall Leaf Node Type Distribution:
+  Total Leaf Nodes: 3171
+  - Homogeneous-0:            119 (3.75%)
+  - Homogeneous-1:            730 (23.02%)
+  - Espresso:                 607 (19.14%)
+  - Raw:                      1715 (54.08%)
+
+
+--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
+  (For the 15 blocks where the entire Quadtree was larger than raw)
+
+  Leaf Node Type Distribution (Overflow Trees):
+    Total Leaf Nodes: 960
+    - Homogeneous-0:          3 (0.31%)
+    - Homogeneous-1:          7 (0.73%)
+    - Espresso:               115 (11.98%)
+    - Raw:                    835 (86.98%)
+
+----------------------------------------
+  Bitplane 3
+  Compressed Bits: 280908
+----------------------------------------
+--- Analysis of Used Quadtrees ---
+Total 64x64 blocks processed: 81
+  - Compressed with Quadtree: 64 (79.01%)
+  - Stored as Raw (64x64 Overflow): 17 (20.99%)
+
+Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
+  Level 64x64 (Total Nodes: 81):
+    - 00 (Homo-0):            0 (0.00%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          81 (100.00%)
+  Level 32x32 (Total Nodes: 324):
+    - 00 (Homo-0):            0 (0.00%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          324 (100.00%)
+  Level 16x16 (Total Nodes: 1296):
+    - 00 (Homo-0):            0 (0.00%)
+    - 01 (Homo-1):            24 (1.85%)
+    - 10 (Internal):          1272 (98.15%)
+  Level 8x8 (Total Nodes: 5088):
+    - 00 (Homo-0):            255 (5.01%)
+    - 01 (Homo-1):            304 (5.97%)
+    - 10 (Internal):          0 (0.00%)
+    - 11 (Hetero-Leaf):       4529 (89.01%)
+  Level 4x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 2x2 (Total Nodes: 0):
+    - No nodes at this level.
+
+Leaf Node Type Distribution (Per Level):
+  Level 8x8 (Total Leaves: 4000):
+    - Espresso:          1109 (27.73%)
+    - Raw:               2338 (58.45%)
+    - Homogeneous-0:     252 (6.30%)
+    - Homogeneous-1:     301 (7.52%)
+  Level 4x4 (Total Leaves: 0):
+    - No leaves at this level.
+  Level 2x2 (Total Leaves: 0):
+    - No leaves at this level.
+
+XOR Usage Statistics (Predictive XOR for Small Blocks):
+  Level 4x4 (Total Blocks: 0):
+    - No blocks at this level.
+  Level 2x2 (Total Blocks: 0):
+    - No blocks at this level.
+
+Predictive XOR 8x8 Effectiveness (Targeted Analysis):
+  Total 8x8 Blocks Evaluated: 4529
+    Originally Compressible:   1297 (28.64%)
+    Originally Incompressible: 3232 (71.36%)
+      -> Converted to Compressible via XOR: 11 (0.34% success rate)
+      -> Remained Incompressible:           3221 (99.66%)
+
+Overall Leaf Node Type Distribution:
+  Total Leaf Nodes: 4024
+  - Homogeneous-0:            252 (6.26%)
+  - Homogeneous-1:            325 (8.08%)
+  - Espresso:                 1109 (27.56%)
+  - Raw:                      2338 (58.10%)
+
+
+--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
+  (For the 17 blocks where the entire Quadtree was larger than raw)
+
+  Leaf Node Type Distribution (Overflow Trees):
+    Total Leaf Nodes: 1088
+    - Homogeneous-0:          3 (0.28%)
+    - Homogeneous-1:          3 (0.28%)
+    - Espresso:               199 (18.29%)
+    - Raw:                    883 (81.16%)
+
+----------------------------------------
+  Bitplane 4
+  Compressed Bits: 123088
+----------------------------------------
+--- Analysis of Used Quadtrees ---
+Total 64x64 blocks processed: 81
+  - Compressed with Quadtree: 80 (98.77%)
+  - Stored as Raw (64x64 Overflow): 1 (1.23%)
+
+Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
+  Level 64x64 (Total Nodes: 81):
+    - 00 (Homo-0):            21 (25.93%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          60 (74.07%)
+  Level 32x32 (Total Nodes: 240):
+    - 00 (Homo-0):            27 (11.25%)
+    - 01 (Homo-1):            1 (0.42%)
+    - 10 (Internal):          212 (88.33%)
+  Level 16x16 (Total Nodes: 848):
+    - 00 (Homo-0):            129 (15.21%)
+    - 01 (Homo-1):            27 (3.18%)
+    - 10 (Internal):          692 (81.60%)
+  Level 8x8 (Total Nodes: 2768):
+    - 00 (Homo-0):            566 (20.45%)
+    - 01 (Homo-1):            151 (5.46%)
+    - 10 (Internal):          0 (0.00%)
+    - 11 (Hetero-Leaf):       2051 (74.10%)
+  Level 4x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 2x2 (Total Nodes: 0):
+    - No nodes at this level.
+
+Leaf Node Type Distribution (Per Level):
+  Level 8x8 (Total Leaves: 2704):
+    - Espresso:          740 (27.37%)
+    - Raw:               1247 (46.12%)
+    - Homogeneous-0:     566 (20.93%)
+    - Homogeneous-1:     151 (5.58%)
+  Level 4x4 (Total Leaves: 0):
+    - No leaves at this level.
+  Level 2x2 (Total Leaves: 0):
+    - No leaves at this level.
+
+XOR Usage Statistics (Predictive XOR for Small Blocks):
+  Level 4x4 (Total Blocks: 0):
+    - No blocks at this level.
+  Level 2x2 (Total Blocks: 0):
+    - No blocks at this level.
+
+Predictive XOR 8x8 Effectiveness (Targeted Analysis):
+  Total 8x8 Blocks Evaluated: 2051
+    Originally Compressible:   738 (35.98%)
+    Originally Incompressible: 1313 (64.02%)
+      -> Converted to Compressible via XOR: 15 (1.14% success rate)
+      -> Remained Incompressible:           1298 (98.86%)
+
+Overall Leaf Node Type Distribution:
+  Total Leaf Nodes: 2909
+  - Homogeneous-0:            743 (25.54%)
+  - Homogeneous-1:            179 (6.15%)
+  - Espresso:                 740 (25.44%)
+  - Raw:                      1247 (42.87%)
+
+
+--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
+  (For the 1 blocks where the entire Quadtree was larger than raw)
+
+  Leaf Node Type Distribution (Overflow Trees):
+    Total Leaf Nodes: 64
+    - Homogeneous-0:          0 (0.00%)
+    - Homogeneous-1:          0 (0.00%)
+    - Espresso:               13 (20.31%)
+    - Raw:                    51 (79.69%)
+
+----------------------------------------
+  Bitplane 5
+  Compressed Bits: 62943
+----------------------------------------
+--- Analysis of Used Quadtrees ---
+Total 64x64 blocks processed: 81
+  - Compressed with Quadtree: 81 (100.00%)
+  - Stored as Raw (64x64 Overflow): 0 (0.00%)
+
+Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
+  Level 64x64 (Total Nodes: 81):
+    - 00 (Homo-0):            22 (27.16%)
+    - 01 (Homo-1):            3 (3.70%)
+    - 10 (Internal):          56 (69.14%)
+  Level 32x32 (Total Nodes: 224):
+    - 00 (Homo-0):            25 (11.16%)
+    - 01 (Homo-1):            45 (20.09%)
+    - 10 (Internal):          154 (68.75%)
+  Level 16x16 (Total Nodes: 616):
+    - 00 (Homo-0):            59 (9.58%)
+    - 01 (Homo-1):            165 (26.79%)
+    - 10 (Internal):          392 (63.64%)
+  Level 8x8 (Total Nodes: 1568):
+    - 00 (Homo-0):            139 (8.86%)
+    - 01 (Homo-1):            389 (24.81%)
+    - 10 (Internal):          0 (0.00%)
+    - 11 (Hetero-Leaf):       1040 (66.33%)
+  Level 4x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 2x2 (Total Nodes: 0):
+    - No nodes at this level.
+
+Leaf Node Type Distribution (Per Level):
+  Level 8x8 (Total Leaves: 1568):
+    - Espresso:          401 (25.57%)
+    - Raw:               639 (40.75%)
+    - Homogeneous-0:     139 (8.86%)
+    - Homogeneous-1:     389 (24.81%)
+  Level 4x4 (Total Leaves: 0):
+    - No leaves at this level.
+  Level 2x2 (Total Leaves: 0):
+    - No leaves at this level.
+
+XOR Usage Statistics (Predictive XOR for Small Blocks):
+  Level 4x4 (Total Blocks: 0):
+    - No blocks at this level.
+  Level 2x2 (Total Blocks: 0):
+    - No blocks at this level.
+
+Predictive XOR 8x8 Effectiveness (Targeted Analysis):
+  Total 8x8 Blocks Evaluated: 1040
+    Originally Compressible:   392 (37.69%)
+    Originally Incompressible: 648 (62.31%)
+      -> Converted to Compressible via XOR: 9 (1.39% success rate)
+      -> Remained Incompressible:           639 (98.61%)
+
+Overall Leaf Node Type Distribution:
+  Total Leaf Nodes: 1887
+  - Homogeneous-0:            245 (12.98%)
+  - Homogeneous-1:            602 (31.90%)
+  - Espresso:                 401 (21.25%)
+  - Raw:                      639 (33.86%)
+
+
+--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
+  No 64x64 blocks overflowed.
+
+----------------------------------------
+  Bitplane 6
+  Compressed Bits: 85743
+----------------------------------------
+--- Analysis of Used Quadtrees ---
+Total 64x64 blocks processed: 81
+  - Compressed with Quadtree: 81 (100.00%)
+  - Stored as Raw (64x64 Overflow): 0 (0.00%)
+
+Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
+  Level 64x64 (Total Nodes: 81):
+    - 00 (Homo-0):            25 (30.86%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          56 (69.14%)
+  Level 32x32 (Total Nodes: 224):
+    - 00 (Homo-0):            41 (18.30%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          183 (81.70%)
+  Level 16x16 (Total Nodes: 732):
+    - 00 (Homo-0):            159 (21.72%)
+    - 01 (Homo-1):            29 (3.96%)
+    - 10 (Internal):          544 (74.32%)
+  Level 8x8 (Total Nodes: 2176):
+    - 00 (Homo-0):            496 (22.79%)
+    - 01 (Homo-1):            200 (9.19%)
+    - 10 (Internal):          0 (0.00%)
+    - 11 (Hetero-Leaf):       1480 (68.01%)
+  Level 4x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 2x2 (Total Nodes: 0):
+    - No nodes at this level.
+
+Leaf Node Type Distribution (Per Level):
+  Level 8x8 (Total Leaves: 2176):
+    - Espresso:          714 (32.81%)
+    - Raw:               766 (35.20%)
+    - Homogeneous-0:     496 (22.79%)
+    - Homogeneous-1:     200 (9.19%)
+  Level 4x4 (Total Leaves: 0):
+    - No leaves at this level.
+  Level 2x2 (Total Leaves: 0):
+    - No leaves at this level.
+
+XOR Usage Statistics (Predictive XOR for Small Blocks):
+  Level 4x4 (Total Blocks: 0):
+    - No blocks at this level.
+  Level 2x2 (Total Blocks: 0):
+    - No blocks at this level.
+
+Predictive XOR 8x8 Effectiveness (Targeted Analysis):
+  Total 8x8 Blocks Evaluated: 1480
+    Originally Compressible:   683 (46.15%)
+    Originally Incompressible: 797 (53.85%)
+      -> Converted to Compressible via XOR: 31 (3.89% success rate)
+      -> Remained Incompressible:           766 (96.11%)
+
+Overall Leaf Node Type Distribution:
+  Total Leaf Nodes: 2430
+  - Homogeneous-0:            721 (29.67%)
+  - Homogeneous-1:            229 (9.42%)
+  - Espresso:                 714 (29.38%)
+  - Raw:                      766 (31.52%)
+
+
+--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
+  No 64x64 blocks overflowed.
+
+----------------------------------------
+  Bitplane 7
+  Compressed Bits: 25834
+----------------------------------------
+--- Analysis of Used Quadtrees ---
+Total 64x64 blocks processed: 81
+  - Compressed with Quadtree: 81 (100.00%)
+  - Stored as Raw (64x64 Overflow): 0 (0.00%)
+
+Code Appearances per Level (00: Homo-0, 01: Homo-1, 10: Internal, 11: Hetero-Leaf):
+  Level 64x64 (Total Nodes: 81):
+    - 00 (Homo-0):            35 (43.21%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          46 (56.79%)
+  Level 32x32 (Total Nodes: 184):
+    - 00 (Homo-0):            86 (46.74%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          98 (53.26%)
+  Level 16x16 (Total Nodes: 392):
+    - 00 (Homo-0):            166 (42.35%)
+    - 01 (Homo-1):            0 (0.00%)
+    - 10 (Internal):          226 (57.65%)
+  Level 8x8 (Total Nodes: 904):
+    - 00 (Homo-0):            453 (50.11%)
+    - 01 (Homo-1):            1 (0.11%)
+    - 10 (Internal):          0 (0.00%)
+    - 11 (Hetero-Leaf):       450 (49.78%)
+  Level 4x4 (Total Nodes: 0):
+    - No nodes at this level.
+  Level 2x2 (Total Nodes: 0):
+    - No nodes at this level.
+
+Leaf Node Type Distribution (Per Level):
+  Level 8x8 (Total Leaves: 904):
+    - Espresso:          233 (25.77%)
+    - Raw:               217 (24.00%)
+    - Homogeneous-0:     453 (50.11%)
+    - Homogeneous-1:     1 (0.11%)
+  Level 4x4 (Total Leaves: 0):
+    - No leaves at this level.
+  Level 2x2 (Total Leaves: 0):
+    - No leaves at this level.
+
+XOR Usage Statistics (Predictive XOR for Small Blocks):
+  Level 4x4 (Total Blocks: 0):
+    - No blocks at this level.
+  Level 2x2 (Total Blocks: 0):
+    - No blocks at this level.
+
+Predictive XOR 8x8 Effectiveness (Targeted Analysis):
+  Total 8x8 Blocks Evaluated: 450
+    Originally Compressible:   230 (51.11%)
+    Originally Incompressible: 220 (48.89%)
+      -> Converted to Compressible via XOR: 3 (1.36% success rate)
+      -> Remained Incompressible:           217 (98.64%)
+
+Overall Leaf Node Type Distribution:
+  Total Leaf Nodes: 1191
+  - Homogeneous-0:            740 (62.13%)
+  - Homogeneous-1:            1 (0.08%)
+  - Espresso:                 233 (19.56%)
+  - Raw:                      217 (18.22%)
+
+
+--- Analysis of Discarded 64x64 Quadtrees (Overflow) ---
+  No 64x64 blocks overflowed.
+
+==================================================
+      Total Predictive XOR 8x8 Effectiveness
+==================================================
+
+Total 8x8 Blocks Evaluated (All Planes): 22781
+  Originally Compressible:   5521 (24.24%)
+  Originally Incompressible: 17260 (75.76%)
+    -> Converted to Compressible via XOR: 155 (0.90% success rate)
+    -> Remained Incompressible:           17105 (99.10%)
+
+==================================================
+      Overall Summary
+==================================================
+Initial Size (before padding): 331776 bytes (2654208 bits)
+Size After Padding:            331776 bytes (2654208 bits)
+Compressed Size:               175075.00 bytes (1400600 bits)
+
+Compression Ratio (Initial/New): 1.8951
+Percentage Space Savings (vs Padded): 47.23%
+
+Compression Time Taken:   23.1653 seconds
+Decompression Time Taken: 1.7945 seconds
+==================================================
